@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: krib-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    env: python
+    pythonVersion: "3.11"
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: PYTHONPATH
+        value: /opt/render/project/src
+    scaling:
+      minInstances: 1
+      maxInstances: 3
