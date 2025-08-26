@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Building2, Users, ClipboardList, Eye, DollarSign, FileText, TrendingUp, Calendar, MapPin, Plus } from "lucide-react"
+import { Building2, Users, ClipboardList, Eye, DollarSign, FileText, TrendingUp, Calendar, MapPin, Plus, BarChart3, BookOpen, CreditCard, Settings } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Progress } from "./ui/progress"
 import { Badge } from "./ui/badge"
@@ -254,12 +254,12 @@ export function DashboardOverview() {
             
             <Button 
               variant="outline" 
-              className="w-full justify-start h-auto p-4 text-left hover:bg-krib-lime-soft border-krib-lime/20 group"
+              className="w-full justify-start h-auto p-4 text-left hover:bg-blue-50 border-blue-200 group"
               onClick={() => navigate('/analytics')}
             >
               <div className="flex items-center w-full">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-krib-lime/10 mr-3 group-hover:bg-krib-lime/20 transition-colors">
-                  <BarChart3 className="h-5 w-5 text-krib-lime" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 mr-3 group-hover:bg-blue-200 transition-colors">
+                  <BarChart3 className="h-5 w-5 text-blue-600" />
                 </div>
                 <div className="text-left">
                   <div className="font-semibold">View Analytics</div>
@@ -275,7 +275,7 @@ export function DashboardOverview() {
             >
               <div className="flex items-center w-full">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-krib-lime/5 mr-3 group-hover:bg-krib-lime/10 transition-colors">
-                  <BookOpen className="h-5 w-5 text-krib-lime" />
+                  <BookOpen className="h-5 w-5 text-teal-600" />
                 </div>
                 <div className="text-left">
                   <div className="font-semibold">Manage Bookings</div>
@@ -291,7 +291,7 @@ export function DashboardOverview() {
             >
               <div className="flex items-center w-full">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-krib-lime-light/5 mr-3 group-hover:bg-krib-lime-light/10 transition-colors">
-                  <CreditCard className="h-5 w-5 text-krib-lime-light" />
+                  <CreditCard className="h-5 w-5 text-yellow-600" />
                 </div>
                 <div className="text-left">
                   <div className="font-semibold">Financial Dashboard</div>
