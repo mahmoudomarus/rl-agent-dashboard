@@ -320,30 +320,30 @@ export function DashboardOverview() {
 
         <Card className="krib-card">
           <CardHeader>
-            <CardTitle>Property Performance</CardTitle>
-            <CardDescription>Overall portfolio metrics</CardDescription>
+            <CardTitle>Agency Performance</CardTitle>
+            <CardDescription>Key performance indicators</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span>Portfolio Occupancy</span>
-                <span>{occupancyRate}%</span>
+                <span>Properties Leased</span>
+                <span>{agencyStats.activeLeases} / {agencyStats.totalProperties}</span>
               </div>
-              <Progress value={occupancyRate} />
+              <Progress value={agencyStats.totalProperties > 0 ? (agencyStats.activeLeases / agencyStats.totalProperties) * 100 : 0} />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span>Active Properties</span>
-                <span>{properties.filter(p => p.status === 'active').length}</span>
+                <span>Active Listings</span>
+                <span>{agencyStats.activeListings} properties</span>
               </div>
-              <Progress value={properties.length > 0 ? (properties.filter(p => p.status === 'active').length / properties.length) * 100 : 0} />
+              <Progress value={agencyStats.totalProperties > 0 ? (agencyStats.activeListings / agencyStats.totalProperties) * 100 : 0} />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span>Average Rating</span>
-                <span>{averageRating.toFixed(1)}/5.0</span>
+                <span>Conversion Rate</span>
+                <span>{agencyStats.conversionRate}%</span>
               </div>
-              <Progress value={(averageRating / 5) * 100} />
+              <Progress value={agencyStats.conversionRate} />
             </div>
           </CardContent>
         </Card>
