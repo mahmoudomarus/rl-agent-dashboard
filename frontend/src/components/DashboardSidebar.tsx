@@ -59,6 +59,12 @@ const navigationItems = [
     description: 'Lease agreements'
   },
   {
+    id: 'templates' as NavigationItem,
+    title: 'Templates',
+    icon: Settings,
+    description: 'Contract templates'
+  },
+  {
     id: 'leases' as NavigationItem,
     title: 'Leases',
     icon: FileText,

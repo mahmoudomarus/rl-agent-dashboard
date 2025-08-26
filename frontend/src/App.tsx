@@ -14,12 +14,13 @@ import { SettingsPage } from "./components/SettingsPage"
 import { ApplicationManagement } from "./components/ApplicationManagement"
 import { ViewingManagement } from "./components/ViewingManagement"
 import { ContractManagement } from "./components/ContractManagement"
+import { ContractTemplateManagement } from "./components/ContractTemplateManagement"
 import { AgentManagement } from "./components/AgentManagement"
 import { CommissionDashboard } from "./components/CommissionDashboard"
 import { LeaseManagement } from "./components/LeaseManagement"
 import { AuthCallback } from "./components/AuthCallback"
 
-export type NavigationItem = 'overview' | 'properties' | 'add-property' | 'applications' | 'viewings' | 'contracts' | 'leases' | 'agents' | 'commissions' | 'analytics' | 'financials' | 'settings'
+export type NavigationItem = 'overview' | 'properties' | 'add-property' | 'applications' | 'viewings' | 'contracts' | 'templates' | 'leases' | 'agents' | 'commissions' | 'analytics' | 'financials' | 'settings'
 
 function DashboardContent() {
   const { user, isLoading } = useApp()
@@ -29,7 +30,7 @@ function DashboardContent() {
   // Map URL paths to navigation items
   const getActiveSection = (pathname: string): NavigationItem => {
     const path = pathname.replace('/', '') || 'overview'
-    return ['overview', 'properties', 'add-property', 'applications', 'viewings', 'contracts', 'leases', 'agents', 'commissions', 'analytics', 'financials', 'settings'].includes(path) 
+    return ['overview', 'properties', 'add-property', 'applications', 'viewings', 'contracts', 'templates', 'leases', 'agents', 'commissions', 'analytics', 'financials', 'settings'].includes(path) 
       ? path as NavigationItem 
       : 'overview'
   }
@@ -80,6 +81,7 @@ function DashboardContent() {
             <Route path="/applications" element={<ApplicationManagement />} />
             <Route path="/viewings" element={<ViewingManagement />} />
             <Route path="/contracts" element={<ContractManagement />} />
+            <Route path="/templates" element={<ContractTemplateManagement />} />
             <Route path="/agents" element={<AgentManagement />} />
             <Route path="/leases" element={<LeaseManagement />} />
             <Route path="/commissions" element={<CommissionDashboard />} />
