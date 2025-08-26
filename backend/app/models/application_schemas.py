@@ -304,6 +304,28 @@ class CommissionStatus(str, Enum):
     paid = "paid"
     disputed = "disputed"
 
+class LeaseStatus(str, Enum):
+    draft = "draft"
+    sent_for_signature = "sent_for_signature"
+    partially_signed = "partially_signed"
+    fully_executed = "fully_executed"
+    active = "active"
+    expired = "expired"
+    terminated = "terminated"
+    cancelled = "cancelled"
+
+class SignatureStatus(str, Enum):
+    pending = "pending"
+    signed = "signed"
+    declined = "declined"
+    not_required = "not_required"
+
+class TemplateStatus(str, Enum):
+    draft = "draft"
+    active = "active"
+    deprecated = "deprecated"
+    archived = "archived"
+
 class LeaseAgreementCreate(BaseModel):
     property_id: UUID
     tenant_application_id: Optional[UUID] = None
@@ -671,6 +693,71 @@ class NotificationResponse(BaseModel):
     sent_sms: bool
     sent_whatsapp: bool
     created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# =====================================================================
+# CONTRACT TEMPLATE MODELS
+# =====================================================================
+
+class ContractTemplateCreate(BaseModel):
+    template_name: str = Field(..., min_length=2, max_length=255)
+    template_version: str = Field(default="1.0", max_length=20)
+    description: Optional[str] = Field(None, max_length=1000)
+    property_type: Optional[ContractType] = None
+    contract_language: str = Field(default="en", pattern="^(en|ar|both)$")
+    emirates: Optional[str] = None
+    template_content: Dict[str, Any]
+    rera_compliant: bool = False
+    dubai_land_department_approved: bool = False
+    municipality_approved: bool = False
+    legal_review_date: Optional[date] = None
+    legal_reviewer_name: Optional[str] = None
+    is_default: bool = False
+    parent_template_id: Optional[UUID] = None
+    changelog: Optional[List[str]] = None
+
+    class Config:
+        use_enum_values = True
+
+class ContractTemplateUpdate(BaseModel):
+    template_name: Optional[str] = Field(None, min_length=2, max_length=255)
+    description: Optional[str] = Field(None, max_length=1000)
+    template_content: Optional[Dict[str, Any]] = None
+    status: Optional[TemplateStatus] = None
+    rera_compliant: Optional[bool] = None
+    dubai_land_department_approved: Optional[bool] = None
+    municipality_approved: Optional[bool] = None
+    legal_review_date: Optional[date] = None
+    legal_reviewer_name: Optional[str] = None
+    is_default: Optional[bool] = None
+    changelog: Optional[List[str]] = None
+
+class ContractTemplateResponse(BaseModel):
+    id: UUID
+    agency_id: UUID
+    template_name: str
+    template_version: str
+    description: Optional[str]
+    property_type: Optional[ContractType]
+    contract_language: str
+    emirates: Optional[str]
+    template_content: Dict[str, Any]
+    docusign_template_id: Optional[str]
+    rera_compliant: bool
+    dubai_land_department_approved: bool
+    municipality_approved: bool
+    legal_review_date: Optional[date]
+    legal_reviewer_name: Optional[str]
+    usage_count: int
+    success_rate: Decimal
+    status: TemplateStatus
+    is_default: bool
+    parent_template_id: Optional[UUID]
+    changelog: List[str]
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True

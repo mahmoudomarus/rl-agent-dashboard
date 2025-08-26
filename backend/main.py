@@ -108,6 +108,18 @@ app.include_router(agencies.router, prefix="/api/agencies", tags=["agencies"])
 app.include_router(applications.router, prefix="/api/applications", tags=["applications"])
 app.include_router(viewings.router, prefix="/api/viewings", tags=["viewings"])
 
+# Import and include lease management router
+from app.api.routes import leases
+app.include_router(leases.router, prefix="/api/leases", tags=["leases"])
+
+# Import and include contract templates router
+from app.api.routes import contract_templates
+app.include_router(contract_templates.router, prefix="/api/contract-templates", tags=["contract-templates"])
+
+# Import and include Google Calendar integration router
+from app.api.routes import calendar
+app.include_router(calendar.router, prefix="/api/calendar", tags=["calendar"])
+
 @app.get("/")
 async def root():
     return {
