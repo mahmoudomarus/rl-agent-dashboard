@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Search, Filter, Edit, Eye, Trash2, MapPin, Star, Building2 } from "lucide-react"
+import { Search, Filter, Edit, Eye, Trash2, MapPin, Star, Building2, UserPlus, Users } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
@@ -58,7 +58,10 @@ export function PropertyList() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [isViewModalOpen, setIsViewModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false)
   const [editFormData, setEditFormData] = useState<Partial<any>>({})
+  const [availableAgents, setAvailableAgents] = useState<any[]>([])
+  const [selectedAgentId, setSelectedAgentId] = useState<string>("")
 
   useEffect(() => {
     loadProperties()
@@ -110,6 +113,46 @@ export function PropertyList() {
       setEditFormData({})
     } catch (error) {
       console.error('Failed to update property:', error)
+    }
+  }
+
+  const handleAssignAgent = (property: any) => {
+    setSelectedProperty(property)
+    setSelectedAgentId(property.agent_id || "")
+    loadAvailableAgents()
+    setIsAssignModalOpen(true)
+  }
+
+  const loadAvailableAgents = async () => {
+    try {
+      // TODO: Replace with real API call to get agency agents
+      // For now, using mock data
+      const mockAgents = [
+        { id: "agent-1", name: "Ahmed Al Rashid", email: "ahmed@agency.com", speciality: "Marina & JBR" },
+        { id: "agent-2", name: "Sara Al Maktoum", email: "sara@agency.com", speciality: "Downtown & Business Bay" },
+        { id: "agent-3", name: "Mohammed Hassan", email: "mohammed@agency.com", speciality: "Dubai Hills & Arabian Ranches" },
+        { id: "agent-4", name: "Fatima Al Zahra", email: "fatima@agency.com", speciality: "Palm Jumeirah & Jumeirah" }
+      ]
+      setAvailableAgents(mockAgents)
+    } catch (error) {
+      console.error('Failed to load agents:', error)
+      setAvailableAgents([])
+    }
+  }
+
+  const handleUpdateAgentAssignment = async () => {
+    if (!selectedProperty) return
+    
+    try {
+      const updateData: any = { agent_id: selectedAgentId || null }
+      await updateProperty(selectedProperty.id, updateData)
+      setIsAssignModalOpen(false)
+      setSelectedProperty(null)
+      setSelectedAgentId("")
+      // Refresh properties to show updated assignment
+      await loadProperties()
+    } catch (error) {
+      console.error('Failed to assign agent:', error)
     }
   }
 
@@ -241,6 +284,15 @@ export function PropertyList() {
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleAssignAgent(property)}
+                      className="h-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                    >
+                      <UserPlus className="h-4 w-4 mr-1" />
+                      {property.agent_id ? 'Reassign' : 'Assign'}
                     </Button>
                     <Button
                       variant="outline"
@@ -494,6 +546,72 @@ export function PropertyList() {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Agent Assignment Modal */}
+      <Dialog open={isAssignModalOpen} onOpenChange={setIsAssignModalOpen}>
+        <DialogContent className="max-w-md bg-white border shadow-lg">
+          <DialogHeader className="pb-4 border-b">
+            <DialogTitle className="text-xl font-semibold text-gray-900 flex items-center">
+              <Users className="h-5 w-5 mr-2 text-blue-600" />
+              Assign Agent
+            </DialogTitle>
+          </DialogHeader>
+          {selectedProperty && (
+            <div className="space-y-6 p-6">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-medium text-gray-900 mb-1">{selectedProperty.title}</h4>
+                <p className="text-sm text-gray-600">{selectedProperty.city}, {selectedProperty.state}</p>
+                <p className="text-sm text-green-600 font-medium">AED {selectedProperty.annual_rent?.toLocaleString() || 0}/year</p>
+              </div>
+
+              <div className="space-y-4">
+                <Label className="text-sm font-medium text-gray-700">Select Agent</Label>
+                <Select value={selectedAgentId} onValueChange={setSelectedAgentId}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose an agent..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Unassigned</SelectItem>
+                    {availableAgents.map((agent) => (
+                      <SelectItem key={agent.id} value={agent.id}>
+                        <div className="flex flex-col">
+                          <span className="font-medium">{agent.name}</span>
+                          <span className="text-xs text-gray-500">{agent.speciality}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {selectedAgentId && (
+                <div className="bg-blue-50 p-3 rounded-lg">
+                  <div className="flex items-center">
+                    <UserPlus className="h-4 w-4 text-blue-600 mr-2" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-900">
+                        {availableAgents.find(a => a.id === selectedAgentId)?.name}
+                      </p>
+                      <p className="text-xs text-blue-700">
+                        {availableAgents.find(a => a.id === selectedAgentId)?.email}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 pt-4 border-t">
+                <Button variant="outline" onClick={() => setIsAssignModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleUpdateAgentAssignment} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  {selectedAgentId ? 'Assign Agent' : 'Remove Assignment'}
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
