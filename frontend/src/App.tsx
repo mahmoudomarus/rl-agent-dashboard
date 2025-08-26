@@ -11,8 +11,13 @@ import { AnalyticsDashboard } from "./components/AnalyticsDashboard"
 import { BookingManagement } from "./components/BookingManagement"
 import { FinancialDashboard } from "./components/FinancialDashboard"
 import { SettingsPage } from "./components/SettingsPage"
+import { ApplicationManagement } from "./components/ApplicationManagement"
+import { ViewingManagement } from "./components/ViewingManagement"
+import { ContractManagement } from "./components/ContractManagement"
+import { AgentManagement } from "./components/AgentManagement"
+import { AuthCallback } from "./components/AuthCallback"
 
-export type NavigationItem = 'overview' | 'properties' | 'add-property' | 'analytics' | 'bookings' | 'financials' | 'settings'
+export type NavigationItem = 'overview' | 'properties' | 'add-property' | 'applications' | 'viewings' | 'contracts' | 'agents' | 'analytics' | 'financials' | 'settings'
 
 function DashboardContent() {
   const { user, isLoading } = useApp()
@@ -22,7 +27,7 @@ function DashboardContent() {
   // Map URL paths to navigation items
   const getActiveSection = (pathname: string): NavigationItem => {
     const path = pathname.replace('/', '') || 'overview'
-    return ['overview', 'properties', 'add-property', 'analytics', 'bookings', 'financials', 'settings'].includes(path) 
+    return ['overview', 'properties', 'add-property', 'applications', 'viewings', 'contracts', 'agents', 'analytics', 'financials', 'settings'].includes(path) 
       ? path as NavigationItem 
       : 'overview'
   }
@@ -70,8 +75,11 @@ function DashboardContent() {
             <Route path="/overview" element={<DashboardOverview />} />
             <Route path="/properties" element={<PropertyList />} />
             <Route path="/add-property" element={<AddPropertyWizard />} />
+            <Route path="/applications" element={<ApplicationManagement />} />
+            <Route path="/viewings" element={<ViewingManagement />} />
+            <Route path="/contracts" element={<ContractManagement />} />
+            <Route path="/agents" element={<AgentManagement />} />
             <Route path="/analytics" element={<AnalyticsDashboard />} />
-            <Route path="/bookings" element={<BookingManagement />} />
             <Route path="/financials" element={<FinancialDashboard />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
@@ -84,7 +92,10 @@ function DashboardContent() {
 function DashboardApp() {
   return (
     <Router>
-      <DashboardContent />
+      <Routes>
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/*" element={<DashboardContent />} />
+      </Routes>
     </Router>
   )
 }
