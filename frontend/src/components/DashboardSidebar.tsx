@@ -71,6 +71,12 @@ const navigationItems = [
     description: 'Lease management & signatures'
   },
   {
+    id: 'calendar' as NavigationItem,
+    title: 'Calendar',
+    icon: Calendar,
+    description: 'Google Calendar integration'
+  },
+  {
     id: 'agents' as NavigationItem,
     title: 'Agents',
     icon: Users,

@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Calendar } from "./ui/calendar"
-import { Eye, Calendar as CalendarIcon, Clock, MapPin, Phone, Plus, AlertCircle } from "lucide-react"
-import { viewingsApi, PropertyViewing } from "../../services/longTermRentalApi"
+import { Eye, Calendar as CalendarIcon, Clock, MapPin, Phone, Plus, AlertCircle, ExternalLink } from "lucide-react"
+import { viewingsApi, calendarApi, PropertyViewing } from "../../services/longTermRentalApi"
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -38,6 +38,28 @@ export function ViewingManagement() {
 
     fetchViewings()
   }, [])
+
+  const createCalendarEvent = async (viewingId: string) => {
+    try {
+      const response = await calendarApi.createViewingEvent(viewingId)
+      
+      // Update viewing with calendar event details
+      setViewings(viewings.map(v => 
+        v.id === viewingId 
+          ? { 
+              ...v, 
+              google_calendar_event_id: response.calendar_event_id,
+              calendar_event_link: response.event_link,
+              meeting_link: response.meeting_link
+            } as any
+          : v
+      ))
+      
+      console.log('Calendar event created successfully')
+    } catch (error) {
+      console.error('Failed to create calendar event:', error)
+    }
+  }
 
   const todaysViewings = viewings.filter(viewing => {
     const viewingDate = new Date(viewing.scheduled_date)
@@ -198,6 +220,28 @@ export function ViewingManagement() {
                       <Badge variant="outline">
                         {viewing.viewing_type === 'virtual' ? 'Virtual' : 'In-Person'}
                       </Badge>
+                      
+                      {(viewing as any).google_calendar_event_id ? (
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => window.open((viewing as any).calendar_event_link, '_blank')}
+                          className="text-green-600 border-green-200 hover:bg-green-50"
+                        >
+                          <ExternalLink className="h-3 w-3 mr-1" />
+                          Calendar
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => createCalendarEvent(viewing.id)}
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        >
+                          <CalendarIcon className="h-3 w-3 mr-1" />
+                          Add to Calendar
+                        </Button>
+                      )}
                       
                       <Button variant="outline" size="sm">
                         Edit
