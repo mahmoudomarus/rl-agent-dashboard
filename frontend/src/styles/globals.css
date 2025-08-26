@@ -7,15 +7,16 @@
 :root {
   --font-size: 14px;
   
-  /* Krib Brand Colors */
-  --krib-lime: #B8FF00;
-  --krib-lime-light: #CBFC50;
-  --krib-lime-soft: rgba(184, 255, 0, 0.1);
-  --krib-lime-medium: rgba(184, 255, 0, 0.15);
-  --krib-black: #111111;
-  --krib-gray-light: #F8F9FA;
-  --krib-gray-medium: #F5F6F8;
+  /* Krib Real Estate Brand Colors - Professional & Distinct */
+  --krib-primary: #1A365D;      /* Deep Blue - Trust & Professionalism */
+  --krib-secondary: #2D7D9A;    /* Teal Blue - Modern Real Estate */
+  --krib-accent: #38B2AC;       /* Bright Teal - Action/CTA */
+  --krib-gold: #D69E2E;         /* Gold - Premium/Success */
+  --krib-black: #1A1A1A;        /* Deep Black */
+  --krib-gray-light: #F7FAFC;
+  --krib-gray-medium: #EDF2F7;
   --krib-gray-dark: #2D3748;
+  --krib-white: #FFFFFF;
   
   /* Base Colors */
   --background: #ffffff;
@@ -25,17 +26,17 @@
   --popover: #ffffff;
   --popover-foreground: var(--krib-gray-dark);
   
-  /* Primary Colors - Krib Lime */
-  --primary: var(--krib-lime);
-  --primary-foreground: var(--krib-black);
+  /* Primary Colors - Real Estate Professional */
+  --primary: var(--krib-primary);
+  --primary-foreground: var(--krib-white);
   --secondary: var(--krib-gray-light);
   --secondary-foreground: var(--krib-gray-dark);
   
   /* UI Elements */
   --muted: var(--krib-gray-light);
   --muted-foreground: #717182;
-  --accent: var(--krib-lime-soft);
-  --accent-foreground: var(--krib-gray-dark);
+  --accent: var(--krib-accent);
+  --accent-foreground: var(--krib-white);
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.08);
@@ -44,14 +45,14 @@
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: var(--krib-lime);
-  
-  /* Charts - Krib Brand Palette */
-  --chart-1: var(--krib-lime);
-  --chart-2: var(--krib-lime-light);
-  --chart-3: #FFE135;
-  --chart-4: #87CEEB;
-  --chart-5: #98FB98;
+    --ring: var(--krib-accent);
+
+  /* Charts - Real Estate Professional Palette */
+  --chart-1: var(--krib-primary);
+  --chart-2: var(--krib-secondary);
+  --chart-3: var(--krib-accent);
+  --chart-4: var(--krib-gold);
+  --chart-5: #68D391;
   
   --radius: 0.625rem;
   

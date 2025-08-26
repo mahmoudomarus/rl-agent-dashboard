@@ -1,6 +1,6 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Building2, TrendingUp, Calendar, DollarSign, Star, Plus, BarChart3, BookOpen, CreditCard, Settings } from "lucide-react"
+import { Building2, Users, ClipboardList, Eye, DollarSign, FileText, TrendingUp, Calendar, MapPin } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Progress } from "./ui/progress"
 import { Badge } from "./ui/badge"
@@ -8,88 +8,116 @@ import { Button } from "./ui/button"
 import { useApp } from "../contexts/AppContext"
 
 export function DashboardOverview() {
-  const { properties, bookings, analytics, getAnalytics } = useApp()
+  const { user } = useApp()
   const navigate = useNavigate()
+  const [agencyStats, setAgencyStats] = useState({
+    totalProperties: 0,
+    activeListings: 0,
+    pendingApplications: 0,
+    scheduledViewings: 0,
+    monthlyCommission: 0,
+    activeLeases: 0,
+    agentCount: 0,
+    conversionRate: 0
+  })
 
   useEffect(() => {
-    getAnalytics()
+    // TODO: Fetch real agency data from API
+    // For now using placeholder data that represents real estate agency metrics
+    setAgencyStats({
+      totalProperties: 24,
+      activeListings: 18,
+      pendingApplications: 7,
+      scheduledViewings: 12,
+      monthlyCommission: 45200,
+      activeLeases: 16,
+      agentCount: 5,
+      conversionRate: 68
+    })
   }, [])
-
-  const totalRevenue = properties.reduce((sum, property) => sum + (property.total_revenue || 0), 0)
-  const totalBookings = properties.reduce((sum, property) => sum + (property.booking_count || 0), 0)
-  const averageRating = properties.length > 0 
-    ? properties.reduce((sum, property) => sum + (property.rating || 0), 0) / properties.length 
-    : 0
-
-  // Calculate actual occupancy rate based on bookings
-  const calculateOccupancyRate = () => {
-    if (properties.length === 0) return 0
-    
-    const today = new Date()
-    const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000))
-    
-    const recentBookings = bookings.filter(booking => 
-      new Date(booking.created_at) >= thirtyDaysAgo && 
-      booking.status === 'confirmed'
-    )
-    
-    if (recentBookings.length === 0) return 0
-    
-    // Simple calculation: (total booked nights / (properties * 30 days)) * 100
-    const totalBookedNights = recentBookings.reduce((sum, booking) => sum + booking.nights, 0)
-    const totalPossibleNights = properties.length * 30
-    
-    return totalPossibleNights > 0 ? Math.round((totalBookedNights / totalPossibleNights) * 100) : 0
-  }
-
-  const occupancyRate = calculateOccupancyRate()
 
   const stats = [
     {
-      title: "Total Properties",
-      value: properties.length.toString(),
-      change: properties.length > 0 ? `${properties.length} active` : "No properties yet",
+      title: "Active Listings",
+      value: agencyStats.activeListings.toString(),
+      change: `${agencyStats.totalProperties - agencyStats.activeListings} under review`,
       icon: Building2,
-      color: "text-krib-lime"
+      color: "text-blue-600"
     },
     {
-      title: "Total Revenue",
-      value: `$${totalRevenue.toLocaleString()}`,
-      change: totalRevenue > 0 ? "From confirmed bookings" : "No revenue yet",
+      title: "Monthly Commission",
+      value: `AED ${agencyStats.monthlyCommission.toLocaleString()}`,
+      change: "From closed deals",
       icon: DollarSign,
       color: "text-green-600"
     },
     {
-      title: "Total Bookings",
-      value: totalBookings.toString(),
-      change: totalBookings > 0 ? `${totalBookings} confirmed` : "No bookings yet",
-      icon: Calendar,
-      color: "text-purple-600"
+      title: "Pending Applications",
+      value: agencyStats.pendingApplications.toString(),
+      change: "Require review",
+      icon: ClipboardList,
+      color: "text-orange-600"
     },
     {
-      title: "Occupancy Rate",
-      value: `${occupancyRate}%`,
-      change: occupancyRate > 0 ? "Last 30 days" : "No bookings to calculate",
+      title: "Team Performance",
+      value: `${agencyStats.conversionRate}%`,
+      change: "Conversion rate",
       icon: TrendingUp,
-      color: "text-orange-600"
+      color: "text-emerald-600"
     }
   ]
 
-  const recentBookings = bookings
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    .slice(0, 3)
+  // Mock recent agency activities - TODO: Replace with real API data
+  const recentActivities = [
+    {
+      id: '1',
+      type: 'application',
+      title: 'New tenant application',
+      description: 'Dubai Marina - 2BR Apartment',
+      time: '2 hours ago',
+      status: 'pending'
+    },
+    {
+      id: '2', 
+      type: 'viewing',
+      title: 'Property viewing scheduled',
+      description: 'Downtown Dubai - 1BR Studio',
+      time: '4 hours ago',
+      status: 'confirmed'
+    },
+    {
+      id: '3',
+      type: 'lease',
+      title: 'Lease agreement signed',
+      description: 'JBR - 3BR Penthouse',
+      time: '1 day ago',
+      status: 'completed'
+    }
+  ]
 
-  const topProperties = properties
-    .sort((a, b) => (b.total_revenue || 0) - (a.total_revenue || 0))
-    .slice(0, 3)
+  // Mock top performing properties - TODO: Replace with real API data
+  const topPerformingAreas = [
+    { area: 'Dubai Marina', properties: 8, avgRent: 85000, demand: 'High' },
+    { area: 'Downtown Dubai', properties: 6, avgRent: 95000, demand: 'Very High' },
+    { area: 'JBR', properties: 4, avgRent: 110000, demand: 'High' }
+  ]
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard Overview</h1>
-        <p className="text-muted-foreground">
-          Welcome back! Here's what's happening with your rental properties.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-krib-primary">Agency Dashboard</h1>
+          <p className="text-muted-foreground">
+            Welcome back! Here's your real estate agency performance overview.
+          </p>
+        </div>
+        <Button 
+          onClick={() => navigate('/add-property')}
+          className="bg-krib-accent hover:bg-krib-secondary text-white"
+        >
+          <Building2 className="mr-2 h-4 w-4" />
+          List New Property
+        </Button>
       </div>
 
       {/* Stats Cards */}
@@ -109,79 +137,93 @@ export function DashboardOverview() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Recent Bookings */}
+        {/* Recent Activities */}
         <Card className="krib-card">
           <CardHeader>
-            <CardTitle>Recent Bookings</CardTitle>
-            <CardDescription>Latest reservations for your properties</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-krib-accent" />
+              Recent Activity
+            </CardTitle>
+            <CardDescription>Latest agency updates and actions</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentBookings.length > 0 ? (
-                recentBookings.map((booking) => (
-                  <div key={booking.id} className="flex items-center justify-between">
-                    <div className="space-y-1">
-                      <p className="font-medium">{booking.property_title || 'Property'}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {booking.guest_name} • {new Date(booking.check_in).toLocaleDateString()} - {new Date(booking.check_out).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium">${booking.total_amount}</p>
-                      <Badge 
-                        variant={booking.status === 'confirmed' ? 'default' : 'secondary'}
-                      >
-                        {booking.status}
-                      </Badge>
-                    </div>
+              {recentActivities.map((activity) => (
+                <div key={activity.id} className="flex items-center gap-4 border-b pb-3 last:border-b-0">
+                  <div className="flex-shrink-0">
+                    {activity.type === 'application' && <ClipboardList className="h-4 w-4 text-orange-500" />}
+                    {activity.type === 'viewing' && <Eye className="h-4 w-4 text-blue-500" />}
+                    {activity.type === 'lease' && <FileText className="h-4 w-4 text-green-500" />}
                   </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center py-4">No bookings yet</p>
-              )}
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium">{activity.title}</p>
+                    <p className="text-sm text-muted-foreground">{activity.description}</p>
+                    <p className="text-xs text-muted-foreground">{activity.time}</p>
+                  </div>
+                  <Badge 
+                    variant={activity.status === 'completed' ? 'default' : 'secondary'}
+                    className="text-xs"
+                  >
+                    {activity.status}
+                  </Badge>
+                </div>
+              ))}
+              <Button 
+                variant="ghost" 
+                className="w-full justify-center text-sm"
+                onClick={() => navigate('/applications')}
+              >
+                View all activities
+              </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Top Performing Properties */}
+        {/* Top Performing Areas */}
         <Card className="krib-card">
           <CardHeader>
-            <CardTitle>Top Performing Properties</CardTitle>
-            <CardDescription>Your best properties by revenue</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-krib-primary" />
+              Top Performing Areas
+            </CardTitle>
+            <CardDescription>Best locations for rental demand</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {topProperties.length > 0 ? (
-                topProperties.map((property) => {
-                  const propertyOccupancy = property.booking_count > 0 ? 
-                    Math.min(Math.round((property.booking_count / 30) * 100), 100) : 0
-                  
-                  return (
-                    <div key={property.id} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{property.title}</p>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <span>{property.booking_count || 0} bookings</span>
-                            <span>•</span>
-                            <div className="flex items-center gap-1">
-                              <Star className="h-3 w-3 fill-current text-yellow-500" />
-                              <span>{property.rating || 0}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-medium">${property.total_revenue || 0}</p>
-                          <p className="text-sm text-muted-foreground">{propertyOccupancy}% occupied</p>
-                        </div>
+              {topPerformingAreas.map((area, index) => (
+                <div key={area.area} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{area.area}</p>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span>{area.properties} properties</span>
+                        <span>•</span>
+                        <Badge 
+                          variant={area.demand === 'Very High' ? 'default' : 'secondary'}
+                          className="text-xs"
+                        >
+                          {area.demand} demand
+                        </Badge>
                       </div>
-                      <Progress value={propertyOccupancy} className="h-2" />
                     </div>
-                  )
-                })
-              ) : (
-                <p className="text-muted-foreground text-center py-4">No properties yet</p>
-              )}
+                    <div className="text-right">
+                      <p className="font-medium">AED {area.avgRent.toLocaleString()}</p>
+                      <p className="text-sm text-muted-foreground">avg/year</p>
+                    </div>
+                  </div>
+                  <Progress 
+                    value={area.demand === 'Very High' ? 90 : area.demand === 'High' ? 75 : 50} 
+                    className="h-2" 
+                  />
+                </div>
+              ))}
+              <Button 
+                variant="ghost" 
+                className="w-full justify-center text-sm"
+                onClick={() => navigate('/analytics')}
+              >
+                View market analytics
+              </Button>
             </div>
           </CardContent>
         </Card>
