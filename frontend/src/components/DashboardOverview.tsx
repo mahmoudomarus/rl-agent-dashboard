@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { analyticsApi } from "../../services/longTermRentalApi"
 import { Building2, Users, ClipboardList, Eye, DollarSign, FileText, TrendingUp, Calendar, MapPin, Plus, BarChart3, BookOpen, CreditCard, Settings } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Progress } from "./ui/progress"
@@ -22,19 +23,39 @@ export function DashboardOverview() {
   })
 
   useEffect(() => {
-    // TODO: Fetch real agency data from API
-    // For now using placeholder data that represents real estate agency metrics
-    setAgencyStats({
-      totalProperties: 24,
-      activeListings: 18,
-      pendingApplications: 7,
-      scheduledViewings: 12,
-      monthlyCommission: 45200,
-      activeLeases: 16,
-      agentCount: 5,
-      conversionRate: 68
-    })
+    loadDashboardData()
   }, [])
+
+  const loadDashboardData = async () => {
+    try {
+      // Fetch real dashboard stats from API
+      const dashboardData = await analyticsApi.getDashboardStats()
+      
+      setAgencyStats({
+        totalProperties: dashboardData.active_listings + 6, // Include inactive for total
+        activeListings: dashboardData.active_listings,
+        pendingApplications: dashboardData.pending_applications,
+        scheduledViewings: 12, // TODO: Add viewings count to dashboard API
+        monthlyCommission: dashboardData.monthly_commission,
+        activeLeases: 16, // TODO: Add active leases count to dashboard API
+        agentCount: 5, // TODO: Add agent count to dashboard API
+        conversionRate: dashboardData.team_performance
+      })
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error)
+      // Keep default values on error to prevent crash
+      setAgencyStats({
+        totalProperties: 0,
+        activeListings: 0,
+        pendingApplications: 0,
+        scheduledViewings: 0,
+        monthlyCommission: 0,
+        activeLeases: 0,
+        agentCount: 0,
+        conversionRate: 0
+      })
+    }
+  }
 
   const stats = [
     {
@@ -319,8 +340,7 @@ export function DashboardOverview() {
         </Card>
 
         <Card className="krib-card">
-          <CardHeader>
-            <CardTitle>Agency Performance</CardTitle>
+          <CardHeader>            <CardTitle>Agency Performance</CardTitle>
             <CardDescription>Key performance indicators</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { contractTemplatesApi, type ContractTemplate } from "../../services/longTermRentalApi"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
@@ -30,31 +31,7 @@ import {
   Calendar
 } from "lucide-react"
 
-interface ContractTemplate {
-  id: string
-  agency_id: string
-  template_name: string
-  template_version: string
-  description?: string
-  property_type?: string
-  contract_language: string
-  emirates?: string
-  template_content: any
-  docusign_template_id?: string
-  rera_compliant: boolean
-  dubai_land_department_approved: boolean
-  municipality_approved: boolean
-  legal_review_date?: string
-  legal_reviewer_name?: string
-  usage_count: number
-  success_rate: number
-  status: string
-  is_default: boolean
-  parent_template_id?: string
-  changelog: string[]
-  created_at: string
-  updated_at: string
-}
+// ContractTemplate interface is imported from the API service
 
 interface TemplateStats {
   total_templates: number
@@ -105,74 +82,29 @@ export function ContractTemplateManagement() {
     loadStats()
   }, [])
 
+  // Reload templates when filters change
+  useEffect(() => {
+    loadTemplates()
+  }, [statusFilter, propertyTypeFilter, complianceFilter])
+
   const loadTemplates = async () => {
     try {
       setLoading(true)
-      // TODO: Replace with actual API call to /api/contract-templates
-      const mockTemplates: ContractTemplate[] = [
-        {
-          id: "template-1",
-          agency_id: "agency-1",
-          template_name: "Standard Residential Lease - Dubai",
-          template_version: "2.1",
-          description: "RERA-compliant residential lease template for Dubai properties",
-          property_type: "residential",
-          contract_language: "en",
-          emirates: "Dubai",
-          template_content: {
-            sections: ["parties", "property_details", "lease_terms", "financial_terms", "conditions"],
-            content: "Standard lease agreement template content..."
-          },
-          rera_compliant: true,
-          dubai_land_department_approved: true,
-          municipality_approved: true,
-          legal_review_date: "2024-01-15",
-          legal_reviewer_name: "Legal Counsel LLC",
-          usage_count: 45,
-          success_rate: 92.3,
-          status: "active",
-          is_default: true,
-          changelog: [
-            "Updated RERA compliance requirements",
-            "Added municipality approval clause",
-            "Enhanced termination conditions"
-          ],
-          created_at: "2024-01-10T10:00:00Z",
-          updated_at: "2024-01-15T14:30:00Z"
-        },
-        {
-          id: "template-2",
-          agency_id: "agency-1",
-          template_name: "Commercial Lease - Business Bay",
-          template_version: "1.3",
-          description: "Commercial property lease template for Business Bay area",
-          property_type: "commercial",
-          contract_language: "en",
-          emirates: "Dubai",
-          template_content: {
-            sections: ["commercial_terms", "business_use", "property_details", "financial_terms"],
-            content: "Commercial lease agreement template content..."
-          },
-          rera_compliant: true,
-          dubai_land_department_approved: false,
-          municipality_approved: true,
-          legal_review_date: "2024-01-20",
-          legal_reviewer_name: "Business Legal Associates",
-          usage_count: 12,
-          success_rate: 88.7,
-          status: "active",
-          is_default: false,
-          changelog: [
-            "Added business use restrictions",
-            "Updated commercial tax clauses"
-          ],
-          created_at: "2024-01-18T09:00:00Z",
-          updated_at: "2024-01-20T16:45:00Z"
-        }
-      ]
-      setTemplates(mockTemplates)
+      
+      // Build filters based on current filter state
+      const filters: any = {}
+      if (statusFilter !== "all") filters.status_filter = statusFilter
+      if (propertyTypeFilter !== "all") filters.property_type = propertyTypeFilter
+      if (complianceFilter === "compliant") filters.rera_compliant = true
+      if (complianceFilter === "non-compliant") filters.rera_compliant = false
+      
+      // Call real API
+      const templateData = await contractTemplatesApi.getTemplates(filters)
+      setTemplates(templateData)
     } catch (error) {
       console.error('Failed to load templates:', error)
+      // On error, show empty state but don't crash
+      setTemplates([])
     } finally {
       setLoading(false)
     }
@@ -213,9 +145,17 @@ export function ContractTemplateManagement() {
 
   const handleCreateTemplate = async () => {
     try {
-      // TODO: Replace with actual API call to /api/contract-templates
-      console.log('Creating template:', newTemplate)
-      await loadTemplates() // Refresh data
+      // Call real API to create template
+      await contractTemplatesApi.createTemplate({
+        ...newTemplate,
+        template_content: newTemplate.template_content ? { content: newTemplate.template_content } : {}
+      })
+      
+      // Refresh templates
+      await loadTemplates()
+      await loadStats()
+      
+      // Close modal and reset form
       setIsCreateModalOpen(false)
       setNewTemplate({
         template_name: "",
@@ -230,6 +170,8 @@ export function ContractTemplateManagement() {
         legal_reviewer_name: "",
         is_default: false
       })
+      
+      console.log('Template created successfully')
     } catch (error) {
       console.error('Failed to create template:', error)
     }
@@ -237,9 +179,11 @@ export function ContractTemplateManagement() {
 
   const handleDuplicateTemplate = async (templateId: string, newName: string) => {
     try {
-      // TODO: Replace with actual API call to /api/contract-templates/{id}/duplicate
-      console.log('Duplicating template:', templateId, 'as', newName)
+      // Call real API to duplicate template
+      await contractTemplatesApi.duplicateTemplate(templateId, newName)
       await loadTemplates() // Refresh data
+      await loadStats()
+      console.log('Template duplicated successfully')
     } catch (error) {
       console.error('Failed to duplicate template:', error)
     }
@@ -247,9 +191,11 @@ export function ContractTemplateManagement() {
 
   const handleActivateTemplate = async (templateId: string) => {
     try {
-      // TODO: Replace with actual API call to /api/contract-templates/{id}/activate
-      console.log('Activating template:', templateId)
+      // Call real API to activate template
+      await contractTemplatesApi.activateTemplate(templateId)
       await loadTemplates() // Refresh data
+      await loadStats()
+      console.log('Template activated successfully')
     } catch (error) {
       console.error('Failed to activate template:', error)
     }
@@ -258,9 +204,11 @@ export function ContractTemplateManagement() {
   const handleDeleteTemplate = async (templateId: string) => {
     if (window.confirm('Are you sure you want to delete this template? This action cannot be undone.')) {
       try {
-        // TODO: Replace with actual API call to DELETE /api/contract-templates/{id}
-        console.log('Deleting template:', templateId)
+        // Call real API to delete template
+        await contractTemplatesApi.deleteTemplate(templateId)
         await loadTemplates() // Refresh data
+        await loadStats()
+        console.log('Template deleted successfully')
       } catch (error) {
         console.error('Failed to delete template:', error)
       }
@@ -269,14 +217,14 @@ export function ContractTemplateManagement() {
 
   const handleUploadTemplate = async (file: File) => {
     try {
-      // TODO: Replace with actual API call to /api/contract-templates/upload-template
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('template_name', file.name.split('.')[0])
+      // Call real API to upload template
+      const templateName = file.name.split('.')[0]
+      await contractTemplatesApi.uploadTemplate(file, templateName)
       
-      console.log('Uploading template file:', file.name)
       await loadTemplates() // Refresh data
+      await loadStats()
       setIsUploadModalOpen(false)
+      console.log('Template uploaded successfully')
     } catch (error) {
       console.error('Failed to upload template:', error)
     }

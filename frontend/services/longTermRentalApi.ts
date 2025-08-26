@@ -34,6 +34,451 @@ const apiCall = async (endpoint: string, options: RequestInit = {}) => {
 }
 
 // =====================================================================
+// LEASE AGREEMENTS API
+// =====================================================================
+
+export interface LeaseAgreement {
+  id: string
+  property_id: string
+  tenant_application_id?: string
+  agent_id: string
+  agency_id: string
+  lease_number: string
+  contract_type: string
+  
+  // Parties Information
+  landlord_name: string
+  landlord_email?: string
+  landlord_phone?: string
+  landlord_emirates_id?: string
+  
+  tenant_name: string
+  tenant_email: string
+  tenant_phone: string
+  tenant_emirates_id?: string
+  tenant_passport?: string
+  
+  // Lease Terms
+  lease_start_date: string
+  lease_end_date: string
+  
+  // Financial Terms
+  annual_rent: number
+  security_deposit: number
+  broker_commission: number
+  
+  // Payment Terms
+  payment_schedule: string
+  payment_method: string
+  payment_due_day: number
+  late_payment_penalty_percentage: number
+  
+  // Additional Charges
+  service_charges_annual: number
+  dewa_included: boolean
+  internet_included: boolean
+  maintenance_included: boolean
+  parking_included: boolean
+  
+  // Contract Terms
+  auto_renewal: boolean
+  renewal_notice_period_days: number
+  early_termination_allowed: boolean
+  early_termination_penalty?: number
+  
+  // Property Condition
+  furnished_status?: string
+  inventory_list_url?: string
+  property_condition_report_url?: string
+  
+  // Legal Compliance
+  rera_permit_number?: string
+  ejari_registration_number?: string
+  municipality_approval: boolean
+  
+  // Document Management
+  contract_template_id?: string
+  docusign_envelope_id?: string
+  signed_contract_url?: string
+  
+  // Signature Status
+  landlord_signature_status: string
+  tenant_signature_status: string
+  witness_signature_status: string
+  
+  // Agreement Status
+  status: string
+  execution_date?: string
+  registration_date?: string
+  
+  // Commission Tracking
+  commission_status: string
+  commission_invoice_number?: string
+  commission_paid_date?: string
+  commission_payment_reference?: string
+  
+  // Timestamps
+  created_at: string
+  updated_at: string
+}
+
+export const leasesApi = {
+  // Get all lease agreements
+  getLeases: async (filters?: {
+    status_filter?: string
+    agent_id?: string
+    property_id?: string
+    contract_type?: string
+  }): Promise<LeaseAgreement[]> => {
+    const queryParams = new URLSearchParams(filters as any).toString()
+    return apiCall(`/leases${queryParams ? `?${queryParams}` : ''}`)
+  },
+
+  // Get specific lease agreement
+  getLease: async (leaseId: string): Promise<LeaseAgreement> => {
+    return apiCall(`/leases/${leaseId}`)
+  },
+
+  // Create new lease agreement
+  createLease: async (leaseData: Partial<LeaseAgreement>): Promise<LeaseAgreement> => {
+    return apiCall('/leases', {
+      method: 'POST',
+      body: JSON.stringify(leaseData)
+    })
+  },
+
+  // Update lease agreement
+  updateLease: async (leaseId: string, updates: Partial<LeaseAgreement>): Promise<LeaseAgreement> => {
+    return apiCall(`/leases/${leaseId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates)
+    })
+  },
+
+  // Send lease for signature
+  sendForSignature: async (leaseId: string): Promise<{ message: string, lease_id: string }> => {
+    return apiCall(`/leases/${leaseId}/send-for-signature`, {
+      method: 'POST'
+    })
+  },
+
+  // Get signature status
+  getSignatureStatus: async (leaseId: string): Promise<{
+    lease_id: string
+    status: string
+    landlord_signed: boolean
+    tenant_signed: boolean
+    witness_signed: boolean
+    docusign_envelope_id?: string
+    fully_executed: boolean
+  }> => {
+    return apiCall(`/leases/${leaseId}/signature-status`)
+  },
+
+  // Delete lease agreement
+  deleteLease: async (leaseId: string): Promise<{ message: string }> => {
+    return apiCall(`/leases/${leaseId}`, {
+      method: 'DELETE'
+    })
+  }
+}
+
+// =====================================================================
+// CONTRACT TEMPLATES API
+// =====================================================================
+
+export interface ContractTemplate {
+  id: string
+  agency_id: string
+  template_name: string
+  template_version: string
+  description?: string
+  property_type?: string
+  contract_language: string
+  emirates?: string
+  template_content: any
+  docusign_template_id?: string
+  rera_compliant: boolean
+  dubai_land_department_approved: boolean
+  municipality_approved: boolean
+  legal_review_date?: string
+  legal_reviewer_name?: string
+  usage_count: number
+  success_rate: number
+  status: string
+  is_default: boolean
+  parent_template_id?: string
+  changelog: string[]
+  created_at: string
+  updated_at: string
+}
+
+export const contractTemplatesApi = {
+  // Get all contract templates
+  getTemplates: async (filters?: {
+    property_type?: string
+    status_filter?: string
+    contract_language?: string
+    emirates?: string
+    rera_compliant?: boolean
+  }): Promise<ContractTemplate[]> => {
+    const queryParams = new URLSearchParams(filters as any).toString()
+    return apiCall(`/contract-templates${queryParams ? `?${queryParams}` : ''}`)
+  },
+
+  // Get specific contract template
+  getTemplate: async (templateId: string): Promise<ContractTemplate> => {
+    return apiCall(`/contract-templates/${templateId}`)
+  },
+
+  // Create new contract template
+  createTemplate: async (templateData: Partial<ContractTemplate>): Promise<ContractTemplate> => {
+    return apiCall('/contract-templates', {
+      method: 'POST',
+      body: JSON.stringify(templateData)
+    })
+  },
+
+  // Update contract template
+  updateTemplate: async (templateId: string, updates: Partial<ContractTemplate>): Promise<ContractTemplate> => {
+    return apiCall(`/contract-templates/${templateId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates)
+    })
+  },
+
+  // Duplicate template
+  duplicateTemplate: async (templateId: string, newName?: string): Promise<ContractTemplate> => {
+    return apiCall(`/contract-templates/${templateId}/duplicate`, {
+      method: 'POST',
+      body: JSON.stringify({ new_name: newName })
+    })
+  },
+
+  // Activate template
+  activateTemplate: async (templateId: string): Promise<ContractTemplate> => {
+    return apiCall(`/contract-templates/${templateId}/activate`, {
+      method: 'POST'
+    })
+  },
+
+  // Get template usage stats
+  getTemplateStats: async (templateId: string): Promise<{
+    template_id: string
+    template_name: string
+    total_uses: number
+    success_rate: number
+    completed_leases: number
+    monthly_usage: Record<string, number>
+    last_used?: string
+  }> => {
+    return apiCall(`/contract-templates/${templateId}/usage-stats`)
+  },
+
+  // Upload template file
+  uploadTemplate: async (file: File, templateName?: string, propertyType?: string): Promise<ContractTemplate> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    if (templateName) formData.append('template_name', templateName)
+    if (propertyType) formData.append('property_type', propertyType)
+
+    const headers = await getAuthHeaders()
+    delete (headers as any)['Content-Type'] // Let browser set it for FormData
+
+    const response = await fetch(`${API_BASE_URL}/contract-templates/upload-template`, {
+      method: 'POST',
+      headers,
+      body: formData
+    })
+
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.status} ${response.statusText}`)
+    }
+
+    return response.json()
+  },
+
+  // Delete template
+  deleteTemplate: async (templateId: string): Promise<{ message: string }> => {
+    return apiCall(`/contract-templates/${templateId}`, {
+      method: 'DELETE'
+    })
+  }
+}
+
+// =====================================================================
+// GOOGLE CALENDAR INTEGRATION API
+// =====================================================================
+
+export const calendarApi = {
+  // Get Google Calendar connection status
+  getConnectionStatus: async (): Promise<{
+    agent_id: string
+    calendar_connected: boolean
+    calendar_id?: string
+    last_sync?: string
+  }> => {
+    return apiCall('/calendar/status')
+  },
+
+  // Get authorization URL for Google Calendar
+  getAuthorizationUrl: async (): Promise<{
+    authorization_url: string
+    message: string
+  }> => {
+    return apiCall('/calendar/connect')
+  },
+
+  // Handle OAuth callback
+  handleOAuthCallback: async (code: string, state: string): Promise<{
+    message: string
+    agent_id: string
+    calendar_connected: boolean
+  }> => {
+    return apiCall('/calendar/oauth/callback', {
+      method: 'POST',
+      body: JSON.stringify({ code, state })
+    })
+  },
+
+  // Sync agent availability
+  syncAvailability: async (): Promise<{
+    message: string
+    agent_id: string
+  }> => {
+    return apiCall('/calendar/sync-availability', {
+      method: 'POST'
+    })
+  },
+
+  // Get agent availability
+  getAvailability: async (startDate: string, endDate: string): Promise<{
+    agent_id: string
+    start_date: string
+    end_date: string
+    available_slots: Array<{
+      start_time: string
+      end_time: string
+      duration_minutes: number
+      available: boolean
+    }>
+  }> => {
+    return apiCall(`/calendar/availability?start_date=${startDate}&end_date=${endDate}`)
+  },
+
+  // Create viewing calendar event
+  createViewingEvent: async (viewingId: string): Promise<{
+    message: string
+    viewing_id: string
+    calendar_event_id: string
+    event_link?: string
+    meeting_link?: string
+  }> => {
+    return apiCall('/calendar/create-viewing-event', {
+      method: 'POST',
+      body: JSON.stringify({ viewing_id: viewingId })
+    })
+  },
+
+  // Update viewing calendar event
+  updateViewingEvent: async (viewingId: string): Promise<{
+    message: string
+    viewing_id: string
+    calendar_event_id: string
+    event_link?: string
+  }> => {
+    return apiCall(`/calendar/update-viewing-event/${viewingId}`, {
+      method: 'PUT'
+    })
+  },
+
+  // Cancel viewing calendar event
+  cancelViewingEvent: async (viewingId: string): Promise<{
+    message: string
+    viewing_id: string
+    cancelled: boolean
+  }> => {
+    return apiCall(`/calendar/cancel-viewing-event/${viewingId}`, {
+      method: 'DELETE'
+    })
+  },
+
+  // Disconnect Google Calendar
+  disconnectCalendar: async (): Promise<{
+    message: string
+    agent_id: string
+  }> => {
+    return apiCall('/calendar/disconnect', {
+      method: 'POST'
+    })
+  }
+}
+
+// =====================================================================
+// ANALYTICS & DASHBOARD API
+// =====================================================================
+
+export const analyticsApi = {
+  // Get agency dashboard stats
+  getDashboardStats: async (): Promise<{
+    active_listings: number
+    monthly_commission: number
+    pending_applications: number
+    team_performance: number
+    recent_activity: Array<{
+      id: string
+      type: string
+      title: string
+      description: string
+      status: string
+      timestamp: string
+    }>
+    top_performing_areas: Array<{
+      area: string
+      properties_count: number
+      demand_level: string
+      avg_rent: number
+    }>
+  }> => {
+    return apiCall('/analytics/dashboard')
+  },
+
+  // Get commission analytics
+  getCommissionAnalytics: async (): Promise<{
+    total_earned: number
+    pending_commission: number
+    paid_commission: number
+    monthly_projection: number
+    commission_breakdown: Array<{
+      agent_id: string
+      agent_name: string
+      total_commission: number
+      properties_count: number
+      success_rate: number
+    }>
+  }> => {
+    return apiCall('/analytics/commissions')
+  },
+
+  // Get property performance analytics
+  getPropertyAnalytics: async (): Promise<{
+    total_properties: number
+    active_properties: number
+    leased_properties: number
+    avg_time_to_lease: number
+    top_performing_properties: Array<{
+      property_id: string
+      property_title: string
+      location: string
+      lease_speed: number
+      commission_earned: number
+    }>
+  }> => {
+    return apiCall('/analytics/properties')
+  }
+}
+
+// =====================================================================
 // APPLICATIONS API
 // =====================================================================
 

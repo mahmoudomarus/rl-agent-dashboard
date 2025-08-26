@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { leasesApi, analyticsApi, type LeaseAgreement } from "../../services/longTermRentalApi"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
@@ -28,90 +29,7 @@ import {
   Filter
 } from "lucide-react"
 
-interface LeaseAgreement {
-  id: string
-  property_id: string
-  tenant_application_id?: string
-  agent_id: string
-  agency_id: string
-  lease_number: string
-  contract_type: string
-  
-  // Parties Information
-  landlord_name: string
-  landlord_email?: string
-  landlord_phone?: string
-  landlord_emirates_id?: string
-  
-  tenant_name: string
-  tenant_email: string
-  tenant_phone: string
-  tenant_emirates_id?: string
-  tenant_passport?: string
-  
-  // Lease Terms
-  lease_start_date: string
-  lease_end_date: string
-  
-  // Financial Terms
-  annual_rent: number
-  security_deposit: number
-  broker_commission: number
-  
-  // Payment Terms
-  payment_schedule: string
-  payment_method: string
-  payment_due_day: number
-  late_payment_penalty_percentage: number
-  
-  // Additional Charges
-  service_charges_annual: number
-  dewa_included: boolean
-  internet_included: boolean
-  maintenance_included: boolean
-  parking_included: boolean
-  
-  // Contract Terms
-  auto_renewal: boolean
-  renewal_notice_period_days: number
-  early_termination_allowed: boolean
-  early_termination_penalty?: number
-  
-  // Property Condition
-  furnished_status?: string
-  inventory_list_url?: string
-  property_condition_report_url?: string
-  
-  // Legal Compliance
-  rera_permit_number?: string
-  ejari_registration_number?: string
-  municipality_approval: boolean
-  
-  // Document Management
-  contract_template_id?: string
-  docusign_envelope_id?: string
-  signed_contract_url?: string
-  
-  // Signature Status
-  landlord_signature_status: string
-  tenant_signature_status: string
-  witness_signature_status: string
-  
-  // Agreement Status
-  status: string
-  execution_date?: string
-  registration_date?: string
-  
-  // Commission Tracking
-  commission_status: string
-  commission_invoice_number?: string
-  commission_paid_date?: string
-  commission_payment_reference?: string
-  
-  // Timestamps
-  created_at: string
-  updated_at: string
-}
+// LeaseAgreement interface is imported from the API service
 
 interface Property {
   id: string
@@ -151,59 +69,27 @@ export function LeaseManagement() {
     loadAgents()
   }, [])
 
+  // Reload leases when filters change
+  useEffect(() => {
+    loadLeases()
+  }, [statusFilter, agentFilter])
+
   const loadLeases = async () => {
     try {
       setLoading(true)
-      // TODO: Replace with actual API call to /api/leases
-      const mockLeases: LeaseAgreement[] = [
-        {
-          id: "lease-1",
-          property_id: "prop-1",
-          agent_id: "agent-1",
-          agency_id: "agency-1",
-          lease_number: "LS-2024-001",
-          contract_type: "residential",
-          landlord_name: "Ahmed Al Rashid",
-          landlord_email: "ahmed@landlord.com",
-          landlord_phone: "+971501234567",
-          tenant_name: "Sarah Johnson",
-          tenant_email: "sarah.johnson@email.com",
-          tenant_phone: "+971509876543",
-          lease_start_date: "2024-02-01",
-          lease_end_date: "2025-01-31",
-          annual_rent: 85000,
-          security_deposit: 4250,
-          broker_commission: 2125,
-          payment_schedule: "quarterly",
-          payment_method: "bank_transfer",
-          payment_due_day: 1,
-          late_payment_penalty_percentage: 5,
-          service_charges_annual: 3000,
-          dewa_included: false,
-          internet_included: true,
-          maintenance_included: true,
-          parking_included: true,
-          auto_renewal: true,
-          renewal_notice_period_days: 90,
-          early_termination_allowed: true,
-          early_termination_penalty: 8500,
-          furnished_status: "furnished",
-          municipality_approval: true,
-          rera_permit_number: "RERA-2024-001",
-          ejari_registration_number: "EJ-2024-001",
-          landlord_signature_status: "signed",
-          tenant_signature_status: "signed",
-          witness_signature_status: "signed",
-          status: "fully_executed",
-          execution_date: "2024-01-25",
-          commission_status: "earned",
-          created_at: "2024-01-20T10:00:00Z",
-          updated_at: "2024-01-25T14:30:00Z"
-        }
-      ]
-      setLeases(mockLeases)
+      
+      // Build filters based on current filter state
+      const filters: any = {}
+      if (statusFilter !== "all") filters.status_filter = statusFilter
+      if (agentFilter !== "all") filters.agent_id = agentFilter
+      
+      // Call real API
+      const leaseData = await leasesApi.getLeases(filters)
+      setLeases(leaseData)
     } catch (error) {
       console.error('Failed to load leases:', error)
+      // On error, show empty state but don't crash
+      setLeases([])
     } finally {
       setLoading(false)
     }
@@ -290,11 +176,17 @@ export function LeaseManagement() {
 
   const handleSendForSignature = async (leaseId: string) => {
     try {
-      // TODO: Replace with actual API call to /api/leases/{id}/send-for-signature
-      console.log('Sending lease for signature:', leaseId)
-      await loadLeases() // Refresh data
+      // Call real API to send lease for signature
+      await leasesApi.sendForSignature(leaseId)
+      
+      // Refresh lease data to show updated status
+      await loadLeases()
+      
+      // Show success message (you can add a toast notification here)
+      console.log('Lease sent for signature successfully')
     } catch (error) {
       console.error('Failed to send for signature:', error)
+      // Show error message (you can add error handling UI here)
     }
   }
 
