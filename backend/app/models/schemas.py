@@ -29,9 +29,23 @@ class PropertyType(str, Enum):
     land = "land"
 
 
+class LeaseType(str, Enum):
+    residential = "residential"
+    commercial = "commercial" 
+    mixed_use = "mixed_use"
+
+
+class FurnishedStatus(str, Enum):
+    furnished = "furnished"
+    semi_furnished = "semi_furnished"
+    unfurnished = "unfurnished"
+
+
 class PropertyStatus(str, Enum):
+    available = "available"
+    leased = "leased"
+    maintenance = "maintenance"
     draft = "draft"
-    active = "active"
     inactive = "inactive"
     suspended = "suspended"
 
@@ -117,6 +131,7 @@ class PasswordChangeRequest(BaseModel):
 
 # Property Models
 class PropertyCreate(BaseModel):
+    # Basic Information
     title: str = Field(..., min_length=3, max_length=200)
     description: Optional[str] = Field(None, max_length=2000)
     address: str = Field(..., min_length=5, max_length=500)
@@ -125,13 +140,28 @@ class PropertyCreate(BaseModel):
     country: str = Field(default="UAE", description="Country code - defaults to UAE")
     latitude: Optional[float] = Field(None, ge=-90, le=90)
     longitude: Optional[float] = Field(None, ge=-180, le=180)
+    
+    # Property Details
     property_type: PropertyType
     bedrooms: int = Field(..., ge=0, le=20)
     bathrooms: float = Field(..., ge=0, le=20)
-    max_guests: int = Field(..., ge=1, le=50)
-    price_per_night: float = Field(..., gt=0, le=50000)  # Increased for Dubai luxury market
+    size_sqft: Optional[int] = Field(None, ge=100, le=50000, description="Property size in square feet")
+    
+    # Long-Term Rental Specific Fields
+    annual_rent: float = Field(..., gt=0, le=2000000, description="Annual rent in AED")
+    security_deposit: Optional[float] = Field(None, ge=0, description="Security deposit amount in AED")
+    commission_rate: float = Field(default=2.5, ge=0, le=10, description="Commission rate percentage")
+    lease_type: LeaseType = Field(default=LeaseType.residential)
+    furnished_status: FurnishedStatus = Field(default=FurnishedStatus.unfurnished)
+    minimum_lease_duration: int = Field(default=12, ge=3, le=60, description="Minimum lease duration in months")
+    maximum_lease_duration: int = Field(default=24, ge=6, le=120, description="Maximum lease duration in months")
+    
+    # Additional Features
     amenities: List[str] = []
     images: List[str] = []
+    
+    # Agent/Agency Assignment (Optional - can be assigned later)
+    agent_id: Optional[str] = Field(None, description="Assigned agent UUID")
     
     @validator('bathrooms')
     def validate_bathrooms(cls, v):
@@ -146,6 +176,13 @@ class PropertyCreate(BaseModel):
         if v.upper() not in ['UAE', 'UNITED ARAB EMIRATES']:
             return 'UAE'
         return 'UAE'
+    
+    @validator('annual_rent')
+    def validate_annual_rent(cls, v):
+        # Ensure reasonable rent for UAE market
+        if v < 10000:  # Minimum 10k AED per year
+            raise ValueError('Annual rent must be at least 10,000 AED')
+        return v
     
     @validator('state')
     def validate_emirate(cls, v):
@@ -187,6 +224,7 @@ class PropertyUpdate(BaseModel):
 
 
 class PropertyResponse(BaseModel):
+    # Basic Information
     id: str
     user_id: str
     title: str
@@ -197,18 +235,39 @@ class PropertyResponse(BaseModel):
     country: str
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+    
+    # Property Details
     property_type: PropertyType
     bedrooms: int
     bathrooms: float
-    max_guests: int
-    price_per_night: float
+    size_sqft: Optional[int] = None
+    
+    # Long-Term Rental Fields
+    annual_rent: float
+    monthly_rent: Optional[float] = None  # Calculated from annual_rent
+    security_deposit: Optional[float] = None
+    commission_rate: float
+    lease_type: LeaseType
+    furnished_status: FurnishedStatus
+    minimum_lease_duration: int
+    maximum_lease_duration: int
+    
+    # Additional Features
     amenities: List[str]
     images: List[str]
+    
+    # Status and Assignment
     status: PropertyStatus
-    rating: float = 0
-    review_count: int = 0
-    booking_count: int = 0
-    total_revenue: float = 0
+    agent_id: Optional[str] = None
+    agency_id: Optional[str] = None
+    
+    # Metrics (Long-term rental focused)
+    applications_count: int = 0
+    viewings_count: int = 0
+    lease_agreements_count: int = 0
+    total_commission_earned: float = 0
+    
+    # Timestamps
     created_at: datetime
     updated_at: datetime
 

@@ -9,6 +9,7 @@ from datetime import datetime
 
 from app.models.schemas import (
     PropertyCreate, PropertyUpdate, PropertyResponse,
+    LeaseType, FurnishedStatus, PropertyStatus,
     AIDescriptionRequest, AIDescriptionResponse,
     AmenitiesSuggestionRequest, AmenitiesSuggestionResponse,
     TitleOptimizationRequest, TitleOptimizationResponse,
@@ -17,7 +18,7 @@ from app.models.schemas import (
 )
 from app.core.supabase_client import supabase_client
 from app.services.ai_service import ai_service
-from app.api.dependencies import get_current_user
+from app.api.dependencies import get_current_user, get_current_agent
 
 router = APIRouter()
 
@@ -37,7 +38,22 @@ async def create_property(
         # Calculate nights for validation
         # (This will be used for booking calculations later)
         
-        # Prepare property data for database
+        # Get agent's agency_id for assignment
+        agent_result = None
+        agency_id = None
+        if property_data.agent_id:
+            # Verify agent exists and get agency_id
+            agent_result = supabase_client.table("agents").select("id, agency_id").eq("id", property_data.agent_id).execute()
+            if agent_result.data:
+                agency_id = agent_result.data[0]["agency_id"]
+        else:
+            # If no agent specified, try to get current user's agent record
+            agent_result = supabase_client.table("agents").select("id, agency_id").eq("user_id", current_user["id"]).execute()
+            if agent_result.data:
+                property_data.agent_id = agent_result.data[0]["id"]
+                agency_id = agent_result.data[0]["agency_id"]
+
+        # Prepare long-term rental property data for database
         property_record = {
             "id": property_id,
             "user_id": current_user["id"],
@@ -52,15 +68,28 @@ async def create_property(
             "property_type": property_data.property_type,
             "bedrooms": property_data.bedrooms,
             "bathrooms": property_data.bathrooms,
-            "max_guests": property_data.max_guests,
-            "price_per_night": property_data.price_per_night,
+            "size_sqft": property_data.size_sqft,
+            # Long-term rental specific fields
+            "annual_rent": property_data.annual_rent,
+            "monthly_rent": property_data.annual_rent / 12,  # Auto-calculate monthly rent
+            "security_deposit": property_data.security_deposit or (property_data.annual_rent * 0.05),  # Default 5% of annual
+            "commission_rate": property_data.commission_rate,
+            "lease_type": property_data.lease_type,
+            "furnished_status": property_data.furnished_status,
+            "minimum_lease_duration": property_data.minimum_lease_duration,
+            "maximum_lease_duration": property_data.maximum_lease_duration,
+            # Assignment
+            "agent_id": property_data.agent_id,
+            "agency_id": agency_id,
+            # Additional fields
             "amenities": property_data.amenities,
             "images": property_data.images,
-            "status": "draft",  # New properties start as draft
-            "rating": 0,
-            "review_count": 0,
-            "booking_count": 0,
-            "total_revenue": 0,
+            "status": "available",  # Long-term rentals start as available for lease
+            # Initialize counters
+            "applications_count": 0,
+            "viewings_count": 0,
+            "lease_agreements_count": 0,
+            "total_commission_earned": 0,
             "created_at": datetime.utcnow().isoformat(),
             "updated_at": datetime.utcnow().isoformat()
         }
@@ -95,25 +124,55 @@ async def create_property(
 
 @router.get("", response_model=List[PropertyResponse])
 @router.get("/", response_model=List[PropertyResponse])
-async def get_user_properties(
+async def get_agency_properties(
     status_filter: Optional[str] = None,
     property_type: Optional[str] = None,
+    lease_type: Optional[str] = None,
+    furnished_status: Optional[str] = None,
+    agent_id: Optional[str] = None,
+    min_rent: Optional[float] = None,
+    max_rent: Optional[float] = None,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get all properties for the current user"""
+    """Get all properties for the current agent's agency with long-term rental filters"""
     try:
-        query = supabase_client.table("properties").select("*").eq("user_id", current_user["id"])
+        # Get current user's agent information
+        agent_result = supabase_client.table("agents").select("id, agency_id").eq("user_id", current_user["id"]).execute()
         
-        # Apply filters
+        if not agent_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User must be an agent to access properties"
+            )
+        
+        current_agent = agent_result.data[0]
+        agency_id = current_agent["agency_id"]
+        
+        # Query properties for the agent's agency
+        query = supabase_client.table("properties").select("*").eq("agency_id", agency_id)
+        
+        # Apply long-term rental specific filters
         if status_filter:
             query = query.eq("status", status_filter)
         if property_type:
             query = query.eq("property_type", property_type)
+        if lease_type:
+            query = query.eq("lease_type", lease_type)
+        if furnished_status:
+            query = query.eq("furnished_status", furnished_status)
+        if agent_id:
+            query = query.eq("agent_id", agent_id)
+        if min_rent:
+            query = query.gte("annual_rent", min_rent)
+        if max_rent:
+            query = query.lte("annual_rent", max_rent)
         
         result = query.order("created_at", desc=True).execute()
         
         return [PropertyResponse(**property_data) for property_data in result.data]
         
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -126,14 +185,27 @@ async def get_property(
     property_id: str,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get a specific property"""
+    """Get a specific property (agency-based access)"""
     try:
-        result = supabase_client.table("properties").select("*").eq("id", property_id).eq("user_id", current_user["id"]).execute()
+        # Get current user's agent information
+        agent_result = supabase_client.table("agents").select("id, agency_id").eq("user_id", current_user["id"]).execute()
+        
+        if not agent_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User must be an agent to access properties"
+            )
+        
+        current_agent = agent_result.data[0]
+        agency_id = current_agent["agency_id"]
+        
+        # Query property with agency access control
+        result = supabase_client.table("properties").select("*").eq("id", property_id).eq("agency_id", agency_id).execute()
         
         if not result.data:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Property not found"
+                detail="Property not found or access denied"
             )
         
         return PropertyResponse(**result.data[0])
