@@ -33,8 +33,8 @@ class AgencyCreate(BaseModel):
     license_number: str = Field(..., min_length=5, max_length=100)
     license_expiry_date: date
     head_office_address: str = Field(..., min_length=10)
-    emirates: str = Field(..., regex="^(Dubai|Abu Dhabi|Sharjah|Ajman|Ras Al Khaimah|Fujairah|Umm Al Quwain)$")
-    phone: str = Field(..., regex="^\\+971[0-9]{8,9}$")
+    emirates: str = Field(..., pattern="^(Dubai|Abu Dhabi|Sharjah|Ajman|Ras Al Khaimah|Fujairah|Umm Al Quwain)$")
+    phone: str = Field(..., pattern="^\\+971[0-9]{8,9}$")
     email: EmailStr
     website_url: Optional[str] = None
     establishment_year: Optional[int] = Field(None, ge=1970, le=2025)
@@ -47,7 +47,7 @@ class AgencyCreate(BaseModel):
 class AgencyUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=2, max_length=255)
     head_office_address: Optional[str] = None
-    phone: Optional[str] = Field(None, regex="^\\+971[0-9]{8,9}$")
+    phone: Optional[str] = Field(None, pattern="^\\+971[0-9]{8,9}$")
     email: Optional[EmailStr] = None
     website_url: Optional[str] = None
     default_commission_rate: Optional[Decimal] = Field(None, ge=0, le=10)
@@ -98,15 +98,15 @@ class AgentStatus(str, Enum):
     suspended = "suspended"
 
 class WorkingHours(BaseModel):
-    start: str = Field("09:00", regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
-    end: str = Field("18:00", regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
+    start: str = Field("09:00", pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
+    end: str = Field("18:00", pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
     days: List[str] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
 class AgentCreate(BaseModel):
     agency_id: UUID
     name: str = Field(..., min_length=2, max_length=255)
     email: EmailStr
-    phone: str = Field(..., regex="^\\+971[0-9]{8,9}$")
+    phone: str = Field(..., pattern="^\\+971[0-9]{8,9}$")
     nationality: Optional[str] = None
     languages_spoken: List[str] = ["English"]
     license_number: Optional[str] = None
@@ -119,7 +119,7 @@ class AgentCreate(BaseModel):
     commission_rate: Decimal = Field(Decimal("2.50"), ge=0, le=10)
     monthly_target: Decimal = Field(Decimal("0"), ge=0)
     annual_target: Decimal = Field(Decimal("0"), ge=0)
-    whatsapp_number: Optional[str] = Field(None, regex="^\\+971[0-9]{8,9}$")
+    whatsapp_number: Optional[str] = Field(None, pattern="^\\+971[0-9]{8,9}$")
     preferred_contact_method: ContactMethod = ContactMethod.phone
     timezone: str = "Asia/Dubai"
     working_hours: WorkingHours = WorkingHours()
@@ -129,7 +129,7 @@ class AgentCreate(BaseModel):
 
 class AgentUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=2, max_length=255)
-    phone: Optional[str] = Field(None, regex="^\\+971[0-9]{8,9}$")
+    phone: Optional[str] = Field(None, pattern="^\\+971[0-9]{8,9}$")
     nationality: Optional[str] = None
     languages_spoken: Optional[List[str]] = None
     license_number: Optional[str] = None
@@ -142,7 +142,7 @@ class AgentUpdate(BaseModel):
     commission_rate: Optional[Decimal] = Field(None, ge=0, le=10)
     monthly_target: Optional[Decimal] = Field(None, ge=0)
     annual_target: Optional[Decimal] = Field(None, ge=0)
-    whatsapp_number: Optional[str] = Field(None, regex="^\\+971[0-9]{8,9}$")
+    whatsapp_number: Optional[str] = Field(None, pattern="^\\+971[0-9]{8,9}$")
     preferred_contact_method: Optional[ContactMethod] = None
     working_hours: Optional[WorkingHours] = None
     status: Optional[AgentStatus] = None
@@ -263,7 +263,7 @@ class ViewingCreate(BaseModel):
     # Applicant Information
     applicant_name: str = Field(..., min_length=2, max_length=255)
     applicant_email: EmailStr
-    applicant_phone: str = Field(..., regex="^\\+971[0-9]{8,9}$")
+    applicant_phone: str = Field(..., pattern="^\\+971[0-9]{8,9}$")
     number_of_attendees: int = Field(1, ge=1, le=10)
     
     # Viewing Type

@@ -49,10 +49,10 @@ class TenantApplicationCreate(BaseModel):
     # Primary Applicant
     primary_applicant_name: str = Field(..., min_length=2, max_length=255)
     primary_applicant_email: EmailStr
-    primary_applicant_phone: str = Field(..., regex="^\\+971[0-9]{8,9}$")
+    primary_applicant_phone: str = Field(..., pattern="^\\+971[0-9]{8,9}$")
     primary_applicant_nationality: Optional[str] = None
     primary_applicant_passport: Optional[str] = None
-    primary_applicant_emirates_id: Optional[str] = Field(None, regex="^[0-9]{3}-[0-9]{4}-[0-9]{7}-[0-9]{1}$")
+    primary_applicant_emirates_id: Optional[str] = Field(None, pattern="^[0-9]{3}-[0-9]{4}-[0-9]{7}-[0-9]{1}$")
     
     # Employment Information
     employer_name: Optional[str] = None
@@ -81,9 +81,9 @@ class TenantApplicationCreate(BaseModel):
     
     # References
     previous_landlord_name: Optional[str] = None
-    previous_landlord_phone: Optional[str] = Field(None, regex="^\\+971[0-9]{8,9}$")
+    previous_landlord_phone: Optional[str] = Field(None, pattern="^\\+971[0-9]{8,9}$")
     employer_reference_name: Optional[str] = None
-    employer_reference_phone: Optional[str] = Field(None, regex="^\\+971[0-9]{8,9}$")
+    employer_reference_phone: Optional[str] = Field(None, pattern="^\\+971[0-9]{8,9}$")
 
     @validator('desired_move_in_date')
     def validate_move_in_date(cls, v):
@@ -314,12 +314,12 @@ class LeaseAgreementCreate(BaseModel):
     # Parties Information
     landlord_name: str = Field(..., min_length=2, max_length=255)
     landlord_email: Optional[EmailStr] = None
-    landlord_phone: Optional[str] = Field(None, regex="^\\+971[0-9]{8,9}$")
+    landlord_phone: Optional[str] = Field(None, pattern="^\\+971[0-9]{8,9}$")
     landlord_emirates_id: Optional[str] = None
     
     tenant_name: str = Field(..., min_length=2, max_length=255)
     tenant_email: EmailStr
-    tenant_phone: str = Field(..., regex="^\\+971[0-9]{8,9}$")
+    tenant_phone: str = Field(..., pattern="^\\+971[0-9]{8,9}$")
     tenant_emirates_id: Optional[str] = None
     tenant_passport: Optional[str] = None
     
