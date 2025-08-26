@@ -94,6 +94,7 @@ function DashboardApp() {
     <Router>
       <Routes>
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/auth/callback/*" element={<AuthCallback />} />
         <Route path="/*" element={<DashboardContent />} />
       </Routes>
     </Router>
