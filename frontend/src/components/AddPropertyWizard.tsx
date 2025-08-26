@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from "./ui/alert"
 import { useApp } from "../contexts/AppContext"
 import { uploadMultipleImages } from "../services/imageUpload"
 
-type WizardStep = 'basic-info' | 'details' | 'images' | 'amenities' | 'pricing' | 'preview' | 'published'
+type WizardStep = 'basic-info' | 'details' | 'images' | 'amenities' | 'lease-terms' | 'preview' | 'published'
 
 interface PropertyData {
   title: string
@@ -25,11 +25,18 @@ interface PropertyData {
   property_type: string
   bedrooms: number
   bathrooms: number
-  max_guests: number
-  price_per_night: number
+  size_sqft?: number
+  annual_rent: number
+  security_deposit?: number
+  commission_rate: number
+  lease_type: string
+  furnished_status: string
+  minimum_lease_duration: number
+  maximum_lease_duration: number
   description: string
   images: string[]
   amenities: string[]
+  agent_id?: string
 }
 
 // UAE-specific amenities and property types are loaded from the backend via useEffect
@@ -64,19 +71,26 @@ export function AddPropertyWizard() {
     property_type: '',
     bedrooms: 1,
     bathrooms: 1,
-    max_guests: 2,
-    price_per_night: 500, // Higher default for UAE market
+    size_sqft: 800, // Default for UAE market
+    annual_rent: 60000, // Default AED 60k/year for UAE market  
+    security_deposit: 3000, // Default 5% of annual rent
+    commission_rate: 2.5, // Standard 2.5% commission
+    lease_type: 'residential',
+    furnished_status: 'unfurnished',
+    minimum_lease_duration: 12, // 12 months minimum
+    maximum_lease_duration: 24, // 24 months maximum
     description: '',
     images: [],
-    amenities: []
+    amenities: [],
+    agent_id: undefined
   })
 
   const steps = [
-    { id: 'basic-info', title: 'Basic Info', icon: Building, description: 'Property basics' },
-    { id: 'details', title: 'Details', icon: Home, description: 'Size & capacity' },
+    { id: 'basic-info', title: 'Basic Info', icon: Building, description: 'Property location & type' },
+    { id: 'details', title: 'Details', icon: Home, description: 'Size & specifications' },
     { id: 'images', title: 'Photos', icon: Camera, description: 'Upload images' },
-    { id: 'amenities', title: 'Amenities', icon: Sparkles, description: 'Features & perks' },
-    { id: 'pricing', title: 'Pricing', icon: DollarSign, description: 'Set your rate' },
+    { id: 'amenities', title: 'Amenities', icon: Sparkles, description: 'Features & facilities' },
+    { id: 'lease-terms', title: 'Lease Terms', icon: FileText, description: 'Rent & lease conditions' },
     { id: 'preview', title: 'Preview', icon: Check, description: 'Review & publish' },
   ]
 
@@ -207,10 +221,17 @@ export function AddPropertyWizard() {
       case 'details':
         if (propertyData.bedrooms < 0) newErrors.bedrooms = 'Bedrooms cannot be negative'
         if (propertyData.bathrooms < 0) newErrors.bathrooms = 'Bathrooms cannot be negative'
-        if (propertyData.max_guests < 1) newErrors.max_guests = 'Must accommodate at least 1 guest'
+        if (propertyData.size_sqft && propertyData.size_sqft < 100) newErrors.size_sqft = 'Size must be at least 100 sq ft'
+        if (!propertyData.lease_type) newErrors.lease_type = 'Lease type is required'
+        if (!propertyData.furnished_status) newErrors.furnished_status = 'Furnished status is required'
         break
-      case 'pricing':
-        if (propertyData.price_per_night < 1) newErrors.price_per_night = 'Price must be at least $1'
+      case 'lease-terms':
+        if (propertyData.annual_rent < 10000) newErrors.annual_rent = 'Annual rent must be at least AED 10,000'
+        if (propertyData.annual_rent > 2000000) newErrors.annual_rent = 'Annual rent cannot exceed AED 2,000,000'
+        if (propertyData.commission_rate < 0 || propertyData.commission_rate > 10) newErrors.commission_rate = 'Commission rate must be between 0% and 10%'
+        if (propertyData.minimum_lease_duration < 3) newErrors.minimum_lease_duration = 'Minimum lease duration must be at least 3 months'
+        if (propertyData.maximum_lease_duration > 120) newErrors.maximum_lease_duration = 'Maximum lease duration cannot exceed 120 months'
+        if (propertyData.minimum_lease_duration >= propertyData.maximum_lease_duration) newErrors.maximum_lease_duration = 'Maximum lease must be greater than minimum lease'
         if (!propertyData.description.trim()) newErrors.description = 'Description is required'
         break
     }
@@ -309,7 +330,6 @@ export function AddPropertyWizard() {
         state: propertyData.state,
         bedrooms: propertyData.bedrooms,
         bathrooms: propertyData.bathrooms,
-        max_guests: propertyData.max_guests,
         amenities: propertyData.amenities,
         address: propertyData.address
       })
@@ -319,7 +339,7 @@ export function AddPropertyWizard() {
       console.error('Failed to generate description:', error)
       console.error('Error details:', error.message, error.status)
       // Fallback to a simple description
-      const fallbackDescription = `Beautiful ${propertyData.property_type.toLowerCase()} in ${propertyData.city}, ${propertyData.state}. This ${propertyData.bedrooms}-bedroom property can accommodate up to ${propertyData.max_guests} guests. Perfect for your next getaway!`
+      const fallbackDescription = `Beautiful ${propertyData.property_type.toLowerCase()} in ${propertyData.city}, ${propertyData.state}. This ${propertyData.bedrooms}-bedroom, ${propertyData.bathrooms}-bathroom property is available for long-term lease. ${propertyData.furnished_status === 'furnished' ? 'Fully furnished and' : ''} Perfect for your new home!`
       setPropertyData(prev => ({ ...prev, description: fallbackDescription }))
     } finally {
       setIsGeneratingDescription(false)
@@ -342,12 +362,18 @@ export function AddPropertyWizard() {
         property_type: propertyData.property_type,
         bedrooms: propertyData.bedrooms,
         bathrooms: propertyData.bathrooms,
-        max_guests: propertyData.max_guests,
-        price_per_night: propertyData.price_per_night,
+        size_sqft: propertyData.size_sqft,
+        annual_rent: propertyData.annual_rent,
+        security_deposit: propertyData.security_deposit,
+        commission_rate: propertyData.commission_rate,
+        lease_type: propertyData.lease_type,
+        furnished_status: propertyData.furnished_status,
+        minimum_lease_duration: propertyData.minimum_lease_duration,
+        maximum_lease_duration: propertyData.maximum_lease_duration,
         description: propertyData.description,
         images: propertyData.images,
         amenities: propertyData.amenities,
-        status: 'active' as const
+        agent_id: propertyData.agent_id
       }
 
       console.log('Sending payload to backend:', propertyPayload)
@@ -483,7 +509,7 @@ export function AddPropertyWizard() {
           <div className="space-y-6">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Details</h2>
-              <p className="text-gray-600">Help guests understand your space</p>
+              <p className="text-gray-600">Provide accurate property specifications</p>
               </div>
               
             <div className="grid gap-6 md:grid-cols-3">
@@ -493,6 +519,7 @@ export function AddPropertyWizard() {
                   id="bedrooms"
                   type="number"
                   min="0"
+                  max="10"
                   value={propertyData.bedrooms}
                   onChange={(e) => setPropertyData(prev => ({ ...prev, bedrooms: parseInt(e.target.value) || 0 }))}
                   className={errors.bedrooms ? 'border-red-500' : ''}
@@ -506,6 +533,7 @@ export function AddPropertyWizard() {
                   id="bathrooms"
                   type="number"
                   min="0"
+                  max="10"
                   step="0.5"
                   value={propertyData.bathrooms}
                   onChange={(e) => setPropertyData(prev => ({ ...prev, bathrooms: parseFloat(e.target.value) || 0 }))}
@@ -515,19 +543,53 @@ export function AddPropertyWizard() {
               </div>
               
               <div>
-                <Label htmlFor="max_guests">Max Guests</Label>
+                <Label htmlFor="size_sqft">Size (sq ft)</Label>
                 <Input
-                  id="max_guests"
+                  id="size_sqft"
                   type="number"
-                  min="1"
-                  value={propertyData.max_guests}
-                  onChange={(e) => setPropertyData(prev => ({ ...prev, max_guests: parseInt(e.target.value) || 1 }))}
-                  className={errors.max_guests ? 'border-red-500' : ''}
+                  min="100"
+                  max="50000"
+                  value={propertyData.size_sqft || ''}
+                  onChange={(e) => setPropertyData(prev => ({ ...prev, size_sqft: parseInt(e.target.value) || undefined }))}
+                  className={errors.size_sqft ? 'border-red-500' : ''}
+                  placeholder="e.g. 1200"
                 />
-                {errors.max_guests && <p className="text-red-500 text-sm mt-1">{errors.max_guests}</p>}
-                  </div>
-                  </div>
-                </div>
+                {errors.size_sqft && <p className="text-red-500 text-sm mt-1">{errors.size_sqft}</p>}
+              </div>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <Label htmlFor="lease_type">Lease Type *</Label>
+                <Select value={propertyData.lease_type} onValueChange={(value) => setPropertyData(prev => ({ ...prev, lease_type: value }))}>
+                  <SelectTrigger className={errors.lease_type ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Select lease type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="residential">Residential</SelectItem>
+                    <SelectItem value="commercial">Commercial</SelectItem>
+                    <SelectItem value="mixed_use">Mixed Use</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.lease_type && <p className="text-red-500 text-sm mt-1">{errors.lease_type}</p>}
+              </div>
+
+              <div>
+                <Label htmlFor="furnished_status">Furnished Status *</Label>
+                <Select value={propertyData.furnished_status} onValueChange={(value) => setPropertyData(prev => ({ ...prev, furnished_status: value }))}>
+                  <SelectTrigger className={errors.furnished_status ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Select furnished status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="furnished">Fully Furnished</SelectItem>
+                    <SelectItem value="semi_furnished">Semi Furnished</SelectItem>
+                    <SelectItem value="unfurnished">Unfurnished</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.furnished_status && <p className="text-red-500 text-sm mt-1">{errors.furnished_status}</p>}
+              </div>
+            </div>
+          </div>
         )
 
       case 'images':
@@ -603,29 +665,108 @@ export function AddPropertyWizard() {
           </div>
         )
 
-      case 'pricing':
+      case 'lease-terms':
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Set Your Price</h2>
-              <p className="text-gray-600">How much do you want to charge per night?</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Lease Terms & Pricing</h2>
+              <p className="text-gray-600">Set your rental terms and commission structure</p>
             </div>
             
-            <div className="max-w-md mx-auto">
-              <Label htmlFor="price_per_night">Price per Night (AED)</Label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">AED</span>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <Label htmlFor="annual_rent">Annual Rent (AED) *</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">AED</span>
+                  <Input
+                    id="annual_rent"
+                    type="number"
+                    min="10000"
+                    max="2000000"
+                    value={propertyData.annual_rent}
+                    onChange={(e) => {
+                      const rent = parseInt(e.target.value) || 10000
+                      setPropertyData(prev => ({ 
+                        ...prev, 
+                        annual_rent: rent,
+                        security_deposit: rent * 0.05 // Auto-calculate 5% security deposit
+                      }))
+                    }}
+                    className={`pl-14 text-lg ${errors.annual_rent ? 'border-red-500' : ''}`}
+                    placeholder="60000"
+                  />
+                </div>
+                {errors.annual_rent && <p className="text-red-500 text-sm mt-1">{errors.annual_rent}</p>}
+                <p className="text-sm text-gray-500 mt-1">Monthly: AED {Math.round(propertyData.annual_rent / 12).toLocaleString()}</p>
+              </div>
+
+              <div>
+                <Label htmlFor="security_deposit">Security Deposit (AED)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">AED</span>
+                  <Input
+                    id="security_deposit"
+                    type="number"
+                    min="0"
+                    value={propertyData.security_deposit || ''}
+                    onChange={(e) => setPropertyData(prev => ({ ...prev, security_deposit: parseInt(e.target.value) || undefined }))}
+                    className={`pl-14 ${errors.security_deposit ? 'border-red-500' : ''}`}
+                    placeholder="3000"
+                  />
+                </div>
+                {errors.security_deposit && <p className="text-red-500 text-sm mt-1">{errors.security_deposit}</p>}
+                <p className="text-sm text-gray-500 mt-1">Recommended: {Math.round(propertyData.annual_rent * 0.05).toLocaleString()} AED (5%)</p>
+              </div>
+
+              <div>
+                <Label htmlFor="commission_rate">Commission Rate (%)</Label>
                 <Input
-                  id="price_per_night"
+                  id="commission_rate"
                   type="number"
-                  min="1"
-                  value={propertyData.price_per_night}
-                  onChange={(e) => setPropertyData(prev => ({ ...prev, price_per_night: parseInt(e.target.value) || 1 }))}
-                  className={`pl-14 text-lg ${errors.price_per_night ? 'border-red-500' : ''}`}
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  value={propertyData.commission_rate}
+                  onChange={(e) => setPropertyData(prev => ({ ...prev, commission_rate: parseFloat(e.target.value) || 2.5 }))}
+                  className={errors.commission_rate ? 'border-red-500' : ''}
+                  placeholder="2.5"
                 />
+                {errors.commission_rate && <p className="text-red-500 text-sm mt-1">{errors.commission_rate}</p>}
+                <p className="text-sm text-gray-500 mt-1">Annual commission: AED {Math.round(propertyData.annual_rent * (propertyData.commission_rate / 100)).toLocaleString()}</p>
               </div>
-              {errors.price_per_night && <p className="text-red-500 text-sm mt-1">{errors.price_per_night}</p>}
+
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="minimum_lease_duration">Min Lease (months)</Label>
+                  <Input
+                    id="minimum_lease_duration"
+                    type="number"
+                    min="3"
+                    max="60"
+                    value={propertyData.minimum_lease_duration}
+                    onChange={(e) => setPropertyData(prev => ({ ...prev, minimum_lease_duration: parseInt(e.target.value) || 12 }))}
+                    className={errors.minimum_lease_duration ? 'border-red-500' : ''}
+                    placeholder="12"
+                  />
+                  {errors.minimum_lease_duration && <p className="text-red-500 text-sm mt-1">{errors.minimum_lease_duration}</p>}
+                </div>
+
+                <div>
+                  <Label htmlFor="maximum_lease_duration">Max Lease (months)</Label>
+                  <Input
+                    id="maximum_lease_duration"
+                    type="number"
+                    min="6"
+                    max="120"
+                    value={propertyData.maximum_lease_duration}
+                    onChange={(e) => setPropertyData(prev => ({ ...prev, maximum_lease_duration: parseInt(e.target.value) || 24 }))}
+                    className={errors.maximum_lease_duration ? 'border-red-500' : ''}
+                    placeholder="24"
+                  />
+                  {errors.maximum_lease_duration && <p className="text-red-500 text-sm mt-1">{errors.maximum_lease_duration}</p>}
+                </div>
               </div>
+            </div>
               
             <div>
               <div className="flex items-center justify-between mb-2">
@@ -689,8 +830,35 @@ export function AddPropertyWizard() {
                   <div className="flex gap-4 text-sm text-gray-600">
                     <span>{propertyData.bedrooms} bed</span>
                     <span>{propertyData.bathrooms} bath</span>
-                    <span>{propertyData.max_guests} guests</span>
-                    <span className="font-bold text-gray-900">AED {propertyData.price_per_night}/night</span>
+                    {propertyData.size_sqft && <span>{propertyData.size_sqft} sq ft</span>}
+                    <span className="font-bold text-gray-900">AED {propertyData.annual_rent.toLocaleString()}/year</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Monthly Rent:</span>
+                      <span className="ml-2 font-medium">AED {Math.round(propertyData.annual_rent / 12).toLocaleString()}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Security Deposit:</span>
+                      <span className="ml-2 font-medium">AED {(propertyData.security_deposit || 0).toLocaleString()}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Lease Type:</span>
+                      <span className="ml-2 font-medium capitalize">{propertyData.lease_type}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Furnished:</span>
+                      <span className="ml-2 font-medium capitalize">{propertyData.furnished_status.replace('_', ' ')}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Lease Duration:</span>
+                      <span className="ml-2 font-medium">{propertyData.minimum_lease_duration}-{propertyData.maximum_lease_duration} months</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Commission:</span>
+                      <span className="ml-2 font-medium">{propertyData.commission_rate}% (AED {Math.round(propertyData.annual_rent * (propertyData.commission_rate / 100)).toLocaleString()})</span>
+                    </div>
                   </div>
                   
                   {propertyData.images.length > 0 && (
@@ -731,8 +899,8 @@ export function AddPropertyWizard() {
               <Check className="h-10 w-10 text-green-600" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">🎉 Property Published!</h2>
-              <p className="text-gray-600">Your property is now live and ready to receive bookings.</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">🎉 Property Listed!</h2>
+              <p className="text-gray-600">Your property is now available for long-term lease applications.</p>
               </div>
             <div className="space-y-3">
               <Button 
@@ -770,7 +938,7 @@ export function AddPropertyWizard() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Add New Property</h1>
-        <p className="text-gray-600">Create a stunning listing for your rental property</p>
+        <p className="text-gray-600">Create a professional listing for long-term lease</p>
       </div>
 
       {/* Progress Bar */}
