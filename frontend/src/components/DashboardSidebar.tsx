@@ -59,6 +59,12 @@ const navigationItems = [
     description: 'Lease agreements'
   },
   {
+    id: 'leases' as NavigationItem,
+    title: 'Leases',
+    icon: FileText,
+    description: 'Lease management & signatures'
+  },
+  {
     id: 'agents' as NavigationItem,
     title: 'Agents',
     icon: Users,
