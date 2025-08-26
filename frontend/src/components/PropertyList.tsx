@@ -11,8 +11,45 @@ import { Label } from "./ui/label"
 import { ImageWithFallback } from "./figma/ImageWithFallback"
 import { useApp } from "../contexts/AppContext"
 
-// Property type inferred from the context
-type Property = NonNullable<ReturnType<typeof useApp>['properties'][0]>
+// Long-term rental property interface
+interface LongTermProperty {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  address: string
+  city: string
+  state: string
+  country: string
+  latitude?: number
+  longitude?: number
+  property_type: string
+  bedrooms: number
+  bathrooms: number
+  size_sqft?: number
+  annual_rent: number
+  monthly_rent?: number
+  security_deposit?: number
+  commission_rate: number
+  lease_type: string
+  furnished_status: string
+  minimum_lease_duration: number
+  maximum_lease_duration: number
+  amenities: string[]
+  images: string[]
+  status: string
+  agent_id?: string
+  agency_id?: string
+  applications_count: number
+  viewings_count: number
+  lease_agreements_count: number
+  total_commission_earned: number
+  created_at: string
+  updated_at: string
+}
+
+// Use the long-term property type
+type Property = LongTermProperty
 
 export function PropertyList() {
   const { properties, loadProperties, deleteProperty, updateProperty } = useApp()
@@ -21,13 +58,13 @@ export function PropertyList() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [isViewModalOpen, setIsViewModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [editFormData, setEditFormData] = useState<Partial<Property>>({})
+  const [editFormData, setEditFormData] = useState<Partial<any>>({})
 
   useEffect(() => {
     loadProperties()
   }, [])
 
-  const filteredProperties = properties.filter(property => {
+  const filteredProperties = (properties as any[]).filter(property => {
     const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          property.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          property.state.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,28 +74,27 @@ export function PropertyList() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800'
-      case 'inactive': return 'bg-gray-100 text-gray-800'
+      case 'available': return 'bg-green-100 text-green-800'
+      case 'leased': return 'bg-blue-100 text-blue-800'
+      case 'maintenance': return 'bg-orange-100 text-orange-800'
       case 'draft': return 'bg-yellow-100 text-yellow-800'
-      case 'suspended': return 'bg-red-100 text-red-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
 
-  const handleViewProperty = (property: Property) => {
+  const handleViewProperty = (property: any) => {
     setSelectedProperty(property)
     setIsViewModalOpen(true)
   }
 
-  const handleEditProperty = (property: Property) => {
+  const handleEditProperty = (property: any) => {
     setSelectedProperty(property)
     setEditFormData({
       title: property.title,
       description: property.description,
-      price_per_night: property.price_per_night,
+      annual_rent: property.annual_rent || property.price_per_night * 365, // Fallback calculation
       bedrooms: property.bedrooms,
       bathrooms: property.bathrooms,
-      max_guests: property.max_guests,
       status: property.status
     })
     setIsEditModalOpen(true)
@@ -90,9 +126,9 @@ export function PropertyList() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1>Properties</h1>
+        <h1>Agency Properties</h1>
         <p className="text-muted-foreground">
-          Manage your rental properties and track their performance.
+          Manage long-term rental properties, track applications, and monitor commission earnings.
         </p>
       </div>
 
@@ -113,10 +149,10 @@ export function PropertyList() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="available">Available</SelectItem>
+            <SelectItem value="leased">Leased</SelectItem>
+            <SelectItem value="maintenance">Maintenance</SelectItem>
             <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="inactive">Inactive</SelectItem>
-            <SelectItem value="suspended">Suspended</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -160,20 +196,38 @@ export function PropertyList() {
                     <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
                       <span>{property.bedrooms} bed</span>
                       <span>{property.bathrooms} bath</span>
-                      <span>{property.max_guests} guests</span>
+                      {property.size_sqft && <span>{property.size_sqft} sq ft</span>}
+                      <span className="capitalize">{property.furnished_status?.replace('_', ' ') || 'Unfurnished'}</span>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-6">
                       <div className="flex items-baseline">
-                        <span className="font-bold text-lg text-green-600">${property.price_per_night}</span>
-                        <span className="text-muted-foreground text-sm ml-1">/night</span>
+                        <span className="font-bold text-lg text-green-600">AED {property.annual_rent?.toLocaleString() || 0}</span>
+                        <span className="text-muted-foreground text-sm ml-1">/year</span>
                       </div>
-                      {property.rating && (
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="ml-1 text-sm font-medium">{property.rating}</span>
-                        </div>
-                      )}
+                      <div className="flex items-baseline">
+                        <span className="font-medium text-gray-700">AED {property.monthly_rent ? Math.round(property.monthly_rent).toLocaleString() : Math.round((property.annual_rent || 0) / 12).toLocaleString()}</span>
+                        <span className="text-muted-foreground text-sm ml-1">/month</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
+                      <span>Commission: {property.commission_rate || 2.5}%</span>
+                      <span>Lease: {property.minimum_lease_duration || 12}-{property.maximum_lease_duration || 24} months</span>
+                      <span className="capitalize">{property.lease_type || 'Residential'}</span>
+                    </div>
+
+                    {/* Agent Assignment & Metrics */}
+                    <div className="flex items-center gap-6 mt-3 pt-3 border-t border-gray-100">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Building2 className="h-3 w-3" />
+                        <span>Agent: {property.agent_id ? 'Assigned' : 'Unassigned'}</span>
+                      </div>
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <span>Applications: {property.applications_count || 0}</span>
+                        <span>Viewings: {property.viewings_count || 0}</span>
+                        <span>Commission Earned: AED {property.total_commission_earned?.toLocaleString() || 0}</span>
+                      </div>
                     </div>
                   </div>
 
@@ -264,8 +318,9 @@ export function PropertyList() {
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-white p-4 rounded-md border">
-                  <Label className="font-semibold text-gray-700">Price per night</Label>
-                  <p className="text-green-600 font-bold text-lg mt-1">${selectedProperty.price_per_night}</p>
+                  <Label className="font-semibold text-gray-700">Annual Rent</Label>
+                  <p className="text-green-600 font-bold text-lg mt-1">AED {selectedProperty.annual_rent?.toLocaleString() || 0}</p>
+                  <p className="text-sm text-gray-500">Monthly: AED {selectedProperty.monthly_rent ? Math.round(selectedProperty.monthly_rent).toLocaleString() : Math.round((selectedProperty.annual_rent || 0) / 12).toLocaleString()}</p>
                 </div>
                 <div className="bg-white p-4 rounded-md border">
                   <Label className="font-semibold text-gray-700">Bedrooms</Label>
@@ -277,14 +332,45 @@ export function PropertyList() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-white p-4 rounded-md border">
+                  <Label className="font-semibold text-gray-700">Size</Label>
+                  <p className="text-gray-900 font-medium mt-1">{selectedProperty.size_sqft || 'N/A'} sq ft</p>
+                </div>
+                <div className="bg-white p-4 rounded-md border">
+                  <Label className="font-semibold text-gray-700">Furnished Status</Label>
+                  <p className="text-gray-900 font-medium mt-1 capitalize">{selectedProperty.furnished_status?.replace('_', ' ') || 'Unfurnished'}</p>
+                </div>
+                <div className="bg-white p-4 rounded-md border">
+                  <Label className="font-semibold text-gray-700">Lease Type</Label>
+                  <p className="text-gray-900 font-medium mt-1 capitalize">{selectedProperty.lease_type || 'Residential'}</p>
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white p-4 rounded-md border">
-                  <Label className="font-semibold text-gray-700">Max Guests</Label>
-                  <p className="text-gray-900 font-medium mt-1">{selectedProperty.max_guests}</p>
+                  <Label className="font-semibold text-gray-700">Lease Duration</Label>
+                  <p className="text-gray-900 font-medium mt-1">{selectedProperty.minimum_lease_duration || 12}-{selectedProperty.maximum_lease_duration || 24} months</p>
                 </div>
                 <div className="bg-white p-4 rounded-md border">
                   <Label className="font-semibold text-gray-700">Location</Label>
                   <p className="text-gray-900 font-medium mt-1">{selectedProperty.city}, {selectedProperty.state}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-white p-4 rounded-md border">
+                  <Label className="font-semibold text-gray-700">Commission Rate</Label>
+                  <p className="text-gray-900 font-medium mt-1">{selectedProperty.commission_rate || 2.5}%</p>
+                  <p className="text-sm text-gray-500">Annual: AED {Math.round((selectedProperty.annual_rent || 0) * ((selectedProperty.commission_rate || 2.5) / 100)).toLocaleString()}</p>
+                </div>
+                <div className="bg-white p-4 rounded-md border">
+                  <Label className="font-semibold text-gray-700">Applications</Label>
+                  <p className="text-gray-900 font-medium mt-1">{selectedProperty.applications_count || 0}</p>
+                </div>
+                <div className="bg-white p-4 rounded-md border">
+                  <Label className="font-semibold text-gray-700">Viewings</Label>
+                  <p className="text-gray-900 font-medium mt-1">{selectedProperty.viewings_count || 0}</p>
                 </div>
               </div>
 
