@@ -15,9 +15,10 @@ import { ApplicationManagement } from "./components/ApplicationManagement"
 import { ViewingManagement } from "./components/ViewingManagement"
 import { ContractManagement } from "./components/ContractManagement"
 import { AgentManagement } from "./components/AgentManagement"
+import { CommissionDashboard } from "./components/CommissionDashboard"
 import { AuthCallback } from "./components/AuthCallback"
 
-export type NavigationItem = 'overview' | 'properties' | 'add-property' | 'applications' | 'viewings' | 'contracts' | 'agents' | 'analytics' | 'financials' | 'settings'
+export type NavigationItem = 'overview' | 'properties' | 'add-property' | 'applications' | 'viewings' | 'contracts' | 'agents' | 'commissions' | 'analytics' | 'financials' | 'settings'
 
 function DashboardContent() {
   const { user, isLoading } = useApp()
@@ -27,7 +28,7 @@ function DashboardContent() {
   // Map URL paths to navigation items
   const getActiveSection = (pathname: string): NavigationItem => {
     const path = pathname.replace('/', '') || 'overview'
-    return ['overview', 'properties', 'add-property', 'applications', 'viewings', 'contracts', 'agents', 'analytics', 'financials', 'settings'].includes(path) 
+    return ['overview', 'properties', 'add-property', 'applications', 'viewings', 'contracts', 'agents', 'commissions', 'analytics', 'financials', 'settings'].includes(path) 
       ? path as NavigationItem 
       : 'overview'
   }
@@ -79,6 +80,7 @@ function DashboardContent() {
             <Route path="/viewings" element={<ViewingManagement />} />
             <Route path="/contracts" element={<ContractManagement />} />
             <Route path="/agents" element={<AgentManagement />} />
+            <Route path="/commissions" element={<CommissionDashboard />} />
             <Route path="/analytics" element={<AnalyticsDashboard />} />
             <Route path="/financials" element={<FinancialDashboard />} />
             <Route path="/settings" element={<SettingsPage />} />

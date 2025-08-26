@@ -1,4 +1,4 @@
-import { Home, Building2, Plus, BarChart3, Calendar, Settings, Bot, LogOut, User, DollarSign } from "lucide-react"
+import { Home, Building2, Plus, BarChart3, Calendar, Settings, Bot, LogOut, User, DollarSign, FileText, Eye, FileCheck, Users } from "lucide-react"
 import KribLogo from "../assets/krib-logo.svg"
 import {
   Sidebar,
@@ -26,37 +26,55 @@ const navigationItems = [
     id: 'overview' as NavigationItem,
     title: 'Overview',
     icon: Home,
-    description: 'Dashboard overview'
+    description: 'Agency dashboard'
   },
   {
     id: 'properties' as NavigationItem,
-    title: 'My Properties',
+    title: 'Properties',
     icon: Building2,
-    description: 'Manage your listings'
+    description: 'Manage listings'
   },
   {
     id: 'add-property' as NavigationItem,
     title: 'Add Property',
     icon: Plus,
-    description: 'AI-powered listing creation'
+    description: 'Create new listing'
+  },
+  {
+    id: 'applications' as NavigationItem,
+    title: 'Applications',
+    icon: FileText,
+    description: 'Tenant applications'
+  },
+  {
+    id: 'viewings' as NavigationItem,
+    title: 'Viewings',
+    icon: Eye,
+    description: 'Property viewings'
+  },
+  {
+    id: 'contracts' as NavigationItem,
+    title: 'Contracts',
+    icon: FileCheck,
+    description: 'Lease agreements'
+  },
+  {
+    id: 'agents' as NavigationItem,
+    title: 'Agents',
+    icon: Users,
+    description: 'Team management'
+  },
+  {
+    id: 'commissions' as NavigationItem,
+    title: 'Commissions',
+    icon: DollarSign,
+    description: 'Track earnings'
   },
   {
     id: 'analytics' as NavigationItem,
     title: 'Analytics',
     icon: BarChart3,
     description: 'Performance insights'
-  },
-  {
-    id: 'bookings' as NavigationItem,
-    title: 'Bookings',
-    icon: Calendar,
-    description: 'Manage reservations'
-  },
-  {
-    id: 'financials' as NavigationItem,
-    title: 'Financials',
-    icon: DollarSign,
-    description: 'Earnings & payouts'
   },
   {
     id: 'settings' as NavigationItem,
