@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
-import { FileText, Download, Send, Clock, CheckCircle, Plus, Search } from "lucide-react"
+import { FileText, Download, Send, Clock, CheckCircle, Plus, Search, AlertCircle } from "lucide-react"
 import { Input } from "./ui/input"
 
 interface LeaseContract {
@@ -72,8 +72,29 @@ const getStatusIcon = (status: string) => {
 }
 
 export function ContractManagement() {
-  const [contracts] = useState<LeaseContract[]>(mockContracts)
+  const [contracts, setContracts] = useState<LeaseContract[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchContracts = async () => {
+      try {
+        setLoading(true)
+        // TODO: Replace with real API call to fetch lease agreements
+        // const data = await leaseAgreementsApi.getAll()
+        // setContracts(data)
+        
+        // For now, show empty state to indicate real backend integration
+        setContracts([])
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch contracts')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchContracts()
+  }, [])
 
   const filteredContracts = contracts.filter(contract =>
     contract.tenantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -161,14 +182,53 @@ export function ContractManagement() {
         </Card>
       </div>
 
+      {/* Loading State */}
+      {loading && (
+        <Card>
+          <CardContent className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-krib-accent mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading contracts...</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <Card>
+          <CardContent className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <p className="text-red-600 font-medium">{error}</p>
+              <p className="text-muted-foreground text-sm mt-2">Please try again later</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Contracts List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Lease Agreements</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {filteredContracts.map((contract) => (
+      {!loading && !error && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Lease Agreements</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {contracts.length === 0 ? (
+              <div className="text-center py-12">
+                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">No contracts yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Start by creating your first lease agreement
+                </p>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create First Contract
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredContracts.map((contract) => (
               <div key={contract.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
@@ -214,9 +274,11 @@ export function ContractManagement() {
                 </div>
               </div>
             ))}
-          </div>
-        </CardContent>
-      </Card>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

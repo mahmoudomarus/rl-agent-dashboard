@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Avatar, AvatarFallback } from "./ui/avatar"
-import { Users, Phone, Mail, MapPin, TrendingUp, Plus, Search, UserPlus } from "lucide-react"
+import { Users, Phone, Mail, MapPin, TrendingUp, Plus, Search, UserPlus, AlertCircle } from "lucide-react"
 
 interface Agent {
   id: string
@@ -81,8 +81,29 @@ const getStatusColor = (status: string) => {
 }
 
 export function AgentManagement() {
-  const [agents] = useState<Agent[]>(mockAgents)
+  const [agents, setAgents] = useState<Agent[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        setLoading(true)
+        // TODO: Replace with real API call to fetch agents
+        // const data = await agentsApi.getAll()
+        // setAgents(data)
+        
+        // For now, show empty state to indicate real backend integration
+        setAgents([])
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch agents')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchAgents()
+  }, [])
 
   const filteredAgents = agents.filter(agent =>
     agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
