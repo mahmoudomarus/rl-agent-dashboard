@@ -12,7 +12,9 @@ services:
       - key: ENVIRONMENT
         value: production
       - key: PYTHONPATH
-        value: /opt/render/project/src
+        value: /opt/render/project/src/backend
+      - key: PORT
+        value: "10000"
     scaling:
       minInstances: 1
       maxInstances: 3
