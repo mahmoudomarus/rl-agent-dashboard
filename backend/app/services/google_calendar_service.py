@@ -2,11 +2,6 @@
 Google Calendar Integration Service for Property Viewing Scheduling
 """
 
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import Flow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from typing import Dict, List, Optional, Any
 import json
 import logging
@@ -16,12 +11,37 @@ import uuid
 from app.core.config import settings
 from app.core.supabase_client import supabase_client
 
+# Try to import Google libraries, but continue if they're not available
+try:
+    from google.oauth2.credentials import Credentials
+    from google.auth.transport.requests import Request
+    from google_auth_oauthlib.flow import Flow
+    from googleapiclient.discovery import build
+    from googleapiclient.errors import HttpError
+    GOOGLE_CALENDAR_AVAILABLE = True
+except ImportError:
+    # Create mock classes if Google Calendar is not available
+    Credentials = None
+    Request = None
+    Flow = None
+    HttpError = Exception
+    GOOGLE_CALENDAR_AVAILABLE = False
+    
+    def build(*args, **kwargs):
+        return None
+
 logger = logging.getLogger(__name__)
 
 class GoogleCalendarService:
     def __init__(self):
-        self.client_id = settings.google_client_id
-        self.client_secret = settings.google_client_secret
+        self.google_calendar_available = GOOGLE_CALENDAR_AVAILABLE
+        
+        if not self.google_calendar_available:
+            logger.warning("Google Calendar library not available. Calendar features will be disabled.")
+            return
+            
+        self.client_id = getattr(settings, 'google_client_id', None)
+        self.client_secret = getattr(settings, 'google_client_secret', None)
         self.redirect_uri = "http://localhost:8000/api/auth/google/callback"
         self.scopes = [
             'https://www.googleapis.com/auth/calendar',
@@ -38,6 +58,10 @@ class GoogleCalendarService:
         Get Google OAuth authorization URL for agent calendar integration
         """
         try:
+            if not self.google_calendar_available:
+                logger.warning("Google Calendar not available, returning mock URL")
+                return "https://mock-calendar-auth.example.com"
+            
             if not self.client_id or not self.client_secret:
                 raise Exception("Google Calendar credentials not configured")
             
