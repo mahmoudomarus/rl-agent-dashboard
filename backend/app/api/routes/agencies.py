@@ -96,6 +96,83 @@ async def create_agency(
         )
 
 
+@router.post("/setup-test-data")
+async def setup_test_data():
+    """TEMPORARY: Setup test data for development"""
+    try:
+        import uuid
+        from datetime import datetime
+        
+        # User from auth logs
+        user_id = "07c03f44-97cd-43e2-8ab5-84fb6efe33e8"
+        user_email = "mahmoudomarus@gmail.com"
+        user_name = "Mahmoud Omar"
+        
+        # 1. Create user profile if not exists
+        user_result = supabase_client.table("users").select("*").eq("id", user_id).execute()
+        if not user_result.data:
+            user_data = {
+                "id": user_id,
+                "name": user_name,
+                "email": user_email,
+                "settings": {},
+                "total_revenue": 0
+            }
+            supabase_client.table("users").insert(user_data).execute()
+        
+        # 2. Create agency if not exists
+        agency_result = supabase_client.table("agencies").select("*").eq("name", "Krib Real Estate Agency").execute()
+        if not agency_result.data:
+            agency_id = str(uuid.uuid4())
+            agency_data = {
+                "id": agency_id,
+                "name": "Krib Real Estate Agency",
+                "email": "agency@krib.com",
+                "phone": "+971501234567",
+                "address": "Business Bay, Dubai, UAE",
+                "emirates": "Dubai",
+                "license_number": "RERA-12345",
+                "website": "https://krib.com",
+                "status": "active",
+                "settings": {"commission_rate": 2.5, "currency": "AED"}
+            }
+            supabase_client.table("agencies").insert(agency_data).execute()
+        else:
+            agency_id = agency_result.data[0]["id"]
+        
+        # 3. Create agent record if not exists
+        agent_result = supabase_client.table("agents").select("*").eq("user_id", user_id).execute()
+        if not agent_result.data:
+            agent_data = {
+                "id": str(uuid.uuid4()),
+                "agency_id": agency_id,
+                "user_id": user_id,
+                "name": user_name,
+                "email": user_email,
+                "phone": "+971501234567",
+                "role": "admin",
+                "status": "active",
+                "assigned_territories": ["Business Bay", "Downtown Dubai", "DIFC"],
+                "commission_rate": 2.5,
+                "specializations": ["Luxury Apartments", "Commercial Properties"],
+                "languages": ["English", "Arabic"],
+                "employee_id": "EMP001",
+                "hire_date": datetime.now().date().isoformat(),
+                "total_deals_closed": 0,
+                "total_commission_earned": 0,
+                "total_properties_managed": 0
+            }
+            supabase_client.table("agents").insert(agent_data).execute()
+        
+        return {"message": "Test data created successfully", "agency_id": agency_id, "user_id": user_id}
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create test data: {str(e)}"
+        )
+
+
 @router.get("/current", response_model=AgencyResponse)
 async def get_current_agency(current_user: dict = Depends(get_current_user)):
     """Get the current user's agency"""
@@ -276,7 +353,7 @@ async def update_agency(
         )
 
 
-@router.get("/{agency_id}/dashboard", response_model=AgencyDashboardStats)
+    ors@router.get("/{agency_id}/dashboard", response_model=AgencyDashboardStats)
 async def get_agency_dashboard(
     agency_id: str,
     current_agent: dict = Depends(get_current_agent)

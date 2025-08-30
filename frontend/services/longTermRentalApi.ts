@@ -6,7 +6,8 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://krib-real-estate-a
 // Helper function to get auth token
 const getAuthHeaders = async () => {
   // Get token from Supabase auth session
-  const { data: { session } } = await (await import('../src/utils/supabase/client')).supabase.auth.getSession()
+  const { supabase } = await import('../src/utils/supabase/client.ts')
+  const { data: { session } } = await supabase.auth.getSession()
   return {
     'Content-Type': 'application/json',
     'Authorization': session?.access_token ? `Bearer ${session.access_token}` : ''
