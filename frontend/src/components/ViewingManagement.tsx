@@ -103,51 +103,51 @@ export function ViewingManagement() {
         </Button>
       </div>
 
-      {/* Statistics Cards */}
+      {/* Statistics Cards - Krib Lime & Black Theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+        <Card className="stats-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today's Viewings</CardTitle>
-            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-800">Today's Viewings</CardTitle>
+            <CalendarIcon className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{todaysViewings.length}</div>
-            <p className="text-xs text-muted-foreground">Scheduled for today</p>
+            <div className="text-3xl font-bold text-gray-800">{todaysViewings.length}</div>
+            <p className="text-xs text-gray-600 opacity-80">Scheduled for today</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-dark">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Week</CardTitle>
-            <Eye className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-lime-400">This Week</CardTitle>
+            <Eye className="h-5 w-5 text-lime-400 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{viewings.length}</div>
-            <p className="text-xs text-muted-foreground">Total scheduled</p>
+            <div className="text-3xl font-bold text-lime-400">{viewings.length}</div>
+            <p className="text-xs text-lime-300 opacity-80">Total scheduled</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-light">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Confirmed</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-800">Confirmed</CardTitle>
+            <Clock className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-gray-800">
               {viewings.filter(v => v.status === 'confirmed').length}
             </div>
-            <p className="text-xs text-muted-foreground">Ready to proceed</p>
+            <p className="text-xs text-gray-600 opacity-80">Ready to proceed</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-accent">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
-            <div className="text-sm text-muted-foreground">%</div>
+            <CardTitle className="text-sm font-medium text-gray-800">Conversion Rate</CardTitle>
+            <div className="text-sm text-gray-700 opacity-90">%</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">85%</div>
-            <p className="text-xs text-muted-foreground">Viewing to application</p>
+            <div className="text-3xl font-bold text-gray-800">85%</div>
+            <p className="text-xs text-gray-600 opacity-80">Viewing to application</p>
           </CardContent>
         </Card>
       </div>

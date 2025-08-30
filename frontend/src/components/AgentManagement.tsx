@@ -286,64 +286,64 @@ export function AgentManagement() {
         </TabsList>
         
         <TabsContent value="overview" className="space-y-6">
-          {/* Team Statistics */}
+          {/* Team Statistics - Krib Lime & Black Theme */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            <Card>
+            <Card className="stats-card">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Agents</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium text-gray-800">Total Agents</CardTitle>
+                <Users className="h-5 w-5 text-gray-700 opacity-90" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{teamStats.totalAgents}</div>
-                <p className="text-xs text-muted-foreground">
+                <div className="text-3xl font-bold text-gray-800">{teamStats.totalAgents}</div>
+                <p className="text-xs text-gray-600 opacity-80">
                   {teamStats.activeAgents} active
                 </p>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="stats-card-dark">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Commission</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium text-lime-400">Total Commission</CardTitle>
+                <DollarSign className="h-5 w-5 text-lime-400 opacity-90" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{formatCurrency(teamStats.totalCommission)}</div>
-                <p className="text-xs text-muted-foreground">Year to date</p>
+                <div className="text-3xl font-bold text-lime-400">{formatCurrency(teamStats.totalCommission)}</div>
+                <p className="text-xs text-lime-300 opacity-80">Year to date</p>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="stats-card-light">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Deals</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium text-gray-800">Total Deals</CardTitle>
+                <TrendingUp className="h-5 w-5 text-gray-700 opacity-90" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{teamStats.totalDeals}</div>
-                <p className="text-xs text-muted-foreground">Closed deals</p>
+                <div className="text-3xl font-bold text-gray-800">{teamStats.totalDeals}</div>
+                <p className="text-xs text-gray-600 opacity-80">Closed deals</p>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="stats-card-accent">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Properties</CardTitle>
-                <Building className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium text-gray-800">Properties</CardTitle>
+                <Building className="h-5 w-5 text-gray-700 opacity-90" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{teamStats.totalProperties}</div>
-                <p className="text-xs text-muted-foreground">Under management</p>
+                <div className="text-3xl font-bold text-gray-800">{teamStats.totalProperties}</div>
+                <p className="text-xs text-gray-600 opacity-80">Under management</p>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="stats-card">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Top Performer</CardTitle>
-                <Crown className="h-4 w-4 text-yellow-500" />
+                <CardTitle className="text-sm font-medium text-gray-800">Top Performer</CardTitle>
+                <Crown className="h-5 w-5 text-yellow-500 opacity-90" />
               </CardHeader>
               <CardContent>
-                <div className="text-sm font-bold truncate">
+                <div className="text-sm font-bold truncate text-gray-800">
                   {teamStats.topPerformer?.name || 'N/A'}
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-gray-600 opacity-80">
                   {formatCurrency(teamStats.topPerformer?.total_commission_earned || 0)}
                 </p>
               </CardContent>

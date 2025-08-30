@@ -109,58 +109,58 @@ export function ApplicationManagement() {
         </div>
       </div>
 
-      {/* Statistics Cards */}
+      {/* Statistics Cards - Krib Lime & Black Theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+        <Card className="stats-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Applications</CardTitle>
-            <ClipboardList className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-800">Total Applications</CardTitle>
+            <ClipboardList className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{applications.length}</div>
-            <p className="text-xs text-muted-foreground">All submissions</p>
+            <div className="text-3xl font-bold text-gray-800">{applications.length}</div>
+            <p className="text-xs text-gray-600 opacity-80">All submissions</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-dark">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Under Review</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-lime-400">Under Review</CardTitle>
+            <Clock className="h-5 w-5 text-lime-400 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-lime-400">
               {applications.filter(a => a.status === 'under_review').length}
             </div>
-            <p className="text-xs text-muted-foreground">Awaiting decision</p>
+            <p className="text-xs text-lime-300 opacity-80">Awaiting decision</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-light">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Approved</CardTitle>
-            <Check className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-800">Approved</CardTitle>
+            <Check className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-gray-800">
               {applications.filter(a => a.status === 'approved').length}
             </div>
-            <p className="text-xs text-muted-foreground">Ready for lease</p>
+            <p className="text-xs text-gray-600 opacity-80">Ready for lease</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-accent">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Budget</CardTitle>
-            <div className="text-sm text-muted-foreground">AED</div>
+            <CardTitle className="text-sm font-medium text-gray-800">Avg. Budget</CardTitle>
+            <div className="text-sm text-gray-700 opacity-90">AED</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-gray-800">
               {applications.length > 0 
                 ? Math.round(applications.reduce((acc, app) => acc + app.maximum_budget, 0) / applications.length).toLocaleString()
                 : '0'
               }
             </div>
-            <p className="text-xs text-muted-foreground">Monthly budget</p>
+            <p className="text-xs text-gray-600 opacity-80">Monthly budget</p>
           </CardContent>
         </Card>
       </div>

@@ -223,62 +223,62 @@ export function LeaseManagement() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - Krib Lime & Black Theme */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card>
+        <Card className="stats-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Leases</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-800">Total Leases</CardTitle>
+            <FileText className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{leases.length}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold text-gray-800">{leases.length}</div>
+            <p className="text-xs text-gray-600 opacity-80">
               +2 from last month
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-dark">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Leases</CardTitle>
-            <Check className="h-4 w-4 text-green-600" />
+            <CardTitle className="text-sm font-medium text-lime-400">Active Leases</CardTitle>
+            <Check className="h-5 w-5 text-lime-400 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-lime-400">
               {leases.filter(l => l.status === 'fully_executed' || l.status === 'active').length}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-lime-300 opacity-80">
               Currently active
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-light">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Signatures</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">Pending Signatures</CardTitle>
+            <Clock className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-gray-800">
               {leases.filter(l => l.status === 'sent_for_signature' || l.status === 'partially_signed').length}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-600 opacity-80">
               Awaiting signatures
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-accent">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Commission Earned</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">Commission Earned</CardTitle>
+            <DollarSign className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-gray-800">
               AED {leases.filter(l => l.commission_status === 'earned' || l.commission_status === 'paid')
                 .reduce((sum, l) => sum + l.broker_commission, 0).toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-600 opacity-80">
               Total earned commission
             </p>
           </CardContent>
