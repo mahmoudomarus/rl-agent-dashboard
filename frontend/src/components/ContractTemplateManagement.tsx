@@ -79,13 +79,17 @@ export function ContractTemplateManagement() {
 
   useEffect(() => {
     loadTemplates()
-    loadStats()
   }, [])
 
   // Reload templates when filters change
   useEffect(() => {
     loadTemplates()
   }, [statusFilter, propertyTypeFilter, complianceFilter])
+  
+  // Update stats whenever templates change
+  useEffect(() => {
+    loadStats()
+  }, [templates])
 
   const loadTemplates = async () => {
     try {
@@ -112,16 +116,32 @@ export function ContractTemplateManagement() {
 
   const loadStats = async () => {
     try {
-      // TODO: Replace with actual API call to /api/contract-templates/stats
+      // Calculate stats from real templates data
+      const totalTemplates = templates.length
+      const activeTemplates = templates.filter(t => t.status === 'active').length
+      const pendingApproval = templates.filter(t => t.status === 'draft').length
+      const totalUsage = templates.reduce((sum, t) => sum + (t.usage_count || 0), 0)
+      const averageSuccessRate = templates.length > 0 
+        ? templates.reduce((sum, t) => sum + (t.success_rate || 0), 0) / templates.length 
+        : 0
+      
       setStats({
-        total_templates: 12,
-        active_templates: 8,
-        pending_approval: 2,
-        total_usage: 156,
-        average_success_rate: 89.4
+        total_templates: totalTemplates,
+        active_templates: activeTemplates,
+        pending_approval: pendingApproval,
+        total_usage: totalUsage,
+        average_success_rate: Math.round(averageSuccessRate * 10) / 10
       })
     } catch (error) {
       console.error('Failed to load stats:', error)
+      // Set all stats to 0 on error
+      setStats({
+        total_templates: 0,
+        active_templates: 0,
+        pending_approval: 0,
+        total_usage: 0,
+        average_success_rate: 0
+      })
     }
   }
 
@@ -287,7 +307,7 @@ export function ContractTemplateManagement() {
           <CardContent>
             <div className="text-2xl font-bold">{stats.total_templates}</div>
             <p className="text-xs text-muted-foreground">
-              +2 this month
+              Total contract templates
             </p>
           </CardContent>
         </Card>
