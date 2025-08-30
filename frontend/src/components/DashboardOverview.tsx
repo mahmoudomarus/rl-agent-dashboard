@@ -311,21 +311,21 @@ export function DashboardOverview() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* Header */}
-      <div className="krib-section-header flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Agency Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-3xl font-bold tracking-tight">Agency Dashboard</h1>
+          <p className="text-muted-foreground">
             Welcome back! Here's your real estate agency performance overview.
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate('/add-property')} className="hover:border-blue-500 hover:text-blue-600">
+          <Button variant="outline" onClick={() => navigate('/add-property')}>
             <Plus className="h-4 w-4 mr-2" />
             Add Property
           </Button>
-          <Button onClick={() => navigate('/analytics')} className="krib-button-colorful">
+          <Button onClick={() => navigate('/analytics')}>
             <BarChart3 className="h-4 w-4 mr-2" />
             View Analytics
           </Button>
@@ -334,52 +334,38 @@ export function DashboardOverview() {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
-          const colorClasses = {
-            0: { card: 'krib-card-properties', icon: 'krib-icon-properties' },
-            1: { card: 'krib-card-financial', icon: 'krib-icon-financial' },
-            2: { card: 'krib-card-analytics', icon: 'krib-icon-applications' },
-            3: { card: 'krib-card-analytics', icon: 'krib-icon-analytics' }
-          }
-          const colors = colorClasses[index as keyof typeof colorClasses] || colorClasses[0]
-          
-          return (
-            <Card key={index} className={`krib-stat-card ${colors.card}`}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-700">{stat.title}</CardTitle>
-                <div className={`${colors.icon} krib-icon-colorful`}>
-                  <stat.icon className="h-5 w-5" />
-                </div>
-              </CardHeader>
-              <CardContent className="krib-card-content">
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <p className="text-xs text-gray-600 mt-1">{stat.change}</p>
-              </CardContent>
-            </Card>
-          )
-        })}
+        {stats.map((stat, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <stat.icon className={`h-4 w-4 ${stat.color}`} />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+              <p className="text-xs text-muted-foreground">{stat.change}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
-        <Card className="krib-card-colorful">
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="flex items-center text-gray-800">
-                  <div className="krib-icon-colorful krib-icon-analytics mr-3">
-                    <Calendar className="h-5 w-5" />
-                  </div>
+                <CardTitle className="flex items-center">
+                  <Calendar className="h-5 w-5 mr-2" />
                   Recent Activity
                 </CardTitle>
-                <CardDescription className="text-gray-600 mt-1">Latest agency updates and actions</CardDescription>
+                <CardDescription>Latest agency updates and actions</CardDescription>
               </div>
-              <Button variant="outline" size="sm" onClick={() => navigate('/applications')} className="krib-button-colorful text-sm">
+              <Button variant="outline" size="sm" onClick={() => navigate('/applications')}>
                 View all activities
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="krib-card-content">
+          <CardContent>
             <div className="space-y-4">
               {recentActivities.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -389,19 +375,19 @@ export function DashboardOverview() {
                 </div>
               ) : (
                 recentActivities.map((activity) => (
-                  <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white hover:shadow-md transition-all duration-200 border border-gray-100">
-                    <div className="krib-icon-colorful krib-icon-analytics">
-                      <activity.icon className="h-4 w-4" />
+                  <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className={`p-2 rounded-full bg-gray-100`}>
+                      <activity.icon className={`h-4 w-4 ${activity.color}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800">{activity.title}</p>
+                      <p className="text-sm font-medium">{activity.title}</p>
                       <p className="text-sm text-gray-600">{activity.description}</p>
                       <div className="flex items-center space-x-2 mt-1">
-                        <Badge className={`text-xs ${
-                          activity.status === 'completed' ? 'krib-badge-success' :
-                          activity.status === 'confirmed' || activity.status === 'scheduled' ? 'krib-badge-info' :
-                          'krib-badge-warning'
-                        }`}>
+                        <Badge variant={
+                          activity.status === 'completed' ? 'default' :
+                          activity.status === 'confirmed' || activity.status === 'scheduled' ? 'secondary' :
+                          'outline'
+                        } className="text-xs">
                           {activity.status}
                         </Badge>
                         <span className="text-xs text-gray-500">{activity.time}</span>
@@ -415,24 +401,22 @@ export function DashboardOverview() {
         </Card>
 
         {/* Top Performing Areas */}
-        <Card className="krib-card-colorful krib-card-properties">
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="flex items-center text-gray-800">
-                  <div className="krib-icon-colorful krib-icon-properties mr-3">
-                    <MapPin className="h-5 w-5" />
-                  </div>
+                <CardTitle className="flex items-center">
+                  <MapPin className="h-5 w-5 mr-2" />
                   Top Performing Areas
                 </CardTitle>
-                <CardDescription className="text-gray-600 mt-1">Best locations for rental demand</CardDescription>
+                <CardDescription>Best locations for rental demand</CardDescription>
               </div>
-              <Button variant="outline" size="sm" onClick={() => navigate('/analytics')} className="krib-button-secondary text-sm">
+              <Button variant="outline" size="sm" onClick={() => navigate('/analytics')}>
                 View market analytics
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="krib-card-content">
+          <CardContent>
             <div className="space-y-4">
               {topPerformingAreas.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -442,20 +426,18 @@ export function DashboardOverview() {
                 </div>
               ) : (
                 topPerformingAreas.map((area, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-all duration-200">
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
-                      <h4 className="font-medium text-gray-800">{area.area}</h4>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                      <h4 className="font-medium">{area.area}</h4>
+                      <div className="flex items-center space-x-4 text-sm text-gray-600">
                         <span>{area.properties} properties</span>
-                        <Badge className={`text-xs ${
-                          area.demand === 'High' ? 'krib-badge-success' : 'krib-badge-info'
-                        }`}>
+                        <Badge variant="outline" className="text-xs">
                           {area.demand} demand
                         </Badge>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-gray-800">AED {Math.round(area.totalCommission).toLocaleString()}</p>
+                      <p className="font-medium">AED {Math.round(area.totalCommission).toLocaleString()}</p>
                       <p className="text-xs text-gray-500">commission earned</p>
                     </div>
                   </div>
@@ -467,58 +449,40 @@ export function DashboardOverview() {
       </div>
 
       {/* Quick Actions */}
-      <Card className="krib-card-colorful">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center text-gray-800">
-            <div className="krib-icon-colorful krib-icon-agents mr-3">
-              <Settings className="h-5 w-5" />
-            </div>
-            Quick Actions
-          </CardTitle>
-          <CardDescription className="text-gray-600 mt-1">Common tasks to manage your properties</CardDescription>
+          <CardTitle>Quick Actions</CardTitle>
+          <CardDescription>Common tasks to manage your properties</CardDescription>
         </CardHeader>
-        <CardContent className="krib-card-content">
+        <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button variant="outline" className="h-20 flex flex-col space-y-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all" onClick={() => navigate('/add-property')}>
-              <div className="krib-icon-colorful krib-icon-properties">
-                <Plus className="h-4 w-4" />
-              </div>
-              <span className="text-sm font-medium">Add Property</span>
+            <Button variant="outline" className="h-20 flex flex-col space-y-2" onClick={() => navigate('/add-property')}>
+              <Plus className="h-5 w-5" />
+              <span>Add Property</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col space-y-2 border-pink-200 hover:border-pink-400 hover:bg-pink-50 transition-all" onClick={() => navigate('/applications')}>
-              <div className="krib-icon-colorful krib-icon-applications">
-                <ClipboardList className="h-4 w-4" />
-              </div>
-              <span className="text-sm font-medium">Review Applications</span>
+            <Button variant="outline" className="h-20 flex flex-col space-y-2" onClick={() => navigate('/applications')}>
+              <ClipboardList className="h-5 w-5" />
+              <span>Review Applications</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col space-y-2 border-purple-200 hover:border-purple-400 hover:bg-purple-50 transition-all" onClick={() => navigate('/viewings')}>
-              <div className="krib-icon-colorful krib-icon-analytics">
-                <Eye className="h-4 w-4" />
-              </div>
-              <span className="text-sm font-medium">Schedule Viewings</span>
+            <Button variant="outline" className="h-20 flex flex-col space-y-2" onClick={() => navigate('/viewings')}>
+              <Eye className="h-5 w-5" />
+              <span>Schedule Viewings</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col space-y-2 border-green-200 hover:border-green-400 hover:bg-green-50 transition-all" onClick={() => navigate('/leases')}>
-              <div className="krib-icon-colorful krib-icon-financial">
-                <FileText className="h-4 w-4" />
-              </div>
-              <span className="text-sm font-medium">Manage Leases</span>
+            <Button variant="outline" className="h-20 flex flex-col space-y-2" onClick={() => navigate('/leases')}>
+              <FileText className="h-5 w-5" />
+              <span>Manage Leases</span>
             </Button>
           </div>
         </CardContent>
       </Card>
 
       {/* Agency Performance */}
-      <Card className="krib-card-colorful krib-card-financial">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center text-gray-800">
-            <div className="krib-icon-colorful krib-icon-financial mr-3">
-              <TrendingUp className="h-5 w-5" />
-            </div>
-            Agency Performance
-          </CardTitle>
-          <CardDescription className="text-gray-600 mt-1">Key performance indicators</CardDescription>
+          <CardTitle>Agency Performance</CardTitle>
+          <CardDescription>Key performance indicators</CardDescription>
         </CardHeader>
-        <CardContent className="krib-card-content">
+        <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
