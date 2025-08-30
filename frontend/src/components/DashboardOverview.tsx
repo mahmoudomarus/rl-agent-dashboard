@@ -332,32 +332,33 @@ export function DashboardOverview() {
         </div>
       </div>
 
-      {/* Statistics Cards - Beautiful Branding */}
+            {/* Statistics Cards - Krib Lime & Black Theme */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const cardClasses = [
-            'stats-card',
-            'stats-card-teal', 
-            'stats-card-gold',
-            'stats-card-accent'
+            'stats-card',          // Lime gradient
+            'stats-card-dark',     // Black gradient  
+            'stats-card-light',    // Light lime
+            'stats-card-accent'    // Accent lime
           ]
+          const isDark = index % 4 === 1 // Only dark card uses lime text
           return (
             <Card key={index} className={cardClasses[index % 4]}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className={`text-sm font-medium ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-800' : 'text-white'}`}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className={`text-sm font-medium ${isDark ? 'text-lime-400' : 'text-gray-800'}`}>
                   {stat.title}
                 </CardTitle>
-                <stat.icon className={`h-5 w-5 ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-700' : 'text-white'} opacity-90`} />
-            </CardHeader>
-            <CardContent>
-                <div className={`text-3xl font-bold ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-800' : 'text-white'}`}>
+                <stat.icon className={`h-5 w-5 ${isDark ? 'text-lime-400' : 'text-gray-700'} opacity-90`} />
+              </CardHeader>
+              <CardContent>
+                <div className={`text-3xl font-bold ${isDark ? 'text-lime-400' : 'text-gray-800'}`}>
                   {stat.value}
                 </div>
-                <p className={`text-xs ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-600' : 'text-white'} opacity-80`}>
+                <p className={`text-xs ${isDark ? 'text-lime-300' : 'text-gray-600'} opacity-80`}>
                   {stat.change}
                 </p>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
           )
         })}
       </div>

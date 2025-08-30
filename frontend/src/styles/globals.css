@@ -7,16 +7,15 @@
 :root {
   --font-size: 14px;
   
-  /* Krib Real Estate Brand Colors - Professional & Distinct */
-  --krib-primary: #1A365D;      /* Deep Blue - Trust & Professionalism */
-  --krib-secondary: #2D7D9A;    /* Teal Blue - Modern Real Estate */
-  --krib-accent: #38B2AC;       /* Bright Teal - Action/CTA */
-  --krib-gold: #D69E2E;         /* Gold - Premium/Success */
-  --krib-black: #1A1A1A;        /* Deep Black */
-  --krib-gray-light: #F7FAFC;
-  --krib-gray-medium: #EDF2F7;
-  --krib-gray-dark: #2D3748;
-  --krib-white: #FFFFFF;
+  /* ORIGINAL KRIB BRAND COLORS - Lime Green & Black Theme */
+  --krib-lime: #B8FF00;         /* Bright Lime Green - Primary Brand */
+  --krib-lime-light: #CBFC50;   /* Light Lime Green - Secondary */
+  --krib-lime-soft: rgba(184, 255, 0, 0.1);  /* Soft Lime - Backgrounds */
+  --krib-black: #1A1A1A;        /* Deep Black - Text & Contrast */
+  --krib-white: #FFFFFF;        /* Pure White */
+  --krib-gray-light: #F7FAFC;   /* Light Gray - Backgrounds */
+  --krib-gray-medium: #EDF2F7;  /* Medium Gray */
+  --krib-gray-dark: #2D3748;    /* Dark Gray - Text */
   
   /* Base Colors */
   --background: #ffffff;
@@ -26,17 +25,17 @@
   --popover: #ffffff;
   --popover-foreground: var(--krib-gray-dark);
   
-  /* Primary Colors - Real Estate Professional */
-  --primary: var(--krib-primary);
-  --primary-foreground: var(--krib-white);
+  /* Primary Colors - Krib Lime Theme */
+  --primary: var(--krib-lime);
+  --primary-foreground: var(--krib-black);
   --secondary: var(--krib-gray-light);
   --secondary-foreground: var(--krib-gray-dark);
   
   /* UI Elements */
   --muted: var(--krib-gray-light);
   --muted-foreground: #717182;
-  --accent: var(--krib-accent);
-  --accent-foreground: var(--krib-white);
+  --accent: var(--krib-lime-light);
+  --accent-foreground: var(--krib-black);
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.08);
@@ -45,14 +44,14 @@
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-    --ring: var(--krib-accent);
+    --ring: var(--krib-lime);
 
-  /* Charts - Real Estate Professional Palette */
-  --chart-1: var(--krib-primary);
-  --chart-2: var(--krib-secondary);
-  --chart-3: var(--krib-accent);
-  --chart-4: var(--krib-gold);
-  --chart-5: #68D391;
+  /* Charts - Krib Lime Theme Palette */
+  --chart-1: var(--krib-lime);
+  --chart-2: var(--krib-lime-light);
+  --chart-3: var(--krib-black);
+  --chart-4: var(--krib-gray-dark);
+  --chart-5: var(--krib-gray-medium);
   
   --radius: 0.625rem;
   
@@ -871,111 +870,112 @@ html {
 }
 
 /* =============================================== */
-/* KRIB REAL ESTATE BRANDING - BEAUTIFUL DESIGN  */
+/* KRIB BRAND DESIGN SYSTEM - LIME & BLACK THEME */
 /* =============================================== */
 
-/* Enhanced Card System with Beautiful Gradients */
+/* Enhanced Card System with Krib Branding */
 .card, [data-card] {
   background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%) !important;
-  border: 1px solid rgba(45, 125, 154, 0.1) !important;
+  border: 1px solid rgba(184, 255, 0, 0.1) !important;
   box-shadow: 
-    0 2px 8px rgba(26, 54, 93, 0.08),
-    0 1px 3px rgba(45, 125, 154, 0.06) !important;
+    0 2px 8px rgba(26, 26, 26, 0.08),
+    0 1px 3px rgba(184, 255, 0, 0.06) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .card:hover, [data-card]:hover {
   transform: translateY(-2px) !important;
   box-shadow: 
-    0 8px 25px rgba(26, 54, 93, 0.12),
-    0 4px 10px rgba(45, 125, 154, 0.08) !important;
-  border-color: rgba(56, 178, 172, 0.2) !important;
+    0 8px 25px rgba(26, 26, 26, 0.12),
+    0 4px 10px rgba(184, 255, 0, 0.08) !important;
+  border-color: var(--krib-lime) !important;
 }
 
-/* Beautiful Header Cards with Gradient Backgrounds */
+/* Beautiful Stats Cards with Krib Gradients */
 .stats-card {
-  background: linear-gradient(135deg, var(--krib-primary) 0%, var(--krib-secondary) 100%) !important;
-  color: white !important;
+  background: linear-gradient(135deg, var(--krib-lime) 0%, var(--krib-lime-light) 100%) !important;
+  color: var(--krib-black) !important;
   border: none !important;
   box-shadow: 
-    0 4px 15px rgba(26, 54, 93, 0.15),
-    0 2px 6px rgba(45, 125, 154, 0.1) !important;
+    0 4px 15px rgba(184, 255, 0, 0.15),
+    0 2px 6px rgba(184, 255, 0, 0.1) !important;
 }
 
-.stats-card-teal {
-  background: linear-gradient(135deg, var(--krib-secondary) 0%, var(--krib-accent) 100%) !important;
-  color: white !important;
+.stats-card-dark {
+  background: linear-gradient(135deg, var(--krib-black) 0%, var(--krib-gray-dark) 100%) !important;
+  color: var(--krib-lime) !important;
 }
 
-.stats-card-gold {
-  background: linear-gradient(135deg, var(--krib-gold) 0%, #F6E05E 100%) !important;
+.stats-card-light {
+  background: linear-gradient(135deg, var(--krib-lime-light) 0%, rgba(203, 252, 80, 0.8) 100%) !important;
   color: var(--krib-black) !important;
 }
 
 .stats-card-accent {
-  background: linear-gradient(135deg, var(--krib-accent) 0%, #4FD1C7 100%) !important;
+  background: linear-gradient(135deg, rgba(184, 255, 0, 0.9) 0%, var(--krib-lime) 100%) !important;
   color: var(--krib-black) !important;
 }
 
-/* Enhanced Button System */
+/* Enhanced Button System with Krib Colors */
 .btn-primary, button[data-variant="default"] {
-  background: linear-gradient(135deg, var(--krib-primary) 0%, var(--krib-secondary) 100%) !important;
-  color: white !important;
+  background: linear-gradient(135deg, var(--krib-lime) 0%, var(--krib-lime-light) 100%) !important;
+  color: var(--krib-black) !important;
   border: none !important;
-  box-shadow: 0 2px 8px rgba(26, 54, 93, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(184, 255, 0, 0.2) !important;
   transition: all 0.3s ease !important;
-}
-
-.btn-primary:hover, button[data-variant="default"]:hover {
-  background: linear-gradient(135deg, var(--krib-secondary) 0%, var(--krib-accent) 100%) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3) !important;
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, var(--krib-accent) 0%, #4FD1C7 100%) !important;
-  color: var(--krib-black) !important;
-  border: none !important;
-}
-
-.btn-gold {
-  background: linear-gradient(135deg, var(--krib-gold) 0%, #F6E05E 100%) !important;
-  color: var(--krib-black) !important;
-  border: none !important;
   font-weight: 600 !important;
 }
 
-/* Beautiful Badge System */
+.btn-primary:hover, button[data-variant="default"]:hover {
+  background: linear-gradient(135deg, var(--krib-lime-light) 0%, var(--krib-lime) 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(184, 255, 0, 0.3) !important;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--krib-black) 0%, var(--krib-gray-dark) 100%) !important;
+  color: var(--krib-lime) !important;
+  border: none !important;
+}
+
+.btn-outline {
+  background: transparent !important;
+  color: var(--krib-lime) !important;
+  border: 2px solid var(--krib-lime) !important;
+  font-weight: 600 !important;
+}
+
+/* Beautiful Badge System with Krib Colors */
 .badge-primary {
-  background: linear-gradient(135deg, var(--krib-primary) 0%, var(--krib-secondary) 100%) !important;
-  color: white !important;
-}
-
-.badge-teal {
-  background: linear-gradient(135deg, var(--krib-accent) 0%, #4FD1C7 100%) !important;
+  background: linear-gradient(135deg, var(--krib-lime) 0%, var(--krib-lime-light) 100%) !important;
   color: var(--krib-black) !important;
 }
 
-.badge-gold {
-  background: linear-gradient(135deg, var(--krib-gold) 0%, #F6E05E 100%) !important;
+.badge-dark {
+  background: linear-gradient(135deg, var(--krib-black) 0%, var(--krib-gray-dark) 100%) !important;
+  color: var(--krib-lime) !important;
+}
+
+.badge-light {
+  background: linear-gradient(135deg, var(--krib-lime-light) 0%, rgba(203, 252, 80, 0.8) 100%) !important;
   color: var(--krib-black) !important;
 }
 
-/* Enhanced Dashboard Background */
+/* Enhanced Dashboard Background with Krib Theme */
 .krib-dashboard-background-enhanced {
   background: 
-    radial-gradient(circle at 20% 20%, rgba(56, 178, 172, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(26, 54, 93, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(214, 158, 46, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 20% 20%, rgba(184, 255, 0, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(26, 26, 26, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(203, 252, 80, 0.02) 0%, transparent 50%),
     linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
   background-attachment: fixed;
   min-height: 100vh;
 }
 
-/* Beautiful Property Cards */
+/* Beautiful Property Cards with Krib Accents */
 .property-card-enhanced {
   background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%) !important;
-  border: 2px solid rgba(45, 125, 154, 0.08) !important;
+  border: 2px solid rgba(184, 255, 0, 0.08) !important;
   border-radius: 20px !important;
   overflow: hidden !important;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -985,9 +985,9 @@ html {
 .property-card-enhanced:hover {
   transform: translateY(-8px) scale(1.02) !important;
   box-shadow: 
-    0 20px 40px rgba(26, 54, 93, 0.15),
-    0 8px 16px rgba(45, 125, 154, 0.1) !important;
-  border-color: var(--krib-accent) !important;
+    0 20px 40px rgba(26, 26, 26, 0.15),
+    0 8px 16px rgba(184, 255, 0, 0.1) !important;
+  border-color: var(--krib-lime) !important;
 }
 
 .property-card-enhanced::before {
@@ -997,6 +997,6 @@ html {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--krib-primary) 0%, var(--krib-accent) 50%, var(--krib-gold) 100%);
+  background: linear-gradient(90deg, var(--krib-lime) 0%, var(--krib-lime-light) 50%, var(--krib-black) 100%);
   z-index: 1;
 }
