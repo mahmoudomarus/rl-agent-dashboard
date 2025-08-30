@@ -78,10 +78,10 @@ export function PropertyList() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'available': return 'bg-green-100 text-green-800'
-      case 'leased': return 'bg-blue-100 text-blue-800'
+      case 'available': return 'badge-primary'
+      case 'leased': return 'badge-primary'
       case 'maintenance': return 'bg-orange-100 text-orange-800'
-      case 'draft': return 'bg-yellow-100 text-yellow-800'
+      case 'draft': return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -221,7 +221,7 @@ export function PropertyList() {
                   className="object-cover w-full h-full rounded-lg"
                 />
                 {property.images && property.images[0] && property.images[0].startsWith('blob:') && (
-                  <div className="absolute bottom-1 left-1 bg-yellow-100 text-yellow-800 text-xs px-1 py-0.5 rounded text-[10px]">
+                  <div className="absolute bottom-1 left-1 bg-gray-100 text-gray-800 text-xs px-1 py-0.5 rounded text-[10px]">
                     Image Issue
                   </div>
                 )}
@@ -252,7 +252,7 @@ export function PropertyList() {
 
                     <div className="flex items-center gap-6">
                       <div className="flex items-baseline">
-                        <span className="font-bold text-lg text-green-600">AED {property.annual_rent?.toLocaleString() || 0}</span>
+                        <span className="font-bold text-lg text-lime-600">AED {property.annual_rent?.toLocaleString() || 0}</span>
                         <span className="text-muted-foreground text-sm ml-1">/year</span>
                       </div>
                       <div className="flex items-baseline">
@@ -296,7 +296,7 @@ export function PropertyList() {
                       variant="outline"
                       size="sm"
                       onClick={() => handleAssignAgent(property)}
-                      className="h-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      className="h-8 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
                     >
                       <UserPlus className="h-4 w-4 mr-1" />
                       {property.agent_id ? 'Reassign' : 'Assign'}
@@ -378,7 +378,7 @@ export function PropertyList() {
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-white p-4 rounded-md border">
                   <Label className="font-semibold text-gray-700">Annual Rent</Label>
-                  <p className="text-green-600 font-bold text-lg mt-1">AED {selectedProperty.annual_rent?.toLocaleString() || 0}</p>
+                  <p className="text-lime-600 font-bold text-lg mt-1">AED {selectedProperty.annual_rent?.toLocaleString() || 0}</p>
                   <p className="text-sm text-gray-500">Monthly: AED {selectedProperty.monthly_rent ? Math.round(selectedProperty.monthly_rent).toLocaleString() : Math.round((selectedProperty.annual_rent || 0) / 12).toLocaleString()}</p>
                 </div>
                 <div className="bg-white p-4 rounded-md border">
@@ -438,7 +438,7 @@ export function PropertyList() {
                   <Label className="font-semibold text-gray-700">Amenities</Label>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {selectedProperty.amenities.map((amenity, index) => (
-                      <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
+                      <Badge key={index} variant="secondary" className="badge-primary">
                         {amenity}
                       </Badge>
                     ))}
@@ -561,7 +561,7 @@ export function PropertyList() {
         <DialogContent className="max-w-md border shadow-lg">
           <DialogHeader className="pb-4 border-b">
             <DialogTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <Users className="h-5 w-5 mr-2 text-blue-600" />
+              <Users className="h-5 w-5 mr-2 text-lime-600" />
               Assign Agent
             </DialogTitle>
           </DialogHeader>

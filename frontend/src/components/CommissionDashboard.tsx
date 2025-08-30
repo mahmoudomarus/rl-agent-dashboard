@@ -150,9 +150,9 @@ export function CommissionDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'earned': return 'bg-green-100 text-green-800'
-      case 'pending': return 'bg-yellow-100 text-yellow-800'  
-      case 'paid': return 'bg-blue-100 text-blue-800'
+      case 'earned': return 'badge-primary'
+      case 'pending': return 'bg-gray-100 text-gray-800'  
+      case 'paid': return 'badge-primary'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -204,47 +204,47 @@ export function CommissionDashboard() {
 
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card>
+        <Card className="stats-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Earned</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">Total Earned</CardTitle>
+            <DollarSign className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(summary.totalEarned)}</div>
-            <p className="text-xs text-muted-foreground">Ready to collect</p>
+            <div className="text-3xl font-bold text-gray-800">{formatCurrency(summary.totalEarned)}</div>
+            <p className="text-xs text-gray-600 opacity-80">Ready to collect</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="stats-card-dark">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-600" />
+            <CardTitle className="text-sm font-medium text-lime-400">Pending</CardTitle>
+            <Clock className="h-5 w-5 text-lime-400 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{formatCurrency(summary.totalPending)}</div>
-            <p className="text-xs text-muted-foreground">Awaiting lease completion</p>
+            <div className="text-3xl font-bold text-lime-400">{formatCurrency(summary.totalPending)}</div>
+            <p className="text-xs text-lime-300 opacity-80">Awaiting lease completion</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="stats-card-light">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Paid</CardTitle>
-            <Award className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">Paid</CardTitle>
+            <Award className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{formatCurrency(summary.totalPaid)}</div>
-            <p className="text-xs text-muted-foreground">Successfully collected</p>
+            <div className="text-3xl font-bold text-gray-800">{formatCurrency(summary.totalPaid)}</div>
+            <p className="text-xs text-gray-600 opacity-80">Successfully collected</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="stats-card-accent">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monthly Projection</CardTitle>
-            <TrendingUp className="h-4 w-4 text-emerald-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">Monthly Projection</CardTitle>
+            <TrendingUp className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-600">{formatCurrency(summary.monthlyProjection)}</div>
-            <p className="text-xs text-muted-foreground">Based on current pipeline</p>
+            <div className="text-3xl font-bold text-gray-800">{formatCurrency(summary.monthlyProjection)}</div>
+            <p className="text-xs text-gray-600 opacity-80">Based on current pipeline</p>
           </CardContent>
         </Card>
       </div>
