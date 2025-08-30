@@ -129,7 +129,7 @@ export function AnalyticsDashboard() {
     {
       title: "Occupancy Rate",
       value: `${analyticsData?.occupancyRate || 0}%`,
-      change: "-2.1%",
+      change: analyticsData?.occupancy_change ? `${analyticsData.occupancy_change > 0 ? '+' : ''}${analyticsData.occupancy_change.toFixed(1)}%` : "0%",
       trend: "down",
       icon: Users,
       color: "text-purple-600"
@@ -181,7 +181,7 @@ export function AnalyticsDashboard() {
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {topMetrics.map((metric) => (
-          <Card key={metric.title} className="krib-card krib-glow-hover">
+          <Card key={metric.title} className="stats-card-light">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm">{metric.title}</CardTitle>
               <metric.icon className={`h-4 w-4 ${metric.color}`} />
@@ -214,7 +214,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="revenue" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-7">
-            <Card className="md:col-span-4 krib-card">
+            <Card className="md:col-span-4 stats-card">
               <CardHeader>
                 <CardTitle>Revenue Trend Analysis</CardTitle>
                 <CardDescription>Revenue performance with trend analysis and predictions</CardDescription>
@@ -238,7 +238,7 @@ export function AnalyticsDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="md:col-span-3 krib-card">
+            <Card className="md:col-span-3 stats-card">
               <CardHeader>
                 <CardTitle>Performance Metrics</CardTitle>
                 <CardDescription>Key performance indicators</CardDescription>
@@ -247,15 +247,15 @@ export function AnalyticsDashboard() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm">This Month</span>
-                    <span className="font-medium">$7,100</span>
+                    <span className="font-medium">${analyticsData?.thisMonthRevenue?.toLocaleString() || '0'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Last Month</span>
-                    <span className="font-medium">$5,900</span>
+                    <span className="font-medium">${analyticsData?.lastMonthRevenue?.toLocaleString() || '0'}</span>
                   </div>
                   <div className="flex justify-between text-green-600">
                     <span className="text-sm">Growth</span>
-                    <span className="font-medium">{forecastData?.confidence ? `${forecastData.confidence}%` : '0%'}</span>
+                    <span className="font-medium">{analyticsData?.monthlyGrowthPercent ? `${analyticsData.monthlyGrowthPercent > 0 ? '+' : ''}${analyticsData.monthlyGrowthPercent.toFixed(1)}%` : '0%'}</span>
                   </div>
                 </div>
                 
@@ -264,14 +264,14 @@ export function AnalyticsDashboard() {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Diversification</span>
-                      <span>85%</span>
+                      <span>{analyticsData?.diversificationScore || 0}%</span>
                     </div>
-                    <Progress value={85} className="h-2" />
+                    <Progress value={analyticsData?.diversificationScore || 0} className="h-2" />
                     <div className="flex justify-between text-sm">
                       <span>Stability</span>
-                      <span>92%</span>
+                      <span>{analyticsData?.stabilityScore || 0}%</span>
                     </div>
-                    <Progress value={92} className="h-2" />
+                    <Progress value={analyticsData?.stabilityScore || 0} className="h-2" />
                   </div>
                 </div>
               </CardContent>
@@ -281,7 +281,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="forecast" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
-            <Card className="md:col-span-2 krib-card">
+            <Card className="md:col-span-2 stats-card">
               <CardHeader>
                 <CardTitle>UAE Market Forecast</CardTitle>
                 <CardDescription>Real UAE seasonal patterns and revenue predictions</CardDescription>
@@ -311,7 +311,7 @@ export function AnalyticsDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                 <CardTitle>Dubai Market Insights</CardTitle>
                 <CardDescription>Real market predictions and seasonal trends</CardDescription>
@@ -355,7 +355,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="market" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                             <CardTitle>UAE Market Performance</CardTitle>
             <CardDescription>Your performance vs UAE market standards</CardDescription>
@@ -392,7 +392,7 @@ export function AnalyticsDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                             <CardTitle>UAE Seasonal Trends</CardTitle>
             <CardDescription>Real UAE seasonal demand patterns</CardDescription>
@@ -443,7 +443,7 @@ export function AnalyticsDashboard() {
         </TabsContent>
 
         <TabsContent value="pricing" className="space-y-4">
-          <Card className="krib-card">
+          <Card className="stats-card">
             <CardHeader>
               <CardTitle>UAE Dynamic Pricing</CardTitle>
               <CardDescription>Real-time pricing optimization based on UAE events, seasons, and demand</CardDescription>
@@ -561,7 +561,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="competition" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                 <CardTitle>UAE Market Competition</CardTitle>
                 <CardDescription>Competitive analysis is being developed for UAE market</CardDescription>
@@ -603,7 +603,7 @@ export function AnalyticsDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                 <CardTitle>Market Positioning</CardTitle>
                 <CardDescription>Your competitive advantage in UAE</CardDescription>
@@ -738,7 +738,7 @@ export function AnalyticsDashboard() {
               </Card>
             )}
 
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                 <CardTitle>UAE Demand Patterns</CardTitle>
                 <CardDescription>Real UAE seasonal and daily booking patterns</CardDescription>
@@ -798,7 +798,7 @@ export function AnalyticsDashboard() {
 
         <TabsContent value="occupancy" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                 <CardTitle>Overall Occupancy</CardTitle>
                 <CardDescription>Current occupancy rate across all properties</CardDescription>
@@ -830,7 +830,7 @@ export function AnalyticsDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="krib-card">
+            <Card className="stats-card">
               <CardHeader>
                 <CardTitle>Occupancy Insights</CardTitle>
                 <CardDescription>Performance metrics and optimization recommendations</CardDescription>
