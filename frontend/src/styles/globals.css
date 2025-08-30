@@ -805,3 +805,66 @@ html {
   pointer-events: none;
   z-index: 0;
 }
+
+/* =============================================== */
+/* SHADCN SIDEBAR LAYOUT SYSTEM                   */
+/* =============================================== */
+
+/* Main sidebar layout system - ensures proper positioning */
+.group\/sidebar-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Sidebar positioning - fixed left side */
+[data-slot="sidebar"] {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  height: 100vh !important;
+  width: var(--sidebar-width) !important;
+  background: var(--sidebar) !important;
+  border-right: 1px solid var(--sidebar-border) !important;
+  z-index: 40 !important;
+  transition: transform 0.3s ease !important;
+}
+
+/* Collapsed sidebar state */
+[data-slot="sidebar"][data-state="collapsed"] {
+  width: var(--sidebar-width-icon) !important;
+}
+
+/* Mobile sidebar - overlay */
+@media (max-width: 768px) {
+  [data-slot="sidebar"] {
+    transform: translateX(-100%) !important;
+  }
+  
+  [data-slot="sidebar"][data-mobile="open"] {
+    transform: translateX(0) !important;
+  }
+}
+
+/* Main content area - properly positioned next to sidebar */
+[data-slot="sidebar-inset"] {
+  margin-left: var(--sidebar-width) !important;
+  width: calc(100% - var(--sidebar-width)) !important;
+  min-height: 100vh !important;
+  background: var(--background) !important;
+  transition: margin-left 0.3s ease, width 0.3s ease !important;
+}
+
+/* Content area when sidebar is collapsed */
+.group\/sidebar-wrapper:has([data-slot="sidebar"][data-state="collapsed"]) [data-slot="sidebar-inset"] {
+  margin-left: var(--sidebar-width-icon) !important;
+  width: calc(100% - var(--sidebar-width-icon)) !important;
+}
+
+/* Mobile content area - full width when sidebar is hidden */
+@media (max-width: 768px) {
+  [data-slot="sidebar-inset"] {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
