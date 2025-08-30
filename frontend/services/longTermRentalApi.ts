@@ -605,6 +605,13 @@ export interface Agent {
   status: 'active' | 'inactive' | 'suspended'
   assigned_territories: string[]
   commission_rate: number
+  specializations?: string[]
+  languages?: string[]
+  employee_id?: string
+  hire_date?: string
+  emergency_contact_name?: string
+  emergency_contact_phone?: string
+  total_properties_managed?: number
   total_deals_closed: number
   total_commission_earned: number
   created_at: string
@@ -612,35 +619,51 @@ export interface Agent {
 }
 
 export const agentsApi = {
-  // Get all agents
-  getAll: async (): Promise<Agent[]> => {
-    return apiCall('/agencies/agents')
+  // Get all agents for current agency
+  getAll: async (agencyId: string): Promise<Agent[]> => {
+    return apiCall(`/agencies/${agencyId}/agents`)
+  },
+
+  // Get agents with filters
+  getFiltered: async (agencyId: string, filters?: {
+    status_filter?: string
+    role_filter?: string
+  }): Promise<Agent[]> => {
+    const queryParams = new URLSearchParams(filters as any).toString()
+    return apiCall(`/agencies/${agencyId}/agents${queryParams ? `?${queryParams}` : ''}`)
   },
 
   // Get agent by ID
-  getById: async (id: string): Promise<Agent> => {
-    return apiCall(`/agencies/agents/${id}`)
+  getById: async (agencyId: string, agentId: string): Promise<Agent> => {
+    return apiCall(`/agencies/${agencyId}/agents/${agentId}`)
   },
 
   // Create new agent
-  create: async (agentData: Partial<Agent>): Promise<Agent> => {
-    return apiCall('/agencies/agents', {
+  create: async (agencyId: string, agentData: Partial<Agent>): Promise<Agent> => {
+    return apiCall(`/agencies/${agencyId}/agents`, {
       method: 'POST',
       body: JSON.stringify(agentData),
     })
   },
 
   // Update agent
-  update: async (id: string, updates: Partial<Agent>): Promise<Agent> => {
-    return apiCall(`/agencies/agents/${id}`, {
+  update: async (agencyId: string, agentId: string, updates: Partial<Agent>): Promise<Agent> => {
+    return apiCall(`/agencies/${agencyId}/agents/${agentId}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
     })
   },
 
+  // Delete agent
+  delete: async (agencyId: string, agentId: string): Promise<{ message: string }> => {
+    return apiCall(`/agencies/${agencyId}/agents/${agentId}`, {
+      method: 'DELETE'
+    })
+  },
+
   // Get agent performance stats
-  getPerformance: async (id: string) => {
-    return apiCall(`/agencies/agents/${id}/performance`)
+  getPerformance: async (agencyId: string, agentId: string) => {
+    return apiCall(`/agencies/${agencyId}/agents/${agentId}/performance`)
   }
 }
 

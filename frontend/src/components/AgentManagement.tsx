@@ -6,10 +6,9 @@ import { Input } from "./ui/input"
 import { Avatar, AvatarFallback } from "./ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog"
 import { Label } from "./ui/label"
 import { Textarea } from "./ui/textarea"
-import { Progress } from "./ui/progress"
 import { 
   Users, 
   Phone, 
@@ -36,265 +35,12 @@ import {
   Eye,
   ArrowUp,
   ArrowDown,
-  Minus
+  Minus,
+  Building,
+  CheckCircle,
+  XCircle
 } from "lucide-react"
-
-interface Agent {
-  id: string
-  name: string
-  email: string
-  phone: string
-  role: 'agent' | 'senior_agent' | 'manager' | 'team_lead'
-  status: 'active' | 'inactive' | 'on_leave'
-  territories: Territory[]
-  propertiesManaged: number
-  dealsThisMonth: number
-  commissionEarned: number
-  joinedDate: string
-  performance: AgentPerformance
-  hierarchy: AgentHierarchy
-  avatar?: string
-  specializations: string[]
-  languages: string[]
-}
-
-interface Territory {
-  id: string
-  name: string
-  area_type: 'district' | 'building' | 'community'
-  priority: 'primary' | 'secondary'
-  assigned_date: string
-  performance_score: number
-  properties_count: number
-  avg_deal_value: number
-}
-
-interface AgentPerformance {
-  monthly_target: number
-  monthly_achieved: number
-  yearly_target: number
-  yearly_achieved: number
-  conversion_rate: number
-  avg_deal_size: number
-  client_satisfaction: number
-  response_time_hours: number
-  deals_last_30_days: number
-  leads_generated: number
-  ranking: number
-  total_commission_ytd: number
-  performance_trend: 'up' | 'down' | 'stable'
-}
-
-interface AgentHierarchy {
-  reports_to?: string
-  team_members?: string[]
-  direct_reports: number
-  team_size: number
-  management_level: number
-}
-
-// Enhanced mock data with performance and territory details
-const mockAgents: Agent[] = [
-  {
-    id: '1',
-    name: 'Mohammed Al Zaabi',
-    email: 'mohammed@kribrealestate.ae',
-    phone: '+971-50-123-4567',
-    role: 'senior_agent',
-    status: 'active',
-    territories: [
-      {
-        id: 'ter-1',
-        name: 'Dubai Marina',
-        area_type: 'district',
-        priority: 'primary',
-        assigned_date: '2023-06-15',
-        performance_score: 92,
-        properties_count: 15,
-        avg_deal_value: 2800000
-      },
-      {
-        id: 'ter-2',
-        name: 'JBR',
-        area_type: 'district',
-        priority: 'secondary',
-        assigned_date: '2023-08-01',
-        performance_score: 87,
-        properties_count: 8,
-        avg_deal_value: 3200000
-      }
-    ],
-    propertiesManaged: 15,
-    dealsThisMonth: 3,
-    commissionEarned: 45000,
-    joinedDate: '2023-06-15',
-    specializations: ['Luxury Properties', 'Marina Views'],
-    languages: ['Arabic', 'English', 'French'],
-    performance: {
-      monthly_target: 150000,
-      monthly_achieved: 135000,
-      yearly_target: 1800000,
-      yearly_achieved: 1620000,
-      conversion_rate: 78,
-      avg_deal_size: 2950000,
-      client_satisfaction: 4.8,
-      response_time_hours: 2.3,
-      deals_last_30_days: 5,
-      leads_generated: 23,
-      ranking: 2,
-      total_commission_ytd: 540000,
-      performance_trend: 'up'
-    },
-    hierarchy: {
-      reports_to: '3',
-      direct_reports: 2,
-      team_size: 3,
-      management_level: 2,
-      team_members: ['4', '5']
-    }
-  },
-  {
-    id: '2',
-    name: 'Fatima Al Mansouri',
-    email: 'fatima@kribrealestate.ae',
-    phone: '+971-55-987-6543',
-    role: 'agent',
-    status: 'active',
-    territories: [
-      {
-        id: 'ter-3',
-        name: 'Downtown Dubai',
-        area_type: 'district',
-        priority: 'primary',
-        assigned_date: '2023-09-01',
-        performance_score: 89,
-        properties_count: 12,
-        avg_deal_value: 3500000
-      }
-    ],
-    propertiesManaged: 12,
-    dealsThisMonth: 2,
-    commissionEarned: 32000,
-    joinedDate: '2023-09-01',
-    specializations: ['Commercial', 'High-rise'],
-    languages: ['Arabic', 'English'],
-    performance: {
-      monthly_target: 120000,
-      monthly_achieved: 98000,
-      yearly_target: 1440000,
-      yearly_achieved: 1176000,
-      conversion_rate: 72,
-      avg_deal_size: 3200000,
-      client_satisfaction: 4.6,
-      response_time_hours: 1.8,
-      deals_last_30_days: 3,
-      leads_generated: 18,
-      ranking: 4,
-      total_commission_ytd: 384000,
-      performance_trend: 'stable'
-    },
-    hierarchy: {
-      reports_to: '1',
-      direct_reports: 0,
-      team_size: 1,
-      management_level: 1
-    }
-  },
-  {
-    id: '3',
-    name: 'Ahmed Hassan',
-    email: 'ahmed@kribrealestate.ae',
-    phone: '+971-52-456-7890',
-    role: 'manager',
-    status: 'active',
-    territories: [
-      {
-        id: 'ter-4',
-        name: 'Palm Jumeirah',
-        area_type: 'district',
-        priority: 'primary',
-        assigned_date: '2022-03-10',
-        performance_score: 95,
-        properties_count: 25,
-        avg_deal_value: 8500000
-      }
-    ],
-    propertiesManaged: 25,
-    dealsThisMonth: 5,
-    commissionEarned: 78000,
-    joinedDate: '2022-03-10',
-    specializations: ['Ultra-Luxury', 'Waterfront', 'Investment'],
-    languages: ['Arabic', 'English', 'Russian'],
-    performance: {
-      monthly_target: 300000,
-      monthly_achieved: 280000,
-      yearly_target: 3600000,
-      yearly_achieved: 3360000,
-      conversion_rate: 85,
-      avg_deal_size: 7800000,
-      client_satisfaction: 4.9,
-      response_time_hours: 1.2,
-      deals_last_30_days: 7,
-      leads_generated: 45,
-      ranking: 1,
-      total_commission_ytd: 936000,
-      performance_trend: 'up'
-    },
-    hierarchy: {
-      direct_reports: 8,
-      team_size: 15,
-      management_level: 3,
-      team_members: ['1', '2', '4', '5', '6', '7', '8']
-    }
-  },
-  {
-    id: '4',
-    name: 'Sarah Williams',
-    email: 'sarah@kribrealestate.ae',
-    phone: '+971-56-789-0123',
-    role: 'agent',
-    status: 'active',
-    territories: [
-      {
-        id: 'ter-5',
-        name: 'DIFC',
-        area_type: 'district',
-        priority: 'primary',
-        assigned_date: '2024-01-15',
-        performance_score: 76,
-        properties_count: 8,
-        avg_deal_value: 2200000
-      }
-    ],
-    propertiesManaged: 8,
-    dealsThisMonth: 1,
-    commissionEarned: 18000,
-    joinedDate: '2024-01-15',
-    specializations: ['First-time Buyers', 'Studio Apartments'],
-    languages: ['English', 'Hindi'],
-    performance: {
-      monthly_target: 80000,
-      monthly_achieved: 65000,
-      yearly_target: 960000,
-      yearly_achieved: 195000,
-      conversion_rate: 68,
-      avg_deal_size: 1950000,
-      client_satisfaction: 4.4,
-      response_time_hours: 3.1,
-      deals_last_30_days: 2,
-      leads_generated: 12,
-      ranking: 6,
-      total_commission_ytd: 54000,
-      performance_trend: 'up'
-    },
-    hierarchy: {
-      reports_to: '1',
-      direct_reports: 0,
-      team_size: 1,
-      management_level: 1
-    }
-  }
-]
+import { agentsApi, agenciesApi, type Agent } from "../../services/longTermRentalApi"
 
 const getRoleColor = (role: string) => {
   switch (role) {
@@ -302,6 +48,7 @@ const getRoleColor = (role: string) => {
     case 'team_lead': return 'bg-indigo-100 text-indigo-800'
     case 'senior_agent': return 'bg-blue-100 text-blue-800'
     case 'agent': return 'bg-green-100 text-green-800'
+    case 'admin': return 'bg-red-100 text-red-800'
     default: return 'bg-gray-100 text-gray-800'
   }
 }
@@ -310,16 +57,8 @@ const getStatusColor = (status: string) => {
   switch (status) {
     case 'active': return 'bg-green-100 text-green-800'
     case 'inactive': return 'bg-red-100 text-red-800'
-    case 'on_leave': return 'bg-yellow-100 text-yellow-800'
+    case 'suspended': return 'bg-yellow-100 text-yellow-800'
     default: return 'bg-gray-100 text-gray-800'
-  }
-}
-
-const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
-  switch (trend) {
-    case 'up': return <ArrowUp className="h-3 w-3 text-green-600" />
-    case 'down': return <ArrowDown className="h-3 w-3 text-red-600" />
-    case 'stable': return <Minus className="h-3 w-3 text-gray-600" />
   }
 }
 
@@ -334,38 +73,50 @@ const formatCurrency = (amount: number) => {
 }
 
 export function AgentManagement() {
-  const [agents, setAgents] = useState<Agent[]>(mockAgents)
-  const [loading, setLoading] = useState(false)
+  const [agents, setAgents] = useState<Agent[]>([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [isTerritoryModalOpen, setIsTerritoryModalOpen] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [agencyId, setAgencyId] = useState<string>('')
+  const [formData, setFormData] = useState<Partial<Agent>>({})
 
+  // Get current agency ID and fetch agents
   useEffect(() => {
-    // In a real app, this would fetch agents from the API
-    const fetchAgents = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true)
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        setAgents(mockAgents)
+        setError(null)
+        
+        // Get current agency
+        const agencyData = await agenciesApi.getCurrent()
+        setAgencyId(agencyData.id)
+        
+        // Get agents for this agency
+        const agentsData = await agentsApi.getAll(agencyData.id)
+        setAgents(agentsData)
+        
       } catch (err) {
+        console.error('Failed to fetch agents:', err)
         setError(err instanceof Error ? err.message : 'Failed to fetch agents')
       } finally {
         setLoading(false)
       }
     }
-    fetchAgents()
+    
+    fetchData()
   }, [])
 
+  // Filter agents based on search and filters
   const filteredAgents = agents.filter(agent => {
     const matchesSearch = agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          agent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         agent.territories.some(territory => 
-                           territory.name.toLowerCase().includes(searchTerm.toLowerCase())
+                         agent.assigned_territories.some(territory => 
+                           territory.toLowerCase().includes(searchTerm.toLowerCase())
                          )
     
     const matchesRole = roleFilter === 'all' || agent.role === roleFilter
@@ -374,15 +125,70 @@ export function AgentManagement() {
     return matchesSearch && matchesRole && matchesStatus
   })
 
-  // Sort agents by performance ranking
-  const sortedAgents = filteredAgents.sort((a, b) => a.performance.ranking - b.performance.ranking)
-
+  // Calculate team statistics from real data
   const teamStats = {
-    totalCommission: agents.reduce((acc, agent) => acc + agent.performance.total_commission_ytd, 0),
-    totalDeals: agents.reduce((acc, agent) => acc + agent.performance.deals_last_30_days, 0),
-    totalProperties: agents.reduce((acc, agent) => acc + agent.propertiesManaged, 0),
-    avgConversion: agents.reduce((acc, agent) => acc + agent.performance.conversion_rate, 0) / agents.length,
-    topPerformer: agents.find(agent => agent.performance.ranking === 1)
+    totalAgents: agents.length,
+    activeAgents: agents.filter(agent => agent.status === 'active').length,
+    totalCommission: agents.reduce((acc, agent) => acc + (agent.total_commission_earned || 0), 0),
+    totalDeals: agents.reduce((acc, agent) => acc + (agent.total_deals_closed || 0), 0),
+    totalProperties: agents.reduce((acc, agent) => acc + (agent.total_properties_managed || 0), 0),
+    topPerformer: agents.sort((a, b) => (b.total_commission_earned || 0) - (a.total_commission_earned || 0))[0]
+  }
+
+  const handleCreateAgent = async () => {
+    if (!agencyId) return
+    
+    try {
+      const newAgent = await agentsApi.create(agencyId, formData)
+      setAgents(prev => [...prev, newAgent])
+      setIsCreateModalOpen(false)
+      setFormData({})
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create agent')
+    }
+  }
+
+  const handleUpdateAgent = async () => {
+    if (!selectedAgent || !agencyId) return
+    
+    try {
+      const updatedAgent = await agentsApi.update(agencyId, selectedAgent.id, formData)
+      setAgents(prev => prev.map(agent => 
+        agent.id === selectedAgent.id ? updatedAgent : agent
+      ))
+      setIsEditModalOpen(false)
+      setSelectedAgent(null)
+      setFormData({})
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update agent')
+    }
+  }
+
+  const handleDeleteAgent = async (agentId: string) => {
+    if (!agencyId || !confirm('Are you sure you want to delete this agent?')) return
+    
+    try {
+      await agentsApi.delete(agencyId, agentId)
+      setAgents(prev => prev.filter(agent => agent.id !== agentId))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete agent')
+    }
+  }
+
+  const openEditModal = (agent: Agent) => {
+    setSelectedAgent(agent)
+    setFormData({
+      name: agent.name,
+      email: agent.email,
+      phone: agent.phone,
+      role: agent.role,
+      status: agent.status,
+      commission_rate: agent.commission_rate,
+      assigned_territories: agent.assigned_territories,
+      specializations: agent.specializations,
+      languages: agent.languages
+    })
+    setIsEditModalOpen(true)
   }
 
   if (loading) {
@@ -402,6 +208,13 @@ export function AgentManagement() {
         <div className="text-center text-red-600">
           <AlertCircle className="h-8 w-8 mx-auto mb-2" />
           <p>Error: {error}</p>
+          <Button 
+            variant="outline" 
+            className="mt-4"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </Button>
         </div>
       </div>
     )
@@ -412,10 +225,13 @@ export function AgentManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Enhanced Team Management</h2>
-          <p className="text-muted-foreground">Manage agents, territories, and performance tracking</p>
+          <h2 className="text-3xl font-bold tracking-tight">Team Management</h2>
+          <p className="text-muted-foreground">Manage your real estate agents and track performance</p>
         </div>
-        <Button>
+        <Button onClick={() => {
+          setFormData({})
+          setIsCreateModalOpen(true)
+        }}>
           <UserPlus className="h-4 w-4 mr-2" />
           Add Agent
         </Button>
@@ -444,6 +260,7 @@ export function AgentManagement() {
                 <SelectItem value="team_lead">Team Lead</SelectItem>
                 <SelectItem value="senior_agent">Senior Agent</SelectItem>
                 <SelectItem value="agent">Agent</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -454,7 +271,7 @@ export function AgentManagement() {
                 <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="inactive">Inactive</SelectItem>
-                <SelectItem value="on_leave">On Leave</SelectItem>
+                <SelectItem value="suspended">Suspended</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -462,16 +279,28 @@ export function AgentManagement() {
       </Card>
 
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="overview">Team Overview</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="territories">Territories</TabsTrigger>
-          <TabsTrigger value="hierarchy">Team Structure</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview" className="space-y-6">
           {/* Team Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Agents</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{teamStats.totalAgents}</div>
+                <p className="text-xs text-muted-foreground">
+                  {teamStats.activeAgents} active
+                </p>
+              </CardContent>
+            </Card>
+            
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Commission</CardTitle>
@@ -485,19 +314,19 @@ export function AgentManagement() {
             
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Deals</CardTitle>
+                <CardTitle className="text-sm font-medium">Total Deals</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{teamStats.totalDeals}</div>
-                <p className="text-xs text-muted-foreground">Last 30 days</p>
+                <p className="text-xs text-muted-foreground">Closed deals</p>
               </CardContent>
             </Card>
             
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Properties</CardTitle>
-                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <Building className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{teamStats.totalProperties}</div>
@@ -507,24 +336,15 @@ export function AgentManagement() {
             
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
-                <Target className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{teamStats.avgConversion.toFixed(1)}%</div>
-                <p className="text-xs text-muted-foreground">Team average</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Top Performer</CardTitle>
                 <Crown className="h-4 w-4 text-yellow-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-sm font-bold">{teamStats.topPerformer?.name}</div>
+                <div className="text-sm font-bold truncate">
+                  {teamStats.topPerformer?.name || 'N/A'}
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  {formatCurrency(teamStats.topPerformer?.performance.total_commission_ytd || 0)}
+                  {formatCurrency(teamStats.topPerformer?.total_commission_earned || 0)}
                 </p>
               </CardContent>
             </Card>
@@ -535,139 +355,148 @@ export function AgentManagement() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Users className="h-5 w-5 mr-2" />
-                Team Members ({sortedAgents.length})
+                Team Members ({filteredAgents.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {sortedAgents.map((agent) => (
-                  <div key={agent.id} className="flex items-center justify-between p-6 border rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center space-x-4">
-                      <div className="relative">
+                {filteredAgents.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Users className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No agents found</h3>
+                    <p className="text-gray-500 mb-4">
+                      {agents.length === 0 
+                        ? "Get started by adding your first agent to the team."
+                        : "Try adjusting your search or filter criteria."
+                      }
+                    </p>
+                    {agents.length === 0 && (
+                      <Button onClick={() => setIsCreateModalOpen(true)}>
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Add First Agent
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  filteredAgents.map((agent) => (
+                    <div key={agent.id} className="flex items-center justify-between p-6 border rounded-lg hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center space-x-4">
                         <Avatar className="h-16 w-16">
                           <AvatarFallback className="text-lg">
                             {agent.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
-                        {agent.performance.ranking <= 3 && (
-                          <div className="absolute -top-1 -right-1 bg-yellow-400 rounded-full p-1">
-                            <Trophy className="h-3 w-3 text-yellow-800" />
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-semibold text-lg">{agent.name}</h4>
+                            <Badge className={getRoleColor(agent.role)}>
+                              {agent.role.replace('_', ' ')}
+                            </Badge>
+                            <Badge className={getStatusColor(agent.status)}>
+                              {agent.status}
+                            </Badge>
                           </div>
-                        )}
+                          
+                          <div className="flex items-center space-x-6 text-sm text-gray-600 mb-2">
+                            <span className="flex items-center">
+                              <Mail className="h-3 w-3 mr-1" />
+                              {agent.email}
+                            </span>
+                            <span className="flex items-center">
+                              <Phone className="h-3 w-3 mr-1" />
+                              {agent.phone}
+                            </span>
+                            {agent.languages && (
+                              <span className="flex items-center">
+                                <Globe className="h-3 w-3 mr-1" />
+                                {agent.languages.join(', ')}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Territories */}
+                          {agent.assigned_territories.length > 0 && (
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-sm text-gray-500">Territories:</span>
+                              {agent.assigned_territories.slice(0, 3).map((territory, index) => (
+                                <Badge key={index} variant="outline" className="text-xs">
+                                  <MapPin className="h-3 w-3 mr-1" />
+                                  {territory}
+                                </Badge>
+                              ))}
+                              {agent.assigned_territories.length > 3 && (
+                                <Badge variant="outline" className="text-xs">
+                                  +{agent.assigned_territories.length - 3} more
+                                </Badge>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Specializations */}
+                          {agent.specializations && agent.specializations.length > 0 && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-500">Specializations:</span>
+                              {agent.specializations.slice(0, 2).map((spec, index) => (
+                                <Badge key={index} variant="secondary" className="text-xs">
+                                  {spec}
+                                </Badge>
+                              ))}
+                              {agent.specializations.length > 2 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  +{agent.specializations.length - 2} more
+                                </Badge>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-lg">{agent.name}</h4>
-                          <Badge className={getRoleColor(agent.role)}>
-                            {agent.role.replace('_', ' ')}
-                          </Badge>
-                          <Badge className={getStatusColor(agent.status)}>
-                            {agent.status.replace('_', ' ')}
-                          </Badge>
-                          <div className="flex items-center gap-1">
-                            <span className="text-sm text-gray-500">#{agent.performance.ranking}</span>
-                            {getTrendIcon(agent.performance.performance_trend)}
+                      
+                      <div className="flex items-center space-x-6">
+                        {/* Performance Metrics */}
+                        <div className="grid grid-cols-3 gap-4 text-center">
+                          <div>
+                            <p className="text-sm font-semibold">
+                              {agent.total_properties_managed || 0}
+                            </p>
+                            <p className="text-xs text-gray-500">Properties</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold">
+                              {agent.total_deals_closed || 0}
+                            </p>
+                            <p className="text-xs text-gray-500">Deals</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold">
+                              {formatCurrency(agent.total_commission_earned || 0)}
+                            </p>
+                            <p className="text-xs text-gray-500">Commission</p>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center space-x-6 text-sm text-gray-600 mb-2">
-                          <span className="flex items-center">
-                            <Mail className="h-3 w-3 mr-1" />
-                            {agent.email}
-                          </span>
-                          <span className="flex items-center">
-                            <Phone className="h-3 w-3 mr-1" />
-                            {agent.phone}
-                          </span>
-                          <span className="flex items-center">
-                            <Globe className="h-3 w-3 mr-1" />
-                            {agent.languages.join(', ')}
-                          </span>
-                        </div>
 
-                        {/* Territories */}
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-sm text-gray-500">Territories:</span>
-                          {agent.territories.map((territory, index) => (
-                            <Badge 
-                              key={index} 
-                              variant={territory.priority === 'primary' ? 'default' : 'outline'}
-                              className="text-xs"
-                            >
-                              <MapPin className="h-3 w-3 mr-1" />
-                              {territory.name} ({territory.performance_score}%)
-                            </Badge>
-                          ))}
-                        </div>
-
-                        {/* Specializations */}
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-500">Specializations:</span>
-                          {agent.specializations.map((spec, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
-                              {spec}
-                            </Badge>
-                          ))}
+                        {/* Action Buttons */}
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openEditModal(agent)}
+                          >
+                            <Edit className="h-3 w-3 mr-1" />
+                            Edit
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeleteAgent(agent.id)}
+                          >
+                            <Trash2 className="h-3 w-3 mr-1" />
+                            Delete
+                          </Button>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center space-x-6">
-                      {/* Performance Metrics */}
-                      <div className="grid grid-cols-4 gap-4 text-center">
-                        <div>
-                          <p className="text-sm font-semibold">{agent.propertiesManaged}</p>
-                          <p className="text-xs text-gray-500">Properties</p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold">{agent.performance.deals_last_30_days}</p>
-                          <p className="text-xs text-gray-500">Deals (30d)</p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold">{formatCurrency(agent.performance.total_commission_ytd)}</p>
-                          <p className="text-xs text-gray-500">Commission YTD</p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold">{agent.performance.conversion_rate}%</p>
-                          <p className="text-xs text-gray-500">Conversion</p>
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedAgent(agent)
-                            setIsEditModalOpen(true)
-                          }}
-                        >
-                          <Edit className="h-3 w-3 mr-1" />
-                          Edit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedAgent(agent)
-                            setIsTerritoryModalOpen(true)
-                          }}
-                        >
-                          <MapPin className="h-3 w-3 mr-1" />
-                          Territories
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                        >
-                          <Eye className="h-3 w-3 mr-1" />
-                          Details
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -683,67 +512,67 @@ export function AgentManagement() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {sortedAgents.map((agent) => (
-                  <div key={agent.id} className="border rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-12 w-12">
-                          <AvatarFallback>
-                            {agent.name.split(' ').map(n => n[0]).join('')}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <h4 className="font-semibold">{agent.name}</h4>
-                          <p className="text-sm text-gray-600">Rank #{agent.performance.ranking}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-4 w-4 ${i < Math.floor(agent.performance.client_satisfaction) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-sm text-gray-600">({agent.performance.client_satisfaction}/5.0)</span>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                      <div>
-                        <p className="text-sm text-gray-500">Monthly Progress</p>
-                        <Progress 
-                          value={(agent.performance.monthly_achieved / agent.performance.monthly_target) * 100} 
-                          className="mt-1"
-                        />
-                        <p className="text-xs mt-1">
-                          {formatCurrency(agent.performance.monthly_achieved)} / {formatCurrency(agent.performance.monthly_target)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Yearly Progress</p>
-                        <Progress 
-                          value={(agent.performance.yearly_achieved / agent.performance.yearly_target) * 100} 
-                          className="mt-1"
-                        />
-                        <p className="text-xs mt-1">
-                          {formatCurrency(agent.performance.yearly_achieved)} / {formatCurrency(agent.performance.yearly_target)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Response Time</p>
-                        <p className="text-lg font-semibold">{agent.performance.response_time_hours}h</p>
-                        <p className="text-xs text-gray-600">Average response</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Leads Generated</p>
-                        <p className="text-lg font-semibold">{agent.performance.leads_generated}</p>
-                        <p className="text-xs text-gray-600">This month</p>
-                      </div>
-                    </div>
+                {filteredAgents.length === 0 ? (
+                  <div className="text-center py-12">
+                    <BarChart3 className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                    <p className="text-gray-500">No performance data available</p>
                   </div>
-                ))}
+                ) : (
+                  filteredAgents
+                    .sort((a, b) => (b.total_commission_earned || 0) - (a.total_commission_earned || 0))
+                    .map((agent, index) => (
+                      <div key={agent.id} className="border rounded-lg p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-12 w-12">
+                              <AvatarFallback>
+                                {agent.name.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-semibold">{agent.name}</h4>
+                              <p className="text-sm text-gray-600">
+                                Rank #{index + 1} • {agent.role.replace('_', ' ')}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-semibold text-green-600">
+                              {formatCurrency(agent.total_commission_earned || 0)}
+                            </p>
+                            <p className="text-xs text-gray-500">Total Earnings</p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="text-center p-3 bg-gray-50 rounded-lg">
+                            <p className="text-lg font-semibold">
+                              {agent.total_deals_closed || 0}
+                            </p>
+                            <p className="text-xs text-gray-600">Deals Closed</p>
+                          </div>
+                          <div className="text-center p-3 bg-gray-50 rounded-lg">
+                            <p className="text-lg font-semibold">
+                              {agent.total_properties_managed || 0}
+                            </p>
+                            <p className="text-xs text-gray-600">Properties</p>
+                          </div>
+                          <div className="text-center p-3 bg-gray-50 rounded-lg">
+                            <p className="text-lg font-semibold">
+                              {agent.commission_rate || 0}%
+                            </p>
+                            <p className="text-xs text-gray-600">Commission Rate</p>
+                          </div>
+                          <div className="text-center p-3 bg-gray-50 rounded-lg">
+                            <p className="text-lg font-semibold">
+                              {agent.assigned_territories.length}
+                            </p>
+                            <p className="text-xs text-gray-600">Territories</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -754,140 +583,194 @@ export function AgentManagement() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <MapPin className="h-5 w-5 mr-2" />
-                Territory Management
+                Territory Assignments
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {agents.map((agent) => (
-                  <div key={agent.id} className="border rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar>
-                          <AvatarFallback>
-                            {agent.name.split(' ').map(n => n[0]).join('')}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <h4 className="font-semibold">{agent.name}</h4>
-                          <p className="text-sm text-gray-600">{agent.territories.length} territories assigned</p>
-                        </div>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedAgent(agent)
-                          setIsTerritoryModalOpen(true)
-                        }}
-                      >
-                        <Plus className="h-3 w-3 mr-1" />
-                        Manage Territories
-                      </Button>
-                    </div>
-                    
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                      {agent.territories.map((territory) => (
-                        <div key={territory.id} className="border rounded-lg p-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <h5 className="font-medium">{territory.name}</h5>
-                            <Badge 
-                              variant={territory.priority === 'primary' ? 'default' : 'outline'}
-                              className="text-xs"
-                            >
-                              {territory.priority}
-                            </Badge>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div>
-                              <p className="text-gray-500">Performance</p>
-                              <p className="font-semibold">{territory.performance_score}%</p>
-                            </div>
-                            <div>
-                              <p className="text-gray-500">Properties</p>
-                              <p className="font-semibold">{territory.properties_count}</p>
-                            </div>
-                            <div className="col-span-2">
-                              <p className="text-gray-500">Avg Deal Value</p>
-                              <p className="font-semibold">{formatCurrency(territory.avg_deal_value)}</p>
-                            </div>
-                          </div>
-                          <div className="mt-3">
-                            <Progress value={territory.performance_score} className="h-2" />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                {filteredAgents.length === 0 ? (
+                  <div className="text-center py-12">
+                    <MapPin className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                    <p className="text-gray-500">No territory assignments available</p>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="hierarchy" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Users className="h-5 w-5 mr-2" />
-                Team Structure & Hierarchy
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {/* Manager Level */}
-                {agents.filter(agent => agent.role === 'manager').map((manager) => (
-                  <div key={manager.id} className="border rounded-lg p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Avatar className="h-12 w-12">
-                        <AvatarFallback>
-                          {manager.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h4 className="font-semibold flex items-center gap-2">
-                          <Crown className="h-4 w-4 text-purple-600" />
-                          {manager.name}
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          Manager • {manager.hierarchy.direct_reports} direct reports • Team of {manager.hierarchy.team_size}
-                        </p>
-                      </div>
-                      <div className="ml-auto text-right">
-                        <p className="text-sm font-semibold">{formatCurrency(manager.performance.total_commission_ytd)}</p>
-                        <p className="text-xs text-gray-500">Team commission YTD</p>
-                      </div>
-                    </div>
-                    
-                    {/* Team Members */}
-                    <div className="ml-6 space-y-3">
-                      {agents.filter(agent => agent.hierarchy.reports_to === manager.id).map((teamMember) => (
-                        <div key={teamMember.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                ) : (
+                  filteredAgents.map((agent) => (
+                    <div key={agent.id} className="border rounded-lg p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
                           <Avatar>
                             <AvatarFallback>
-                              {teamMember.name.split(' ').map(n => n[0]).join('')}
+                              {agent.name.split(' ').map(n => n[0]).join('')}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex-1">
-                            <h5 className="font-medium">{teamMember.name}</h5>
+                          <div>
+                            <h4 className="font-semibold">{agent.name}</h4>
                             <p className="text-sm text-gray-600">
-                              {teamMember.role.replace('_', ' ')} • Rank #{teamMember.performance.ranking}
+                              {agent.assigned_territories.length} territories assigned
                             </p>
                           </div>
-                          <div className="text-right">
-                            <p className="text-sm font-semibold">{formatCurrency(teamMember.performance.total_commission_ytd)}</p>
-                            <p className="text-xs text-gray-500">{teamMember.territories.length} territories</p>
-                          </div>
                         </div>
-                      ))}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openEditModal(agent)}
+                        >
+                          <Settings className="h-3 w-3 mr-1" />
+                          Manage
+                        </Button>
+                      </div>
+                      
+                      {agent.assigned_territories.length > 0 ? (
+                        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                          {agent.assigned_territories.map((territory, index) => (
+                            <div key={index} className="border rounded-lg p-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <h5 className="font-medium">{territory}</h5>
+                                <Badge variant="outline" className="text-xs">
+                                  Active
+                                </Badge>
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                <p>Assigned territory for {agent.role.replace('_', ' ')}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p>No territories assigned</p>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Create Agent Modal */}
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Add New Agent</DialogTitle>
+            <DialogDescription>
+              Add a new agent to your real estate team.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Full Name *</Label>
+                <Input 
+                  value={formData.name || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter full name"
+                />
+              </div>
+              <div>
+                <Label>Role *</Label>
+                <Select value={formData.role || ''} onValueChange={(value) => setFormData(prev => ({ ...prev, role: value as any }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="agent">Agent</SelectItem>
+                    <SelectItem value="senior_agent">Senior Agent</SelectItem>
+                    <SelectItem value="team_lead">Team Lead</SelectItem>
+                    <SelectItem value="manager">Manager</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Email *</Label>
+                <Input 
+                  type="email"
+                  value={formData.email || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="Enter email address"
+                />
+              </div>
+              <div>
+                <Label>Phone *</Label>
+                <Input 
+                  value={formData.phone || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  placeholder="Enter phone number"
+                />
+              </div>
+              <div>
+                <Label>Commission Rate (%)</Label>
+                <Input 
+                  type="number"
+                  value={formData.commission_rate || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, commission_rate: parseFloat(e.target.value) }))}
+                  placeholder="e.g., 2.5"
+                />
+              </div>
+              <div>
+                <Label>Status</Label>
+                <Select value={formData.status || 'active'} onValueChange={(value) => setFormData(prev => ({ ...prev, status: value as any }))}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                    <SelectItem value="suspended">Suspended</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            <div>
+              <Label>Territories (comma-separated)</Label>
+              <Input 
+                value={formData.assigned_territories?.join(', ') || ''} 
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  assigned_territories: e.target.value.split(',').map(t => t.trim()).filter(t => t)
+                }))}
+                placeholder="e.g., Dubai Marina, JBR, Downtown Dubai"
+              />
+            </div>
+            
+            <div>
+              <Label>Specializations (comma-separated)</Label>
+              <Input 
+                value={formData.specializations?.join(', ') || ''} 
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  specializations: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+                }))}
+                placeholder="e.g., Luxury Properties, Waterfront, Investment"
+              />
+            </div>
+            
+            <div>
+              <Label>Languages (comma-separated)</Label>
+              <Input 
+                value={formData.languages?.join(', ') || ''} 
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  languages: e.target.value.split(',').map(l => l.trim()).filter(l => l)
+                }))}
+                placeholder="e.g., Arabic, English, French"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleCreateAgent}>
+              Create Agent
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Agent Modal */}
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
@@ -895,7 +778,7 @@ export function AgentManagement() {
           <DialogHeader>
             <DialogTitle>Edit Agent Profile</DialogTitle>
             <DialogDescription>
-              Update agent information, performance targets, and settings.
+              Update agent information and settings.
             </DialogDescription>
           </DialogHeader>
           {selectedAgent && (
@@ -903,11 +786,14 @@ export function AgentManagement() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Full Name</Label>
-                  <Input defaultValue={selectedAgent.name} />
+                  <Input 
+                    value={formData.name || ''} 
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  />
                 </div>
                 <div>
                   <Label>Role</Label>
-                  <Select defaultValue={selectedAgent.role}>
+                  <Select value={formData.role || ''} onValueChange={(value) => setFormData(prev => ({ ...prev, role: value as any }))}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -921,33 +807,73 @@ export function AgentManagement() {
                 </div>
                 <div>
                   <Label>Email</Label>
-                  <Input defaultValue={selectedAgent.email} />
+                  <Input 
+                    type="email"
+                    value={formData.email || ''} 
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  />
                 </div>
                 <div>
                   <Label>Phone</Label>
-                  <Input defaultValue={selectedAgent.phone} />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Monthly Target (AED)</Label>
-                  <Input defaultValue={selectedAgent.performance.monthly_target} />
+                  <Input 
+                    value={formData.phone || ''} 
+                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  />
                 </div>
                 <div>
-                  <Label>Yearly Target (AED)</Label>
-                  <Input defaultValue={selectedAgent.performance.yearly_target} />
+                  <Label>Commission Rate (%)</Label>
+                  <Input 
+                    type="number"
+                    value={formData.commission_rate || ''} 
+                    onChange={(e) => setFormData(prev => ({ ...prev, commission_rate: parseFloat(e.target.value) }))}
+                  />
+                </div>
+                <div>
+                  <Label>Status</Label>
+                  <Select value={formData.status || ''} onValueChange={(value) => setFormData(prev => ({ ...prev, status: value as any }))}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                      <SelectItem value="suspended">Suspended</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               
               <div>
-                <Label>Specializations</Label>
-                <Input defaultValue={selectedAgent.specializations.join(', ')} placeholder="Luxury Properties, Marina Views" />
+                <Label>Territories (comma-separated)</Label>
+                <Input 
+                  value={formData.assigned_territories?.join(', ') || ''} 
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    assigned_territories: e.target.value.split(',').map(t => t.trim()).filter(t => t)
+                  }))}
+                />
               </div>
               
               <div>
-                <Label>Languages</Label>
-                <Input defaultValue={selectedAgent.languages.join(', ')} placeholder="Arabic, English, French" />
+                <Label>Specializations (comma-separated)</Label>
+                <Input 
+                  value={formData.specializations?.join(', ') || ''} 
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    specializations: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+                  }))}
+                />
+              </div>
+              
+              <div>
+                <Label>Languages (comma-separated)</Label>
+                <Input 
+                  value={formData.languages?.join(', ') || ''} 
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    languages: e.target.value.split(',').map(l => l.trim()).filter(l => l)
+                  }))}
+                />
               </div>
             </div>
           )}
@@ -955,91 +881,7 @@ export function AgentManagement() {
             <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={() => setIsEditModalOpen(false)}>
-              Save Changes
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Territory Management Modal */}
-      <Dialog open={isTerritoryModalOpen} onOpenChange={setIsTerritoryModalOpen}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>Territory Management</DialogTitle>
-            <DialogDescription>
-              Assign and manage territories for {selectedAgent?.name}
-            </DialogDescription>
-          </DialogHeader>
-          {selectedAgent && (
-            <div className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2">
-                {selectedAgent.territories.map((territory) => (
-                  <div key={territory.id} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <h5 className="font-medium">{territory.name}</h5>
-                      <Button variant="ghost" size="sm">
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div>
-                        <Label className="text-xs">Priority</Label>
-                        <Select defaultValue={territory.priority}>
-                          <SelectTrigger className="h-8">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="primary">Primary</SelectItem>
-                            <SelectItem value="secondary">Secondary</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div>
-                        <Label className="text-xs">Area Type</Label>
-                        <Select defaultValue={territory.area_type}>
-                          <SelectTrigger className="h-8">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="district">District</SelectItem>
-                            <SelectItem value="building">Building</SelectItem>
-                            <SelectItem value="community">Community</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div>
-                          <p className="text-gray-500">Performance</p>
-                          <p className="font-semibold">{territory.performance_score}%</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500">Properties</p>
-                          <p className="font-semibold">{territory.properties_count}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                
-                {/* Add New Territory */}
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex items-center justify-center">
-                  <Button variant="ghost" className="flex-col h-auto py-4">
-                    <Plus className="h-6 w-6 mb-2" />
-                    <span>Add Territory</span>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsTerritoryModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={() => setIsTerritoryModalOpen(false)}>
+            <Button onClick={handleUpdateAgent}>
               Save Changes
             </Button>
           </DialogFooter>
