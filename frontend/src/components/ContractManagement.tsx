@@ -4,50 +4,11 @@ import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { FileText, Download, Send, Clock, CheckCircle, Plus, Search, AlertCircle } from "lucide-react"
 import { Input } from "./ui/input"
+import { leasesApi, LeaseAgreement } from "../../services/longTermRentalApi"
 
-interface LeaseContract {
-  id: string
-  propertyTitle: string
-  tenantName: string
-  landlordName: string
-  annualRent: number
-  securityDeposit: number
-  leaseStartDate: string
-  leaseEndDate: string
-  status: 'draft' | 'sent_for_signature' | 'partially_signed' | 'fully_executed' | 'active'
-  signedBy: string[]
-  contractType: 'residential' | 'commercial'
-}
 
-// Mock data for now
-const mockContracts: LeaseContract[] = [
-  {
-    id: '1',
-    propertyTitle: 'Luxury 2BR in Dubai Marina',
-    tenantName: 'Ahmed Al Mansouri',
-    landlordName: 'Khalid Properties LLC',
-    annualRent: 85000,
-    securityDeposit: 8500,
-    leaseStartDate: '2024-02-01',
-    leaseEndDate: '2025-01-31',
-    status: 'sent_for_signature',
-    signedBy: [],
-    contractType: 'residential'
-  },
-  {
-    id: '2',
-    propertyTitle: 'Modern 3BR in Downtown',
-    tenantName: 'Sarah Johnson',
-    landlordName: 'Emirates Real Estate',
-    annualRent: 120000,
-    securityDeposit: 12000,
-    leaseStartDate: '2024-02-15',
-    leaseEndDate: '2025-02-14',
-    status: 'fully_executed',
-    signedBy: ['tenant', 'landlord'],
-    contractType: 'residential'
-  }
-]
+
+
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -72,7 +33,7 @@ const getStatusIcon = (status: string) => {
 }
 
 export function ContractManagement() {
-  const [contracts, setContracts] = useState<LeaseContract[]>([])
+  const [contracts, setContracts] = useState<LeaseAgreement[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -81,13 +42,13 @@ export function ContractManagement() {
     const fetchContracts = async () => {
       try {
         setLoading(true)
-        // TODO: Replace with real API call to fetch lease agreements
-        // const data = await leaseAgreementsApi.getAll()
-        // setContracts(data)
+        setError(null)
         
-        // For now, show empty state to indicate real backend integration
-        setContracts([])
+        // Fetch real lease agreements from API
+        const data = await leasesApi.getLeases()
+        setContracts(data)
       } catch (err) {
+        console.error('Failed to fetch lease agreements:', err)
         setError(err instanceof Error ? err.message : 'Failed to fetch contracts')
       } finally {
         setLoading(false)
@@ -97,9 +58,9 @@ export function ContractManagement() {
   }, [])
 
   const filteredContracts = contracts.filter(contract =>
-    contract.tenantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contract.propertyTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contract.landlordName.toLowerCase().includes(searchTerm.toLowerCase())
+    (contract.tenant_name && contract.tenant_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (contract.property_id && contract.property_id.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (contract.landlord_name && contract.landlord_name.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
   return (
@@ -175,7 +136,7 @@ export function ContractManagement() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(contracts.reduce((acc, contract) => acc + contract.annualRent, 0) / 1000).toFixed(0)}K
+              {(contracts.reduce((acc, contract) => acc + (contract.annual_rent || 0), 0) / 1000).toFixed(0)}K
             </div>
             <p className="text-xs text-muted-foreground">Annual rent value</p>
           </CardContent>
@@ -235,22 +196,22 @@ export function ContractManagement() {
                     {getStatusIcon(contract.status)}
                   </div>
                   <div>
-                    <h4 className="font-semibold">{contract.propertyTitle}</h4>
+                    <h4 className="font-semibold">Lease #{contract.lease_number || contract.property_id}</h4>
                     <p className="text-sm text-gray-600">
-                      Tenant: {contract.tenantName} | Landlord: {contract.landlordName}
+                      Tenant: {contract.tenant_name || 'N/A'} | Landlord: {contract.landlord_name || 'N/A'}
                     </p>
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <span>Lease: {contract.leaseStartDate} to {contract.leaseEndDate}</span>
-                      <Badge variant="outline">{contract.contractType}</Badge>
+                      <span>Lease: {contract.lease_start_date ? new Date(contract.lease_start_date).toLocaleDateString() : 'N/A'} to {contract.lease_end_date ? new Date(contract.lease_end_date).toLocaleDateString() : 'N/A'}</span>
+                      <Badge variant="outline">{contract.contract_type || 'Residential'}</Badge>
                     </div>
                   </div>
                 </div>
                 
                 <div className="flex items-center space-x-4">
                   <div className="text-right">
-                    <p className="font-semibold">AED {contract.annualRent.toLocaleString()}/year</p>
+                    <p className="font-semibold">AED {(contract.annual_rent || 0).toLocaleString()}/year</p>
                     <p className="text-sm text-gray-500">
-                      Security: AED {contract.securityDeposit.toLocaleString()}
+                      Security: AED {(contract.security_deposit || 0).toLocaleString()}
                     </p>
                   </div>
                   
