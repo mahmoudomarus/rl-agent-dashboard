@@ -174,9 +174,9 @@ export function FinancialDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800'
-      case 'processing': return 'bg-blue-100 text-blue-800'
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
+      case 'completed': return 'badge-primary'
+      case 'processing': return 'bg-gray-100 text-gray-800'
+      case 'pending': return 'bg-gray-100 text-gray-800'
       case 'failed': return 'bg-red-100 text-red-800'
       default: return 'bg-gray-100 text-gray-800'
     }
@@ -221,7 +221,7 @@ export function FinancialDashboard() {
         <Card className="krib-card krib-glow-hover">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Available Balance</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-600" />
+            <DollarSign className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${summary?.pending_earnings.toFixed(2) || '0.00'}</div>
@@ -398,7 +398,7 @@ export function FinancialDashboard() {
                         </Badge>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium text-green-600">+${transaction.amount.toFixed(2)}</p>
+                        <p className="font-medium text-lime-600">+${transaction.amount.toFixed(2)}</p>
                         <p className="text-sm text-muted-foreground">{transaction.type}</p>
                       </div>
                     </div>
@@ -517,7 +517,7 @@ export function FinancialDashboard() {
                           id="is_primary"
                           checked={bankForm.is_primary}
                           onChange={(e) => setBankForm(prev => ({...prev, is_primary: e.target.checked}))}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          className="rounded border-gray-300 text-lime-600 focus:ring-lime-500"
                         />
                         <Label htmlFor="is_primary" className="text-sm text-gray-700">Set as primary account</Label>
                       </div>

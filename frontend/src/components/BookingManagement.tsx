@@ -156,7 +156,7 @@ export function BookingManagement() {
         <Card className="krib-card krib-glow-hover">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm">Check-ins Today</CardTitle>
-            <User className="h-4 w-4 text-green-600" />
+            <User className="h-4 w-4 text-lime-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{todayCheckIns.length}</div>

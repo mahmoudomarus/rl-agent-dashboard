@@ -133,7 +133,7 @@ export function DashboardOverview() {
           status: viewing.status,
           time: formatTimeAgo(viewing.created_at),
           icon: Eye,
-          color: 'text-blue-600'
+          color: 'text-lime-600'
         }))
 
       // Add recent leases
@@ -149,7 +149,7 @@ export function DashboardOverview() {
           status: lease.status,
           time: formatTimeAgo(lease.execution_date || lease.created_at),
           icon: FileText,
-          color: 'text-green-600'
+          color: 'text-lime-600'
         }))
 
       // Combine and sort by time
@@ -252,14 +252,14 @@ export function DashboardOverview() {
       value: agencyStats.activeListings.toString(),
       change: `${Math.max(0, agencyStats.totalProperties - agencyStats.activeListings)} under review`,
       icon: Building2,
-      color: "text-blue-600"
+      color: "text-lime-600"
     },
     {
       title: "Monthly Commission",
       value: `AED ${Math.round(agencyStats.monthlyCommission).toLocaleString()}`,
       change: "From closed deals",
       icon: DollarSign,
-      color: "text-green-600"
+      color: "text-lime-600"
     },
     {
       title: "Pending Applications",

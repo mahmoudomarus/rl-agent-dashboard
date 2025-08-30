@@ -895,8 +895,8 @@ export function AddPropertyWizard() {
       case 'published':
         return (
           <div className="text-center space-y-6">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-              <Check className="h-10 w-10 text-green-600" />
+            <div className="w-20 h-20 bg-lime-100 rounded-full flex items-center justify-center mx-auto">
+              <Check className="h-10 w-10 text-lime-600" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">🎉 Property Listed!</h2>

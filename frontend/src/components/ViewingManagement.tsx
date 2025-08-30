@@ -8,8 +8,8 @@ import { viewingsApi, calendarApi, PropertyViewing } from "../../services/longTe
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'scheduled': return 'bg-blue-100 text-blue-800'
-    case 'confirmed': return 'bg-green-100 text-green-800'
+    case 'scheduled': return 'badge-primary'
+    case 'confirmed': return 'badge-primary'
     case 'completed': return 'bg-gray-100 text-gray-800'
     case 'cancelled': return 'bg-red-100 text-red-800'
     default: return 'bg-gray-100 text-gray-800'
@@ -185,11 +185,11 @@ export function ViewingManagement() {
                 viewings.map((viewing) => (
                   <div key={viewing.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                     <div className="flex items-center space-x-4">
-                      <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
+                      <div className="flex items-center justify-center w-10 h-10 bg-lime-100 rounded-full">
                         {viewing.viewing_type === 'virtual' ? (
-                          <Eye className="h-4 w-4 text-blue-600" />
+                          <Eye className="h-4 w-4 text-lime-600" />
                         ) : (
-                          <MapPin className="h-4 w-4 text-blue-600" />
+                          <MapPin className="h-4 w-4 text-lime-600" />
                         )}
                       </div>
                       <div>
