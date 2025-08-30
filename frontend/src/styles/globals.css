@@ -807,6 +807,257 @@ html {
 }
 
 /* =============================================== */
+/* UNIFIED SPACING & COLORFUL DESIGN SYSTEM       */
+/* =============================================== */
+
+/* CONSISTENT SPACING SYSTEM */
+.krib-main-content {
+  padding: 1.5rem !important; /* p-6 everywhere */
+}
+
+.krib-card-content {
+  padding: 1rem !important; /* p-4 for card interiors */
+}
+
+.krib-section-header {
+  padding-bottom: 1rem !important; /* pb-4 for headers */
+  margin-bottom: 1.5rem !important;
+}
+
+/* COLORFUL DESIGN SYSTEM - VIBRANT & ENGAGING */
+
+/* Enhanced Color Palette */
+:root {
+  /* Vibrant Primary Colors */
+  --krib-teal-gradient: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
+  --krib-blue-gradient: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+  --krib-purple-gradient: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  --krib-pink-gradient: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+  --krib-orange-gradient: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+  --krib-green-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  
+  /* Colorful Shadows */
+  --krib-teal-shadow: 0 10px 25px -5px rgba(20, 184, 166, 0.25);
+  --krib-blue-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.25);
+  --krib-purple-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.25);
+  --krib-pink-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.25);
+  --krib-orange-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.25);
+  --krib-green-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.25);
+  
+  /* Glass-morphism */
+  --krib-glass-bg: rgba(255, 255, 255, 0.85);
+  --krib-glass-border: rgba(255, 255, 255, 0.18);
+  --krib-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* COLORFUL CARD SYSTEM */
+.krib-card-colorful {
+  background: var(--krib-glass-bg) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid var(--krib-glass-border) !important;
+  box-shadow: var(--krib-glass-shadow) !important;
+  border-radius: 16px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.krib-card-colorful::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--krib-teal-gradient);
+  border-radius: 16px 16px 0 0;
+}
+
+.krib-card-colorful:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--krib-teal-shadow), var(--krib-glass-shadow) !important;
+}
+
+/* Themed Colorful Cards */
+.krib-card-analytics {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%), var(--krib-glass-bg) !important;
+}
+
+.krib-card-analytics::before {
+  background: var(--krib-purple-gradient) !important;
+}
+
+.krib-card-analytics:hover {
+  box-shadow: var(--krib-purple-shadow), var(--krib-glass-shadow) !important;
+}
+
+.krib-card-financial {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%), var(--krib-glass-bg) !important;
+}
+
+.krib-card-financial::before {
+  background: var(--krib-green-gradient) !important;
+}
+
+.krib-card-financial:hover {
+  box-shadow: var(--krib-green-shadow), var(--krib-glass-shadow) !important;
+}
+
+.krib-card-properties {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%), var(--krib-glass-bg) !important;
+}
+
+.krib-card-properties::before {
+  background: var(--krib-blue-gradient) !important;
+}
+
+.krib-card-properties:hover {
+  box-shadow: var(--krib-blue-shadow), var(--krib-glass-shadow) !important;
+}
+
+/* COLORFUL ICON SYSTEM */
+.krib-icon-colorful {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--krib-teal-gradient) !important;
+  color: white !important;
+  box-shadow: var(--krib-teal-shadow) !important;
+  transition: all 0.3s ease !important;
+}
+
+.krib-icon-analytics {
+  background: var(--krib-purple-gradient) !important;
+  box-shadow: var(--krib-purple-shadow) !important;
+}
+
+.krib-icon-financial {
+  background: var(--krib-green-gradient) !important;
+  box-shadow: var(--krib-green-shadow) !important;
+}
+
+.krib-icon-properties {
+  background: var(--krib-blue-gradient) !important;
+  box-shadow: var(--krib-blue-shadow) !important;
+}
+
+.krib-icon-agents {
+  background: var(--krib-orange-gradient) !important;
+  box-shadow: var(--krib-orange-shadow) !important;
+}
+
+.krib-icon-applications {
+  background: var(--krib-pink-gradient) !important;
+  box-shadow: var(--krib-pink-shadow) !important;
+}
+
+/* COLORFUL BUTTONS */
+.krib-button-colorful {
+  background: var(--krib-teal-gradient) !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  box-shadow: var(--krib-teal-shadow) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.krib-button-colorful:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 35px -5px rgba(20, 184, 166, 0.4) !important;
+}
+
+.krib-button-secondary {
+  background: var(--krib-purple-gradient) !important;
+  box-shadow: var(--krib-purple-shadow) !important;
+}
+
+.krib-button-secondary:hover {
+  box-shadow: 0 15px 35px -5px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* COLORFUL STATUS BADGES */
+.krib-badge-colorful {
+  padding: 6px 12px !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.krib-badge-success {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+}
+
+.krib-badge-warning {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3) !important;
+}
+
+.krib-badge-info {
+  background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
+}
+
+.krib-badge-danger {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* ENHANCED STATS CARDS */
+.krib-stat-card {
+  background: var(--krib-glass-bg) !important;
+  backdrop-filter: blur(15px) !important;
+  border: 1px solid var(--krib-glass-border) !important;
+  border-radius: 20px !important;
+  padding: 1.5rem !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.krib-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.krib-stat-card:hover::before {
+  opacity: 1;
+}
+
+.krib-stat-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* COLORFUL BACKGROUNDS */
+.krib-background-colorful {
+  background: 
+    linear-gradient(135deg, rgba(20, 184, 166, 0.02) 0%, rgba(59, 130, 246, 0.02) 100%),
+    radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+    var(--background) !important;
+}
+
+/* =============================================== */
 /* SHADCN SIDEBAR LAYOUT SYSTEM                   */
 /* =============================================== */
 
