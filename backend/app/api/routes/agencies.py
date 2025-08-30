@@ -96,6 +96,41 @@ async def create_agency(
         )
 
 
+@router.get("/current", response_model=AgencyResponse)
+async def get_current_agency(current_user: dict = Depends(get_current_user)):
+    """Get the current user's agency"""
+    try:
+        # First, get the current user's agent information to find their agency
+        agent_result = supabase_client.table("agents").select("agency_id").eq("user_id", current_user["id"]).execute()
+        
+        if not agent_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User is not associated with any agency. Please contact your administrator."
+            )
+        
+        agency_id = agent_result.data[0]["agency_id"]
+        
+        # Get the agency information
+        agency_result = supabase_client.table("agencies").select("*").eq("id", agency_id).execute()
+        
+        if not agency_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Agency not found"
+            )
+        
+        return AgencyResponse(**agency_result.data[0])
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch current agency: {str(e)}"
+        )
+
+
 @router.get("/", response_model=List[AgencyResponse])
 async def get_agencies(
     status_filter: Optional[str] = None,
@@ -191,6 +226,53 @@ async def update_agency(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to update agency: {str(e)}"
+        )
+
+
+@router.get("/dashboard")
+async def get_current_agency_dashboard(current_user: dict = Depends(get_current_user)):
+    """Get dashboard statistics for current user's agency"""
+    try:
+        # Get current user's agency
+        agent_result = supabase_client.table("agents").select("agency_id").eq("user_id", current_user["id"]).execute()
+        
+        if not agent_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User is not associated with any agency"
+            )
+        
+        agency_id = agent_result.data[0]["agency_id"]
+        
+        # Return simplified dashboard stats for frontend compatibility
+        stats = {
+            "active_listings": 0,
+            "monthly_commission": 0,
+            "pending_applications": 0,
+            "team_performance": 0
+        }
+        
+        # Get basic counts
+        try:
+            properties_result = supabase_client.table("properties").select("id", count="exact").eq("agency_id", agency_id).eq("status", "available").execute()
+            stats["active_listings"] = properties_result.count or 0
+        except:
+            pass
+            
+        try:
+            applications_result = supabase_client.table("tenant_applications").select("id", count="exact").in_("status", ["submitted", "under_review", "documents_pending"]).execute()
+            stats["pending_applications"] = applications_result.count or 0
+        except:
+            pass
+        
+        return stats
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch dashboard stats: {str(e)}"
         )
 
 
