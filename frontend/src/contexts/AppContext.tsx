@@ -47,28 +47,39 @@ interface User {
   created_at?: string
 }
 
+// Long-term rental property interface (updated from short-term rental)
 interface Property {
   id: string
+  user_id: string
   title: string
   description?: string
   address: string
   city: string
   state: string
   country: string
+  latitude?: number
+  longitude?: number
   property_type: string
   bedrooms: number
   bathrooms: number
-  max_guests: number
-  price_per_night: number
+  size_sqft?: number
+  annual_rent: number
+  monthly_rent?: number
+  security_deposit?: number
+  commission_rate: number
+  lease_type: string
+  furnished_status: string
+  minimum_lease_duration: number
+  maximum_lease_duration: number
   amenities: string[]
   images: string[]
-  status: 'draft' | 'active' | 'inactive' | 'suspended'
-  rating?: number
-  review_count?: number
-  booking_count?: number
-  total_revenue?: number
-  views_count?: number
-  featured?: boolean
+  status: 'draft' | 'available' | 'leased' | 'maintenance' | 'inactive'
+  agent_id?: string
+  agency_id?: string
+  applications_count: number
+  viewings_count: number
+  lease_agreements_count: number
+  total_commission_earned: number
   created_at: string
   updated_at: string
 }
