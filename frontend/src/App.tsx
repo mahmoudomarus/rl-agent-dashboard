@@ -78,7 +78,7 @@ function DashboardContent() {
             <SidebarTrigger className="-ml-1" />
           </div>
         </header>
-        <div className="flex-1 overflow-auto krib-dashboard-background">
+        <div className="flex-1 overflow-auto krib-dashboard-background-enhanced">
           <Routes>
             <Route path="/" element={<DashboardOverview />} />
             <Route path="/overview" element={<DashboardOverview />} />

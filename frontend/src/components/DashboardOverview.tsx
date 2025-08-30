@@ -314,38 +314,52 @@ export function DashboardOverview() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
+      <div>
           <h1 className="text-3xl font-bold tracking-tight">Agency Dashboard</h1>
-          <p className="text-muted-foreground">
+        <p className="text-muted-foreground">
             Welcome back! Here's your real estate agency performance overview.
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => navigate('/add-property')}>
+          <Button onClick={() => navigate('/add-property')} className="btn-primary">
             <Plus className="h-4 w-4 mr-2" />
             Add Property
           </Button>
-          <Button onClick={() => navigate('/analytics')}>
+          <Button onClick={() => navigate('/analytics')} className="btn-secondary">
             <BarChart3 className="h-4 w-4 mr-2" />
             View Analytics
           </Button>
         </div>
       </div>
 
-      {/* Statistics Cards */}
+      {/* Statistics Cards - Beautiful Branding */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <Card key={index}>
+        {stats.map((stat, index) => {
+          const cardClasses = [
+            'stats-card',
+            'stats-card-teal', 
+            'stats-card-gold',
+            'stats-card-accent'
+          ]
+          return (
+            <Card key={index} className={cardClasses[index % 4]}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                <CardTitle className={`text-sm font-medium ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-800' : 'text-white'}`}>
+                  {stat.title}
+                </CardTitle>
+                <stat.icon className={`h-5 w-5 ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-700' : 'text-white'} opacity-90`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">{stat.change}</p>
+                <div className={`text-3xl font-bold ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-800' : 'text-white'}`}>
+                  {stat.value}
+                </div>
+                <p className={`text-xs ${(index % 4 === 2 || index % 4 === 3) ? 'text-gray-600' : 'text-white'} opacity-80`}>
+                  {stat.change}
+                </p>
             </CardContent>
           </Card>
-        ))}
+          )
+        })}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -389,7 +403,7 @@ export function DashboardOverview() {
                           'outline'
                         } className="text-xs">
                           {activity.status}
-                        </Badge>
+                      </Badge>
                         <span className="text-xs text-gray-500">{activity.time}</span>
                       </div>
                     </div>
@@ -427,16 +441,16 @@ export function DashboardOverview() {
               ) : (
                 topPerformingAreas.map((area, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div>
+                        <div>
                       <h4 className="font-medium">{area.area}</h4>
                       <div className="flex items-center space-x-4 text-sm text-gray-600">
                         <span>{area.properties} properties</span>
                         <Badge variant="outline" className="text-xs">
                           {area.demand} demand
                         </Badge>
-                      </div>
-                    </div>
-                    <div className="text-right">
+                          </div>
+                        </div>
+                        <div className="text-right">
                       <p className="font-medium">AED {Math.round(area.totalCommission).toLocaleString()}</p>
                       <p className="text-xs text-gray-500">commission earned</p>
                     </div>
@@ -450,10 +464,10 @@ export function DashboardOverview() {
 
       {/* Quick Actions */}
       <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common tasks to manage your properties</CardDescription>
-        </CardHeader>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+            <CardDescription>Common tasks to manage your properties</CardDescription>
+          </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Button variant="outline" className="h-20 flex flex-col space-y-2" onClick={() => navigate('/add-property')}>
@@ -472,16 +486,16 @@ export function DashboardOverview() {
               <FileText className="h-5 w-5" />
               <span>Manage Leases</span>
             </Button>
-          </div>
-        </CardContent>
-      </Card>
+              </div>
+          </CardContent>
+        </Card>
 
       {/* Agency Performance */}
       <Card>
-        <CardHeader>
+          <CardHeader>
           <CardTitle>Agency Performance</CardTitle>
           <CardDescription>Key performance indicators</CardDescription>
-        </CardHeader>
+          </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -505,9 +519,9 @@ export function DashboardOverview() {
               </div>
               <Progress value={Math.min((agencyStats.scheduledViewings / 20) * 100, 100)} className="h-2" />
             </div>
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+          </CardContent>
+        </Card>
     </div>
   )
 }

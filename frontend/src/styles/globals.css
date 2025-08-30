@@ -848,17 +848,18 @@ html {
 
 /* Main content area - properly positioned next to sidebar */
 [data-slot="sidebar-inset"] {
-  margin-left: var(--sidebar-width) !important;
-  width: calc(100% - var(--sidebar-width)) !important;
+  margin-left: calc(var(--sidebar-width) + 1.5rem) !important;
+  width: calc(100% - var(--sidebar-width) - 1.5rem) !important;
   min-height: 100vh !important;
   background: var(--background) !important;
   transition: margin-left 0.3s ease, width 0.3s ease !important;
+  padding-right: 1.5rem !important;
 }
 
 /* Content area when sidebar is collapsed */
 .group\/sidebar-wrapper:has([data-slot="sidebar"][data-state="collapsed"]) [data-slot="sidebar-inset"] {
-  margin-left: var(--sidebar-width-icon) !important;
-  width: calc(100% - var(--sidebar-width-icon)) !important;
+  margin-left: calc(var(--sidebar-width-icon) + 1.5rem) !important;
+  width: calc(100% - var(--sidebar-width-icon) - 1.5rem) !important;
 }
 
 /* Mobile content area - full width when sidebar is hidden */
@@ -867,4 +868,135 @@ html {
     margin-left: 0 !important;
     width: 100% !important;
   }
+}
+
+/* =============================================== */
+/* KRIB REAL ESTATE BRANDING - BEAUTIFUL DESIGN  */
+/* =============================================== */
+
+/* Enhanced Card System with Beautiful Gradients */
+.card, [data-card] {
+  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%) !important;
+  border: 1px solid rgba(45, 125, 154, 0.1) !important;
+  box-shadow: 
+    0 2px 8px rgba(26, 54, 93, 0.08),
+    0 1px 3px rgba(45, 125, 154, 0.06) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.card:hover, [data-card]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 8px 25px rgba(26, 54, 93, 0.12),
+    0 4px 10px rgba(45, 125, 154, 0.08) !important;
+  border-color: rgba(56, 178, 172, 0.2) !important;
+}
+
+/* Beautiful Header Cards with Gradient Backgrounds */
+.stats-card {
+  background: linear-gradient(135deg, var(--krib-primary) 0%, var(--krib-secondary) 100%) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 
+    0 4px 15px rgba(26, 54, 93, 0.15),
+    0 2px 6px rgba(45, 125, 154, 0.1) !important;
+}
+
+.stats-card-teal {
+  background: linear-gradient(135deg, var(--krib-secondary) 0%, var(--krib-accent) 100%) !important;
+  color: white !important;
+}
+
+.stats-card-gold {
+  background: linear-gradient(135deg, var(--krib-gold) 0%, #F6E05E 100%) !important;
+  color: var(--krib-black) !important;
+}
+
+.stats-card-accent {
+  background: linear-gradient(135deg, var(--krib-accent) 0%, #4FD1C7 100%) !important;
+  color: var(--krib-black) !important;
+}
+
+/* Enhanced Button System */
+.btn-primary, button[data-variant="default"] {
+  background: linear-gradient(135deg, var(--krib-primary) 0%, var(--krib-secondary) 100%) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(26, 54, 93, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover, button[data-variant="default"]:hover {
+  background: linear-gradient(135deg, var(--krib-secondary) 0%, var(--krib-accent) 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3) !important;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--krib-accent) 0%, #4FD1C7 100%) !important;
+  color: var(--krib-black) !important;
+  border: none !important;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--krib-gold) 0%, #F6E05E 100%) !important;
+  color: var(--krib-black) !important;
+  border: none !important;
+  font-weight: 600 !important;
+}
+
+/* Beautiful Badge System */
+.badge-primary {
+  background: linear-gradient(135deg, var(--krib-primary) 0%, var(--krib-secondary) 100%) !important;
+  color: white !important;
+}
+
+.badge-teal {
+  background: linear-gradient(135deg, var(--krib-accent) 0%, #4FD1C7 100%) !important;
+  color: var(--krib-black) !important;
+}
+
+.badge-gold {
+  background: linear-gradient(135deg, var(--krib-gold) 0%, #F6E05E 100%) !important;
+  color: var(--krib-black) !important;
+}
+
+/* Enhanced Dashboard Background */
+.krib-dashboard-background-enhanced {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(56, 178, 172, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(26, 54, 93, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(214, 158, 46, 0.02) 0%, transparent 50%),
+    linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Beautiful Property Cards */
+.property-card-enhanced {
+  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%) !important;
+  border: 2px solid rgba(45, 125, 154, 0.08) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+}
+
+.property-card-enhanced:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 
+    0 20px 40px rgba(26, 54, 93, 0.15),
+    0 8px 16px rgba(45, 125, 154, 0.1) !important;
+  border-color: var(--krib-accent) !important;
+}
+
+.property-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--krib-primary) 0%, var(--krib-accent) 50%, var(--krib-gold) 100%);
+  z-index: 1;
 }
