@@ -8,9 +8,11 @@ import { Progress } from "./ui/progress"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { TrendingUp, TrendingDown, DollarSign, Calendar, Users, Star, Eye, Heart, Target, Brain, Download, BarChart3, PieChart, AlertTriangle, CheckCircle, Zap, MapPin, Clock, Activity } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area } from "recharts"
-import { leasesApi, propertiesApi, agentsApi, viewingsApi, applicationsApi } from "../../services/longTermRentalApi"
+import { leasesApi, agentsApi, viewingsApi, applicationsApi } from "../../services/longTermRentalApi"
+import { useApp } from "../contexts/AppContext"
 
 export function AnalyticsDashboard() {
+  const { properties: contextProperties } = useApp()
   const [analyticsData, setAnalyticsData] = useState<any>(null)
   const [selectedPeriod, setSelectedPeriod] = useState("12months")
   const [loading, setLoading] = useState(true)
@@ -30,19 +32,19 @@ export function AnalyticsDashboard() {
       
       // Load ALL real data from our APIs
       const [
-        propertiesData,
         leasesData, 
         agentsData,
         viewingsData,
         applicationsData
       ] = await Promise.all([
-        propertiesApi.getAll().catch(() => []),
         leasesApi.getLeases().catch(() => []),
         agentsApi.getAll().catch(() => []),
         viewingsApi.getAll().catch(() => []),
         applicationsApi.getAll().catch(() => [])
       ])
 
+      // Use properties from context
+      const propertiesData = contextProperties || []
       setProperties(propertiesData)
       setLeases(leasesData)
       setAgents(agentsData) 
