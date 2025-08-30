@@ -297,68 +297,68 @@ export function ContractTemplateManagement() {
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - Krib Lime & Black Theme */}
       <div className="grid gap-4 md:grid-cols-5">
-        <Card>
+        <Card className="stats-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Templates</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-800">Total Templates</CardTitle>
+            <FileText className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total_templates}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold text-gray-800">{stats.total_templates}</div>
+            <p className="text-xs text-gray-600 opacity-80">
               Total contract templates
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-dark">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Templates</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CardTitle className="text-sm font-medium text-lime-400">Active Templates</CardTitle>
+            <CheckCircle className="h-5 w-5 text-lime-400 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.active_templates}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold text-lime-400">{stats.active_templates}</div>
+            <p className="text-xs text-lime-300 opacity-80">
               Ready for use
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-light">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Approval</CardTitle>
-            <AlertCircle className="h-4 w-4 text-yellow-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">Pending Approval</CardTitle>
+            <AlertCircle className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.pending_approval}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold text-gray-800">{stats.pending_approval}</div>
+            <p className="text-xs text-gray-600 opacity-80">
               Awaiting legal review
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-accent">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Usage</CardTitle>
-            <BarChart3 className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">Total Usage</CardTitle>
+            <BarChart3 className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total_usage}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold text-gray-800">{stats.total_usage}</div>
+            <p className="text-xs text-gray-600 opacity-80">
               Across all templates
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-            <Star className="h-4 w-4 text-krib-accent" />
+            <CardTitle className="text-sm font-medium text-gray-800">Success Rate</CardTitle>
+            <Star className="h-5 w-5 text-yellow-500 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.average_success_rate}%</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-bold text-gray-800">{stats.average_success_rate}%</div>
+            <p className="text-xs text-gray-600 opacity-80">
               Average completion rate
             </p>
           </CardContent>

@@ -247,7 +247,7 @@ export function CalendarIntegration() {
           <Button 
             onClick={handleSyncAvailability}
             disabled={syncing}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="btn-primary"
           >
             {syncing ? (
               <>
@@ -280,9 +280,9 @@ export function CalendarIntegration() {
             <div className="flex items-center space-x-4">
               {calendarStatus?.calendar_connected ? (
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <CheckCircle className="h-5 w-5 text-lime-500" />
                   <div>
-                    <p className="font-medium text-green-800">Connected</p>
+                    <p className="font-medium text-lime-700">Connected</p>
                     <p className="text-sm text-gray-600">
                       Calendar ID: {calendarStatus.calendar_id}
                     </p>
