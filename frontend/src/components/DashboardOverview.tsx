@@ -90,7 +90,7 @@ export function DashboardOverview() {
 
       // Load recent activities from real data
       await loadRecentActivities(applications, viewings, leases)
-      await loadTopPerformingAreas(leases)
+      await loadTopPerformingAreas(leases, agents)
       
     } catch (error) {
       console.error('Failed to load dashboard data:', error)
@@ -168,38 +168,46 @@ export function DashboardOverview() {
     }
   }
 
-  const loadTopPerformingAreas = async (leases: any[]) => {
+  const loadTopPerformingAreas = async (leases: any[], agents: any[]) => {
     try {
-      // Calculate performance by area from actual lease data
-      const areaPerformance = new Map()
+      // Since leases don't have property location, use agent territories and commission data instead
+      const territoryPerformance = new Map()
       
-      leases.forEach((lease: any) => {
-        const area = lease.property_location || 'Unknown Area'
-        const rent = lease.monthly_rent || lease.annual_rent / 12 || 0
+      // Group by agent territories and calculate performance
+      agents.forEach((agent: any) => {
+        const agentLeases = leases.filter((lease: any) => lease.agent_id === agent.id)
+        const totalCommission = agentLeases.reduce((sum: number, lease: any) => sum + (lease.broker_commission || 0), 0)
+        const avgRent = agentLeases.length > 0 ? 
+          agentLeases.reduce((sum: number, lease: any) => sum + (lease.annual_rent || 0), 0) / agentLeases.length : 0
         
-        if (areaPerformance.has(area)) {
-          const existing = areaPerformance.get(area)
-          areaPerformance.set(area, {
-            area,
-            properties: existing.properties + 1,
-            totalRent: existing.totalRent + rent,
-            avgRent: (existing.totalRent + rent) / (existing.properties + 1),
-            demand: existing.properties + 1 > 3 ? 'High' : 'Medium'
-          })
-        } else {
-          areaPerformance.set(area, {
-            area,
-            properties: 1,
-            totalRent: rent,
-            avgRent: rent,
-            demand: 'Medium'
-          })
-        }
+        // Use agent's assigned territories
+        const territories = agent.assigned_territories || ['General']
+        
+        territories.forEach((territory: string) => {
+          if (territoryPerformance.has(territory)) {
+            const existing = territoryPerformance.get(territory)
+            territoryPerformance.set(territory, {
+              area: territory,
+              properties: existing.properties + agentLeases.length,
+              totalCommission: existing.totalCommission + totalCommission,
+              avgRent: (existing.avgRent + avgRent) / 2,
+              demand: existing.properties + agentLeases.length > 2 ? 'High' : 'Medium'
+            })
+          } else {
+            territoryPerformance.set(territory, {
+              area: territory,
+              properties: agentLeases.length,
+              totalCommission: totalCommission,
+              avgRent: avgRent,
+              demand: agentLeases.length > 2 ? 'High' : 'Medium'
+            })
+          }
+        })
       })
       
-      const topAreas = Array.from(areaPerformance.values())
-        .filter(area => area.area !== 'Unknown Area')
-        .sort((a, b) => b.avgRent - a.avgRent)
+      const topAreas = Array.from(territoryPerformance.values())
+        .filter(area => area.properties > 0) // Only show areas with actual activity
+        .sort((a, b) => b.totalCommission - a.totalCommission) // Sort by commission performance
         .slice(0, 3)
       
       setTopPerformingAreas(topAreas)
@@ -429,8 +437,8 @@ export function DashboardOverview() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">AED {Math.round(area.avgRent).toLocaleString()}</p>
-                      <p className="text-xs text-gray-500">avg/year</p>
+                      <p className="font-medium">AED {Math.round(area.totalCommission).toLocaleString()}</p>
+                      <p className="text-xs text-gray-500">commission earned</p>
                     </div>
                   </div>
                 ))
