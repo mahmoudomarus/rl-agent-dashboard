@@ -443,7 +443,7 @@ export function FinancialDashboard() {
                       Add Bank Account
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[500px] bg-white border shadow-lg">
+                  <DialogContent className="sm:max-w-[500px] border shadow-lg">
                     <DialogHeader className="pb-4 border-b">
                       <DialogTitle className="text-xl font-semibold text-gray-900">Add Bank Account</DialogTitle>
                       <DialogDescription className="text-gray-600">
@@ -504,7 +504,7 @@ export function FinancialDashboard() {
                           <SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
                             <SelectValue placeholder="Select account type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border shadow-lg">
+                          <SelectContent className="border shadow-lg">
                             <SelectItem value="checking">Checking</SelectItem>
                             <SelectItem value="savings">Savings</SelectItem>
                             <SelectItem value="current">Current</SelectItem>

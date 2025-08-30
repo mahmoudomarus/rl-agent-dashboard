@@ -349,7 +349,7 @@ export function PropertyList() {
 
       {/* View Property Modal */}
       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className="max-w-2xl bg-white border shadow-lg">
+        <DialogContent className="max-w-2xl border shadow-lg">
           <DialogHeader className="pb-4 border-b">
             <DialogTitle className="text-xl font-semibold text-gray-900">Property Details</DialogTitle>
           </DialogHeader>
@@ -452,7 +452,7 @@ export function PropertyList() {
 
       {/* Edit Property Modal */}
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className="max-w-2xl bg-white border shadow-lg">
+        <DialogContent className="max-w-2xl border shadow-lg">
           <DialogHeader className="pb-4 border-b">
             <DialogTitle className="text-xl font-semibold text-gray-900">Edit Property</DialogTitle>
           </DialogHeader>
@@ -498,7 +498,7 @@ export function PropertyList() {
                   <SelectTrigger className="mt-2 bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border shadow-lg">
+                  <SelectContent className="border shadow-lg">
                     <SelectItem value="draft">Draft</SelectItem>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
@@ -558,7 +558,7 @@ export function PropertyList() {
 
       {/* Agent Assignment Modal */}
       <Dialog open={isAssignModalOpen} onOpenChange={setIsAssignModalOpen}>
-        <DialogContent className="max-w-md bg-white border shadow-lg">
+        <DialogContent className="max-w-md border shadow-lg">
           <DialogHeader className="pb-4 border-b">
             <DialogTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <Users className="h-5 w-5 mr-2 text-blue-600" />

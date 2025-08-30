@@ -873,6 +873,29 @@ html {
 /* KRIB BRAND DESIGN SYSTEM - LIME & BLACK THEME */
 /* =============================================== */
 
+/* MODAL & DIALOG FIXES - ENSURE PROPER BACKGROUNDS */
+[data-slot="dialog-overlay"] {
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+[data-slot="dialog-content"] {
+  background: white !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-slot="alert-dialog-overlay"] {
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+[data-slot="alert-dialog-content"] {
+  background: white !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
 /* Enhanced Card System with Krib Branding */
 .card, [data-card] {
   background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%) !important;

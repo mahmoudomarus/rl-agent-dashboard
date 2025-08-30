@@ -344,21 +344,21 @@ export function DashboardOverview() {
           const isDark = index % 4 === 1 // Only dark card uses lime text
           return (
             <Card key={index} className={cardClasses[index % 4]}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className={`text-sm font-medium ${isDark ? 'text-lime-400' : 'text-gray-800'}`}>
                   {stat.title}
                 </CardTitle>
                 <stat.icon className={`h-5 w-5 ${isDark ? 'text-lime-400' : 'text-gray-700'} opacity-90`} />
-              </CardHeader>
-              <CardContent>
+            </CardHeader>
+            <CardContent>
                 <div className={`text-3xl font-bold ${isDark ? 'text-lime-400' : 'text-gray-800'}`}>
                   {stat.value}
                 </div>
                 <p className={`text-xs ${isDark ? 'text-lime-300' : 'text-gray-600'} opacity-80`}>
                   {stat.change}
                 </p>
-              </CardContent>
-            </Card>
+            </CardContent>
+          </Card>
           )
         })}
       </div>
