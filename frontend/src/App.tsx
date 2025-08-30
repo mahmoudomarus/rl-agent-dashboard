@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { SidebarProvider } from "./components/ui/sidebar"
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "./components/ui/sidebar"
 import { AppProvider, useApp } from "./contexts/AppContext"
 import { AuthForm } from "./components/AuthForm"
 import { DashboardSidebar } from "./components/DashboardSidebar"
@@ -68,12 +68,17 @@ function DashboardContent() {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full">
-        <DashboardSidebar 
-          activeSection={activeSection} 
-          onSectionChange={handleSectionChange} 
-        />
-        <main className="flex-1 overflow-auto krib-dashboard-background p-6">
+      <DashboardSidebar 
+        activeSection={activeSection} 
+        onSectionChange={handleSectionChange} 
+      />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+          </div>
+        </header>
+        <div className="flex-1 overflow-auto krib-dashboard-background p-6">
           <Routes>
             <Route path="/" element={<DashboardOverview />} />
             <Route path="/overview" element={<DashboardOverview />} />
@@ -91,8 +96,8 @@ function DashboardContent() {
             <Route path="/financials" element={<FinancialDashboard />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
-        </main>
-      </div>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   )
 }
