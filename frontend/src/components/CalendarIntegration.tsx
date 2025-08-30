@@ -295,9 +295,9 @@ export function CalendarIntegration() {
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <AlertCircle className="h-5 w-5 text-yellow-600" />
+                  <AlertCircle className="h-5 w-5 text-gray-600" />
                   <div>
-                    <p className="font-medium text-yellow-800">Not Connected</p>
+                    <p className="font-medium text-gray-800">Not Connected</p>
                     <p className="text-sm text-gray-600">
                       Connect your Google Calendar to enable automatic scheduling
                     </p>
@@ -319,7 +319,7 @@ export function CalendarIntegration() {
               ) : (
                 <Button 
                   onClick={handleConnectCalendar}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="btn-primary"
                 >
                   <LinkIcon className="h-4 w-4 mr-2" />
                   Connect Google Calendar
@@ -375,8 +375,8 @@ export function CalendarIntegration() {
                         key={index}
                         className={`p-3 rounded-lg border-2 ${
                           slot.available 
-                            ? 'border-green-200 bg-green-50' 
-                            : 'border-red-200 bg-red-50'
+                            ? 'border-lime-200 bg-lime-50' 
+                            : 'border-gray-200 bg-gray-50'
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -384,7 +384,7 @@ export function CalendarIntegration() {
                             {formatTime(slot.start_time.split('T')[1])} - {formatTime(slot.end_time.split('T')[1])}
                           </span>
                           <Badge 
-                            className={slot.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}
+                            className={slot.available ? 'badge-primary' : 'bg-gray-100 text-gray-800'}
                           >
                             {slot.available ? 'Available' : 'Busy'}
                           </Badge>
@@ -458,7 +458,7 @@ export function CalendarIntegration() {
 
                           {viewing.calendar_event_id && (
                             <div className="mt-3 flex items-center gap-2">
-                              <Badge className="bg-green-100 text-green-800">
+                              <Badge className="badge-primary">
                                 <CheckCircle className="h-3 w-3 mr-1" />
                                 Calendar Event Created
                               </Badge>
@@ -477,7 +477,7 @@ export function CalendarIntegration() {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => window.open(viewing.meeting_link, '_blank')}
-                                  className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                                  className="btn-outline"
                                 >
                                   <Video className="h-3 w-3 mr-1" />
                                   Join Meeting
@@ -502,7 +502,7 @@ export function CalendarIntegration() {
                             <Button
                               size="sm"
                               onClick={() => handleCreateViewingEvent(viewing.viewing_id)}
-                              className="bg-blue-600 hover:bg-blue-700"
+                              className="btn-primary"
                             >
                               <Plus className="h-4 w-4 mr-1" />
                               Create Event

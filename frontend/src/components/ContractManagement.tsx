@@ -13,10 +13,10 @@ import { leasesApi, LeaseAgreement } from "../../services/longTermRentalApi"
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'draft': return 'bg-gray-100 text-gray-800'
-    case 'sent_for_signature': return 'bg-blue-100 text-blue-800'
+    case 'sent_for_signature': return 'badge-primary'
     case 'partially_signed': return 'bg-yellow-100 text-yellow-800'
-    case 'fully_executed': return 'bg-green-100 text-green-800'
-    case 'active': return 'bg-green-100 text-green-800'
+    case 'fully_executed': return 'badge-primary'
+    case 'active': return 'badge-primary'
     default: return 'bg-gray-100 text-gray-800'
   }
 }
@@ -92,9 +92,9 @@ export function ContractManagement() {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+        <Card className="stats-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Contracts</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-800">Total Contracts</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -103,29 +103,29 @@ export function ContractManagement() {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-dark">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Signature</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-lime-400">Pending Signature</CardTitle>
+            <Clock className="h-5 w-5 text-lime-400 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-lime-400">
               {contracts.filter(c => c.status === 'sent_for_signature' || c.status === 'partially_signed').length}
             </div>
-            <p className="text-xs text-muted-foreground">Awaiting signatures</p>
+            <p className="text-xs text-lime-300 opacity-80">Awaiting signatures</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="stats-card-light">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Leases</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-gray-800">Active Leases</CardTitle>
+            <CheckCircle className="h-5 w-5 text-gray-700 opacity-90" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-gray-800">
               {contracts.filter(c => c.status === 'active' || c.status === 'fully_executed').length}
             </div>
-            <p className="text-xs text-muted-foreground">Currently active</p>
+            <p className="text-xs text-gray-600 opacity-80">Currently active</p>
           </CardContent>
         </Card>
         
@@ -192,7 +192,7 @@ export function ContractManagement() {
                 {filteredContracts.map((contract) => (
               <div key={contract.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex items-center space-x-4">
-                  <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
+                  <div className="flex items-center justify-center w-10 h-10 bg-lime-100 rounded-full">
                     {getStatusIcon(contract.status)}
                   </div>
                   <div>
