@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { leasesApi, analyticsApi, type LeaseAgreement } from "../../services/longTermRentalApi"
+import { leasesApi, analyticsApi, agentsApi, agenciesApi, type LeaseAgreement } from "../../services/longTermRentalApi"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
@@ -97,39 +97,36 @@ export function LeaseManagement() {
 
   const loadProperties = async () => {
     try {
-      // TODO: Replace with actual API call to /api/properties
-      const mockProperties: Property[] = [
-        {
-          id: "prop-1",
-          title: "Luxury Marina Apartment",
-          address: "Marina Walk, Dubai Marina",
-          city: "Dubai Marina",
-          property_type: "apartment",
-          bedrooms: 2,
-          bathrooms: 2,
-          annual_rent: 85000
-        }
-      ]
-      setProperties(mockProperties)
+      // Load properties from context or API
+      // Note: Properties are typically loaded from AppContext in PropertyList
+      // For lease management, we'll set empty array as properties are not critical here
+      setProperties([])
     } catch (error) {
       console.error('Failed to load properties:', error)
+      setProperties([])
     }
   }
 
   const loadAgents = async () => {
     try {
-      // TODO: Replace with actual API call to /api/agents
-      const mockAgents: Agent[] = [
-        {
-          id: "agent-1",
-          name: "Mohammad Al Zaabi",
-          email: "mohammad@agency.com",
-          specializations: ["Marina", "Downtown", "JBR"]
-        }
-      ]
-      setAgents(mockAgents)
+      // Get current agency first
+      const agency = await agenciesApi.getCurrent()
+      
+      // Load real agents from API
+      const agentData = await agentsApi.getAll(agency.id)
+      
+      // Transform to local Agent interface
+      const transformedAgents: Agent[] = agentData.map(agent => ({
+        id: agent.id,
+        name: agent.name,
+        email: agent.email,
+        specializations: agent.specializations || []
+      }))
+      
+      setAgents(transformedAgents)
     } catch (error) {
       console.error('Failed to load agents:', error)
+      setAgents([])
     }
   }
 

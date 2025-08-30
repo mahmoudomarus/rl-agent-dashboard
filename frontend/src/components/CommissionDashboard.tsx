@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { leasesApi, analyticsApi } from "../../services/longTermRentalApi"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
@@ -67,71 +68,81 @@ export function CommissionDashboard() {
   const loadCommissionData = async () => {
     try {
       setLoading(true)
-      // TODO: Replace with real API call
-      const mockCommissions: CommissionData[] = [
-        {
-          id: "c1",
-          propertyId: "p1",
-          propertyTitle: "Marina View Apartment - 2BR",
-          agentId: "agent-1",
-          agentName: "Ahmed Al Rashid",
-          annual_rent: 85000,
-          commission_rate: 2.5,
-          commission_amount: 2125,
-          status: 'earned',
-          earned_date: '2024-01-15',
-          lease_start_date: '2024-01-15',
-          lease_end_date: '2025-01-14'
-        },
-        {
-          id: "c2",
-          propertyId: "p2",
-          propertyTitle: "Downtown Dubai Studio",
-          agentId: "agent-2",
-          agentName: "Sara Al Maktoum",
-          annual_rent: 65000,
-          commission_rate: 3.0,
-          commission_amount: 1950,
-          status: 'pending',
-          lease_start_date: '2024-02-01',
-          lease_end_date: '2025-01-31'
-        },
-        {
-          id: "c3",
-          propertyId: "p3",
-          propertyTitle: "Business Bay - 1BR",
-          agentId: "agent-1",
-          agentName: "Ahmed Al Rashid",
-          annual_rent: 75000,
-          commission_rate: 2.5,
-          commission_amount: 1875,
-          status: 'paid',
-          earned_date: '2024-01-10',
-          paid_date: '2024-01-25',
-          lease_start_date: '2024-01-10',
-          lease_end_date: '2025-01-09'
-        }
-      ]
+      
+      // Load real lease agreements and commission analytics
+      const [leases, commissionAnalytics] = await Promise.all([
+        leasesApi.getLeases(),
+        analyticsApi.getCommissionAnalytics().catch(() => ({
+          total_earned: 0,
+          pending_commission: 0,
+          paid_commission: 0,
+          monthly_projection: 0,
+          commission_breakdown: []
+        }))
+      ])
 
-      setCommissions(mockCommissions)
+      // Transform leases to commission format
+      const commissionData: CommissionData[] = leases
+        .filter(lease => lease.broker_commission > 0)
+        .map(lease => ({
+          id: lease.id,
+          propertyId: lease.property_id,
+          propertyTitle: `Lease #${lease.lease_number}`,
+          agentId: lease.agent_id,
+          agentName: 'Agent', // Would need to resolve from agent data
+          annual_rent: lease.annual_rent,
+          commission_rate: (lease.broker_commission / lease.annual_rent) * 100,
+          commission_amount: lease.broker_commission,
+          status: lease.commission_status === 'paid' ? 'paid' : 
+                  lease.status === 'fully_executed' ? 'earned' : 'pending',
+          earned_date: lease.execution_date,
+          paid_date: lease.commission_paid_date,
+          lease_start_date: lease.lease_start_date,
+          lease_end_date: lease.lease_end_date
+        }))
 
-      // Calculate summary
-      const earned = mockCommissions.filter(c => c.status === 'earned').reduce((sum, c) => sum + c.commission_amount, 0)
-      const pending = mockCommissions.filter(c => c.status === 'pending').reduce((sum, c) => sum + c.commission_amount, 0)
-      const paid = mockCommissions.filter(c => c.status === 'paid').reduce((sum, c) => sum + c.commission_amount, 0)
+      setCommissions(commissionData)
+
+      // Calculate summary from real data
+      const earned = commissionData.filter(c => c.status === 'earned').reduce((sum, c) => sum + c.commission_amount, 0)
+      const pending = commissionData.filter(c => c.status === 'pending').reduce((sum, c) => sum + c.commission_amount, 0)
+      const paid = commissionData.filter(c => c.status === 'paid').reduce((sum, c) => sum + c.commission_amount, 0)
+
+      // Calculate averages
+      const avgRate = commissionData.length > 0 
+        ? commissionData.reduce((sum, c) => sum + c.commission_rate, 0) / commissionData.length
+        : 0
+
+      // Find top performers
+      const agentCommissions = new Map()
+      commissionData.forEach(c => {
+        const current = agentCommissions.get(c.agentName) || 0
+        agentCommissions.set(c.agentName, current + c.commission_amount)
+      })
+      
+      const topAgent = Array.from(agentCommissions.entries())
+        .sort((a, b) => b[1] - a[1])[0] || ['No agent', 0]
+
+      const bestProperty = commissionData
+        .sort((a, b) => b.commission_amount - a.commission_amount)[0]
 
       setSummary({
         totalEarned: earned,
         totalPending: pending,
         totalPaid: paid,
-        monthlyProjection: (earned + pending) * 1.2, // Projected growth
-        averageCommissionRate: 2.7,
-        topAgent: { name: "Ahmed Al Rashid", amount: 4000 },
-        bestProperty: { title: "Marina View Apartment", amount: 2125 }
+        monthlyProjection: commissionAnalytics.monthly_projection || (earned + pending),
+        averageCommissionRate: avgRate,
+        topAgent: { name: topAgent[0], amount: topAgent[1] },
+        bestProperty: { 
+          title: bestProperty?.propertyTitle || 'No properties', 
+          amount: bestProperty?.commission_amount || 0 
+        }
       })
 
     } catch (error) {
       console.error('Failed to load commission data:', error)
+      // Set empty state on error
+      setCommissions([])
     } finally {
       setLoading(false)
     }

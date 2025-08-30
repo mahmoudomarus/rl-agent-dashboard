@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { calendarApi } from "../../services/longTermRentalApi"
+import { calendarApi, viewingsApi } from "../../services/longTermRentalApi"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
@@ -60,7 +60,7 @@ export function CalendarIntegration() {
 
   useEffect(() => {
     loadCalendarStatus()
-    loadMockViewingEvents() // In a real app, this would come from viewings API
+    loadViewingEvents()
   }, [])
 
   useEffect(() => {
@@ -106,32 +106,31 @@ export function CalendarIntegration() {
     }
   }
 
-  const loadMockViewingEvents = () => {
-    // Mock data - in production, this would come from viewings API
-    const mockEvents: ViewingEvent[] = [
-      {
-        viewing_id: "viewing-1",
-        property_title: "Marina Apartment - 2BR",
-        applicant_name: "Sarah Johnson",
-        scheduled_date: "2024-02-15",
-        scheduled_time: "14:00",
-        viewing_type: "in_person",
-        calendar_event_id: "cal-event-1",
-        event_link: "https://calendar.google.com/event/..."
-      },
-      {
-        viewing_id: "viewing-2", 
-        property_title: "Downtown Studio",
-        applicant_name: "Ahmed Al Rashid",
-        scheduled_date: "2024-02-15",
-        scheduled_time: "16:30",
-        viewing_type: "virtual",
-        calendar_event_id: "cal-event-2",
-        event_link: "https://calendar.google.com/event/...",
-        meeting_link: "https://meet.google.com/abc-defg-hij"
-      }
-    ]
-    setViewingEvents(mockEvents)
+  const loadViewingEvents = async () => {
+    try {
+      // Load real viewing events from API
+      const viewings = await viewingsApi.getAll()
+      
+      // Transform viewings to ViewingEvent format
+      const events: ViewingEvent[] = viewings
+        .filter(viewing => viewing.status === 'scheduled' || viewing.status === 'confirmed')
+        .map(viewing => ({
+          viewing_id: viewing.id,
+          property_title: `Property ${viewing.property_id}`, // Note: property title would need to be resolved
+          applicant_name: viewing.applicant_name,
+          scheduled_date: viewing.scheduled_date,
+          scheduled_time: viewing.scheduled_time,
+          viewing_type: viewing.viewing_type,
+          calendar_event_id: undefined, // Calendar integration would add these fields separately
+          event_link: undefined,
+          meeting_link: undefined
+        }))
+      
+      setViewingEvents(events)
+    } catch (error) {
+      console.error('Failed to load viewing events:', error)
+      setViewingEvents([])
+    }
   }
 
   const handleConnectCalendar = async () => {
