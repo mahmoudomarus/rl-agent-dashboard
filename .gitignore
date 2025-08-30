@@ -33,3 +33,6 @@ logs/
 .temp/
 .tmp/
 *.tmp
+
+# Test scripts with credentials - NEVER COMMIT
+setup_test_data.py
