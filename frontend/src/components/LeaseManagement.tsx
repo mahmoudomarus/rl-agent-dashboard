@@ -233,7 +233,7 @@ export function LeaseManagement() {
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">{leases.length}</div>
             <p className="text-xs text-gray-600 opacity-80">
-              +2 from last month
+              Total lease agreements
             </p>
           </CardContent>
         </Card>
