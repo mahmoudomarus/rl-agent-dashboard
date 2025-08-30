@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { agentsApi, agenciesApi } from "../../services/longTermRentalApi"
 import { Search, Filter, Edit, Eye, Trash2, MapPin, Star, Building2, UserPlus, Users } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Input } from "./ui/input"
@@ -95,7 +96,7 @@ export function PropertyList() {
     setEditFormData({
       title: property.title,
       description: property.description,
-      annual_rent: property.annual_rent || property.price_per_night * 365, // Fallback calculation
+      annual_rent: property.annual_rent || 0,
       bedrooms: property.bedrooms,
       bathrooms: property.bathrooms,
       status: property.status
@@ -125,15 +126,21 @@ export function PropertyList() {
 
   const loadAvailableAgents = async () => {
     try {
-      // TODO: Replace with real API call to get agency agents
-      // For now, using mock data
-      const mockAgents = [
-        { id: "agent-1", name: "Ahmed Al Rashid", email: "ahmed@agency.com", speciality: "Marina & JBR" },
-        { id: "agent-2", name: "Sara Al Maktoum", email: "sara@agency.com", speciality: "Downtown & Business Bay" },
-        { id: "agent-3", name: "Mohammed Hassan", email: "mohammed@agency.com", speciality: "Dubai Hills & Arabian Ranches" },
-        { id: "agent-4", name: "Fatima Al Zahra", email: "fatima@agency.com", speciality: "Palm Jumeirah & Jumeirah" }
-      ]
-      setAvailableAgents(mockAgents)
+      // Get current agency first
+      const agency = await agenciesApi.getCurrent()
+      
+      // Load real agents from API
+      const agents = await agentsApi.getAll(agency.id)
+      
+      // Transform to format expected by component
+      const transformedAgents = agents.map(agent => ({
+        id: agent.id,
+        name: agent.name,
+        email: agent.email,
+        speciality: agent.specializations?.join(', ') || 'General'
+      }))
+      
+      setAvailableAgents(transformedAgents)
     } catch (error) {
       console.error('Failed to load agents:', error)
       setAvailableAgents([])
