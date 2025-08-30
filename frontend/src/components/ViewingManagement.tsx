@@ -4,7 +4,7 @@ import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Calendar } from "./ui/calendar"
 import { Eye, Calendar as CalendarIcon, Clock, MapPin, Phone, Plus, AlertCircle, ExternalLink } from "lucide-react"
-import { viewingsApi, calendarApi, PropertyViewing } from "../../services/longTermRentalApi"
+import { viewingsApi, calendarApi, applicationsApi, PropertyViewing } from "../../services/longTermRentalApi"
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -18,25 +18,30 @@ const getStatusColor = (status: string) => {
 
 export function ViewingManagement() {
   const [viewings, setViewings] = useState<PropertyViewing[]>([])
+  const [applications, setApplications] = useState<any[]>([])
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch viewings on component mount
+  // Fetch viewings and applications on component mount
   useEffect(() => {
-    const fetchViewings = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true)
-        const data = await viewingsApi.getAll()
-        setViewings(data)
+        const [viewingsData, applicationsData] = await Promise.all([
+          viewingsApi.getAll(),
+          applicationsApi.getAll().catch(() => [])
+        ])
+        setViewings(viewingsData)
+        setApplications(applicationsData)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch viewings')
+        setError(err instanceof Error ? err.message : 'Failed to fetch data')
       } finally {
         setLoading(false)
       }
     }
 
-    fetchViewings()
+    fetchData()
   }, [])
 
   const createCalendarEvent = async (viewingId: string) => {
@@ -66,6 +71,12 @@ export function ViewingManagement() {
     const today = new Date()
     return viewingDate.toDateString() === today.toDateString()
   })
+
+  // Calculate real conversion rate from viewing to application
+  const completedViewings = viewings.filter(v => v.status === 'completed').length
+  const conversionRate = completedViewings > 0 
+    ? ((applications.length / completedViewings) * 100).toFixed(0)
+    : '0'
 
   if (loading) {
     return (
@@ -146,7 +157,7 @@ export function ViewingManagement() {
             <div className="text-sm text-gray-700 opacity-90">%</div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">85%</div>
+            <div className="text-3xl font-bold text-gray-800">{conversionRate}%</div>
             <p className="text-xs text-gray-600 opacity-80">Viewing to application</p>
           </CardContent>
         </Card>
