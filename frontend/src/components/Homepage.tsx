@@ -3,6 +3,7 @@ import { Card, CardContent } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { ArrowRight, Bot, Building2, Search, BarChart3, Users, MapPin, Sparkles, CheckCircle } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import kribLogo from "../assets/krib-logo.svg"
 
 export function Homepage() {
   const navigate = useNavigate()
@@ -73,9 +74,11 @@ export function Homepage() {
       {/* Navigation */}
       <nav className="relative z-20 flex items-center justify-between p-6 lg:px-12">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-krib-lime to-krib-lime-light rounded-lg flex items-center justify-center">
-            <Building2 className="h-6 w-6 text-black font-bold" />
-          </div>
+          <img 
+            src={kribLogo} 
+            alt="Krib Logo" 
+            className="h-10 w-auto"
+          />
           <div className="text-2xl font-bold text-gray-900">
             Krib
             <span className="text-krib-lime">AI</span>
@@ -270,9 +273,11 @@ export function Homepage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-krib-lime to-krib-lime-light rounded-lg flex items-center justify-center">
-                <Building2 className="h-5 w-5 text-black font-bold" />
-              </div>
+              <img 
+                src={kribLogo} 
+                alt="Krib Logo" 
+                className="h-8 w-auto"
+              />
               <div className="text-lg font-bold text-gray-900">
                 Krib<span className="text-krib-lime">AI</span>
               </div>
