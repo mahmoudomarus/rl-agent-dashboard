@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,63 +9,97 @@
 :root {
   --font-size: 14px;
   
-  /* SWISS/BAUHAUS DESIGN SYSTEM - Bold, Geometric, Functional */
-  --swiss-red: #FF0000;         /* Bold Bauhaus Red - Primary Action */
-  --swiss-blue: #0066CC;        /* Classic Swiss Blue - Information */
-  --swiss-yellow: #FFD700;      /* Bauhaus Yellow - Highlights */
-  --swiss-black: #000000;       /* Pure Black - Typography & Contrast */
-  --swiss-white: #FFFFFF;       /* Pure White - Clean Backgrounds */
-  --swiss-gray-50: #F8F9FA;     /* Lightest Gray - Subtle Backgrounds */
-  --swiss-gray-100: #E9ECEF;    /* Light Gray - Borders */
-  --swiss-gray-600: #6C757D;    /* Medium Gray - Secondary Text */
-  --swiss-gray-900: #212529;    /* Dark Gray - Body Text */
+  /* SWISS DESIGN TYPOGRAPHY */
+  --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
   
-  /* Base Colors - Swiss Design System */
-  --background: var(--swiss-white);
-  --foreground: var(--swiss-black);
-  --card: var(--swiss-white);
-  --card-foreground: var(--swiss-black);
-  --popover: var(--swiss-white);
-  --popover-foreground: var(--swiss-black);
+  /* SWISS SPACING SYSTEM - 8px Grid */
+  --space-xs: 0.25rem;    /* 4px */
+  --space-sm: 0.5rem;     /* 8px */
+  --space-md: 1rem;       /* 16px */
+  --space-lg: 1.5rem;     /* 24px */
+  --space-xl: 2rem;       /* 32px */
+  --space-2xl: 3rem;      /* 48px */
+  --space-3xl: 4rem;      /* 64px */
   
-  /* Primary Colors - Swiss Red Primary */
-  --primary: var(--swiss-red);
-  --primary-foreground: var(--swiss-white);
-  --secondary: var(--swiss-gray-50);
-  --secondary-foreground: var(--swiss-gray-900);
+  /* SWISS BAUHAUS KRIB BRAND SYSTEM */
+  --krib-lime: #B8FF00;         /* Primary: Bright Lime Green */
+  --krib-lime-light: #CBFC50;   /* Secondary: Light Lime */
+  --krib-lime-soft: rgba(184, 255, 0, 0.08);  /* Subtle: Soft Lime */
+  --krib-lime-bold: rgba(184, 255, 0, 0.15);  /* Medium: Bold Lime */
+  --krib-black: #1A1A1A;        /* Primary: Deep Black */
+  --krib-white: #FFFFFF;        /* Pure White */
   
-  /* UI Elements - Swiss Design */
-  --muted: var(--swiss-gray-50);
-  --muted-foreground: var(--swiss-gray-600);
-  --accent: var(--swiss-blue);
-  --accent-foreground: var(--swiss-white);
-  --destructive: var(--swiss-red);
-  --destructive-foreground: var(--swiss-white);
-  --border: var(--swiss-gray-100);
-  --input: var(--swiss-gray-50);
+  /* SWISS PRECISION GRAYS */
+  --swiss-gray-50: #FAFBFC;     /* Lightest background */
+  --swiss-gray-100: #F4F6F8;    /* Card backgrounds */
+  --swiss-gray-200: #E4E7EB;    /* Borders */
+  --swiss-gray-300: #D1D5DB;    /* Dividers */
+  --swiss-gray-400: #9CA3AF;    /* Muted text */
+  --swiss-gray-500: #6B7280;    /* Secondary text */
+  --swiss-gray-600: #4B5563;    /* Primary text */
+  --swiss-gray-700: #374151;    /* Headings */
+  --swiss-gray-800: #1F2937;    /* Dark headings */
+  
+  /* GEOMETRIC ELEMENTS */
+  --border-radius-none: 0;
+  --border-radius-sm: 0.125rem;  /* 2px */
+  --border-radius-md: 0.25rem;   /* 4px */
+  --border-radius-lg: 0.5rem;    /* 8px */
+  --border-radius-xl: 1rem;      /* 16px */
+  
+  /* SWISS SHADOWS */
+  --shadow-minimal: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-subtle: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-moderate: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-bold: 0 8px 24px rgba(0, 0, 0, 0.12);
+  
+  /* SWISS BASE SYSTEM */
+  --background: var(--krib-white);
+  --foreground: var(--swiss-gray-800);
+  --card: var(--krib-white);
+  --card-foreground: var(--swiss-gray-700);
+  --popover: var(--krib-white);
+  --popover-foreground: var(--swiss-gray-700);
+  
+  /* PRIMARY KRIB SYSTEM */
+  --primary: var(--krib-lime);
+  --primary-foreground: var(--krib-black);
+  --secondary: var(--swiss-gray-100);
+  --secondary-foreground: var(--swiss-gray-700);
+  
+  /* SWISS UI ELEMENTS */
+  --muted: var(--swiss-gray-100);
+  --muted-foreground: var(--swiss-gray-500);
+  --accent: var(--krib-lime-light);
+  --accent-foreground: var(--krib-black);
+  --destructive: #dc2626;
+  --destructive-foreground: var(--krib-white);
+  --border: var(--swiss-gray-200);
+  --input: var(--swiss-gray-100);
   --input-background: var(--swiss-gray-50);
-  --switch-background: var(--swiss-gray-100);
-  --font-weight-medium: 600;
+  --switch-background: var(--swiss-gray-300);
+  --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: var(--swiss-red);
+  --ring: var(--krib-lime);
 
-  /* Charts - Swiss Design Palette */
-  --chart-1: var(--swiss-red);
-  --chart-2: var(--swiss-blue);
-  --chart-3: var(--swiss-yellow);
-  --chart-4: var(--swiss-black);
-  --chart-5: var(--swiss-gray-600);
+  /* Charts - Krib Lime Theme Palette */
+  --chart-1: var(--krib-lime);
+  --chart-2: var(--krib-lime-light);
+  --chart-3: var(--krib-black);
+  --chart-4: var(--krib-gray-dark);
+  --chart-5: var(--krib-gray-medium);
   
   --radius: 0.625rem;
   
-  /* Sidebar - Light Gray Theme */
-  --sidebar: var(--krib-gray-light);
-  --sidebar-foreground: var(--krib-gray-dark);
+  /* SWISS SIDEBAR SYSTEM */
+  --sidebar: var(--krib-black);
+  --sidebar-foreground: var(--krib-white);
   --sidebar-primary: var(--krib-lime);
   --sidebar-primary-foreground: var(--krib-black);
-  --sidebar-accent: var(--krib-lime-soft);
-  --sidebar-accent-foreground: var(--krib-gray-dark);
-  --sidebar-border: rgba(184, 255, 0, 0.2);
+  --sidebar-accent: var(--krib-lime-bold);
+  --sidebar-accent-foreground: var(--krib-white);
+  --sidebar-border: var(--swiss-gray-800);
   --sidebar-ring: var(--krib-lime);
 }
 
@@ -870,9 +906,50 @@ html {
   }
 }
 
-/* =============================================== */
-/* KRIB BRAND DESIGN SYSTEM - LIME & BLACK THEME */
-/* =============================================== */
+/* ======================================================= */
+/* SWISS BAUHAUS DESIGN SYSTEM - KRIB LIME & BLACK THEME */
+/* ======================================================= */
+
+/* SWISS TYPOGRAPHY FOUNDATION */
+* {
+  font-family: var(--font-primary) !important;
+  letter-spacing: -0.01em;
+}
+
+body {
+  font-family: var(--font-primary) !important;
+  font-weight: 400;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; font-weight: 800; }
+h2 { font-size: 2rem; font-weight: 700; }
+h3 { font-size: 1.5rem; font-weight: 600; }
+h4 { font-size: 1.25rem; font-weight: 600; }
+h5 { font-size: 1.125rem; font-weight: 500; }
+h6 { font-size: 1rem; font-weight: 500; }
+
+/* GEOMETRIC LAYOUTS */
+.swiss-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.swiss-section {
+  padding: var(--space-2xl) var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
 
 /* MODAL & DIALOG FIXES - ENSURE PROPER BACKGROUNDS */
 [data-slot="dialog-overlay"] {
@@ -897,245 +974,294 @@ html {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* ========================================
-   SWISS/BAUHAUS DESIGN SYSTEM 
-   Bold, Geometric, Functional
-   ======================================== */
-
-/* Swiss Typography System */
-.swiss-heading-1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--swiss-black);
-  line-height: 1.2;
-}
-
-.swiss-heading-2 {
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--swiss-black);
-  line-height: 1.3;
-}
-
-.swiss-heading-3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--swiss-black);
-  line-height: 1.4;
-}
-
-/* Swiss Card System - Clean, Geometric */
+/* SWISS GEOMETRIC CARD SYSTEM */
 .card, [data-card] {
-  background: var(--swiss-white) !important;
-  border: 2px solid var(--swiss-gray-100) !important;
-  border-radius: 0 !important;
-  box-shadow: 
-    0 4px 0 var(--swiss-black),
-    0 4px 20px rgba(0, 0, 0, 0.08) !important;
-  transition: all 0.2s ease !important;
-  position: relative;
+  background: var(--krib-white) !important;
+  border: 2px solid var(--swiss-gray-200) !important;
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: var(--shadow-subtle) !important;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
 .card:hover, [data-card]:hover {
-  transform: translateX(2px) translateY(-2px) !important;
-  box-shadow: 
-    0 6px 0 var(--swiss-black),
-    0 6px 25px rgba(0, 0, 0, 0.12) !important;
+  border-color: var(--krib-lime) !important;
+  box-shadow: var(--shadow-moderate) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* Swiss Stats Cards - Bold Geometric Design */
-.stats-card {
-  background: var(--swiss-red) !important;
-  color: var(--swiss-white) !important;
-  border: none !important;
-  border-radius: 0 !important;
-  position: relative;
-  overflow: hidden;
-}
-
-.stats-card::before {
+.card::before, [data-card]::before {
   content: '';
   position: absolute;
   top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--krib-lime);
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+  transform-origin: top;
+}
+
+.card:hover::before, [data-card]:hover::before {
+  transform: scaleY(1);
+}
+
+/* SWISS BAUHAUS STATS CARDS */
+.stats-card {
+  background: var(--krib-lime) !important;
+  color: var(--krib-black) !important;
+  border: none !important;
+  border-radius: var(--border-radius-md) !important;
+  box-shadow: var(--shadow-moderate) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.stats-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
   right: 0;
   width: 60px;
   height: 60px;
-  background: var(--swiss-yellow);
-  clip-path: polygon(100% 0%, 0% 100%, 100% 100%);
+  background: var(--krib-black);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  opacity: 0.1;
 }
 
 .stats-card-dark {
-  background: var(--swiss-black) !important;
-  color: var(--swiss-white) !important;
+  background: var(--krib-black) !important;
+  color: var(--krib-lime) !important;
+  border: 2px solid var(--swiss-gray-800) !important;
 }
 
-.stats-card-dark::before {
-  background: var(--swiss-red);
+.stats-card-dark::after {
+  background: var(--krib-lime);
+  opacity: 0.15;
 }
 
 .stats-card-light {
-  background: var(--swiss-white) !important;
-  color: var(--swiss-black) !important;
-  border: 3px solid var(--swiss-black) !important;
+  background: var(--swiss-gray-100) !important;
+  color: var(--swiss-gray-800) !important;
+  border: 2px solid var(--swiss-gray-200) !important;
 }
 
-.stats-card-light::before {
-  background: var(--swiss-blue);
+.stats-card-light::after {
+  background: var(--krib-lime);
+  opacity: 0.08;
 }
 
 .stats-card-accent {
-  background: var(--swiss-blue) !important;
-  color: var(--swiss-white) !important;
+  background: var(--krib-white) !important;
+  color: var(--swiss-gray-800) !important;
+  border: 2px solid var(--krib-lime) !important;
 }
 
-.stats-card-accent::before {
-  background: var(--swiss-yellow);
+.stats-card-accent::after {
+  background: var(--krib-lime);
+  opacity: 0.12;
 }
 
-/* Swiss Button System - Bold & Geometric */
+/* SWISS GEOMETRIC BUTTON SYSTEM */
 .btn-primary, button[data-variant="default"] {
-  background: var(--swiss-red) !important;
-  color: var(--swiss-white) !important;
+  background: var(--krib-lime) !important;
+  color: var(--krib-black) !important;
   border: none !important;
-  border-radius: 0 !important;
-  box-shadow: 0 3px 0 var(--swiss-black) !important;
-  transition: all 0.1s ease !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  border-radius: var(--border-radius-md) !important;
+  box-shadow: var(--shadow-subtle) !important;
+  transition: all 0.15s cubic-bezier(0.2, 0, 0.2, 1) !important;
+  font-weight: 600 !important;
+  font-family: var(--font-primary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.btn-primary::before, button[data-variant="default"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--krib-black);
+  transition: left 0.15s ease;
+  z-index: 0;
+}
+
+.btn-primary:hover::before, button[data-variant="default"]:hover::before {
+  left: 0;
 }
 
 .btn-primary:hover, button[data-variant="default"]:hover {
-  background: var(--swiss-black) !important;
-  transform: translateY(1px) !important;
-  box-shadow: 0 2px 0 var(--swiss-black) !important;
+  color: var(--krib-lime) !important;
+  box-shadow: var(--shadow-moderate) !important;
+}
+
+.btn-primary > *, button[data-variant="default"] > * {
+  position: relative;
+  z-index: 1;
 }
 
 .btn-secondary {
-  background: var(--swiss-blue) !important;
-  color: var(--swiss-white) !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: 0 3px 0 var(--swiss-black) !important;
+  background: var(--krib-black) !important;
+  color: var(--krib-lime) !important;
+  border: 2px solid var(--krib-black) !important;
+  border-radius: var(--border-radius-md) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.btn-secondary:hover {
+  background: var(--krib-lime) !important;
+  color: var(--krib-black) !important;
+  border-color: var(--krib-lime) !important;
 }
 
 .btn-outline {
   background: transparent !important;
-  color: var(--swiss-black) !important;
-  border: 3px solid var(--swiss-black) !important;
-  border-radius: 0 !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
+  color: var(--krib-lime) !important;
+  border: 2px solid var(--krib-lime) !important;
+  border-radius: var(--border-radius-md) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
-/* Swiss Badge System - Clean & Functional */
+.btn-outline:hover {
+  background: var(--krib-lime) !important;
+  color: var(--krib-black) !important;
+}
+
+/* SWISS GEOMETRIC BADGE SYSTEM */
 .badge-primary {
-  background: var(--swiss-red) !important;
-  color: var(--swiss-white) !important;
-  border-radius: 0 !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  background: var(--krib-lime) !important;
+  color: var(--krib-black) !important;
+  border-radius: var(--border-radius-sm) !important;
+  font-weight: 600 !important;
+  font-family: var(--font-primary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
 }
 
 .badge-dark {
-  background: var(--swiss-black) !important;
-  color: var(--swiss-white) !important;
-  border-radius: 0 !important;
-  font-weight: 700 !important;
+  background: var(--krib-black) !important;
+  color: var(--krib-lime) !important;
+  border-radius: var(--border-radius-sm) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
 .badge-light {
-  background: var(--swiss-white) !important;
-  color: var(--swiss-black) !important;
-  border: 2px solid var(--swiss-black) !important;
-  border-radius: 0 !important;
-  font-weight: 700 !important;
+  background: var(--swiss-gray-100) !important;
+  color: var(--swiss-gray-800) !important;
+  border: 1px solid var(--swiss-gray-200) !important;
+  border-radius: var(--border-radius-sm) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
-.badge-accent {
-  background: var(--swiss-yellow) !important;
-  color: var(--swiss-black) !important;
-  border-radius: 0 !important;
-  font-weight: 700 !important;
-}
-
-/* Swiss Geometric Elements */
-.swiss-circle {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.swiss-circle-red {
-  background: var(--swiss-red);
-}
-
-.swiss-circle-blue {
-  background: var(--swiss-blue);
-}
-
-.swiss-circle-yellow {
-  background: var(--swiss-yellow);
-}
-
-.swiss-square {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-}
-
-.swiss-square-red {
-  background: var(--swiss-red);
-}
-
-.swiss-square-blue {
-  background: var(--swiss-blue);
-}
-
-.swiss-square-yellow {
-  background: var(--swiss-yellow);
-}
-
-/* Swiss Grid Lines */
-.swiss-grid {
-  background-image: 
-    linear-gradient(var(--swiss-gray-100) 1px, transparent 1px),
-    linear-gradient(90deg, var(--swiss-gray-100) 1px, transparent 1px);
-  background-size: 20px 20px;
+/* SWISS BAUHAUS DASHBOARD BACKGROUND */
+.swiss-dashboard-background {
+  background: var(--swiss-gray-50);
   position: relative;
+  min-height: 100vh;
 }
 
-/* Swiss Section Dividers */
-.swiss-divider {
-  height: 4px;
-  background: var(--swiss-black);
-  margin: 2rem 0;
-  position: relative;
+.swiss-dashboard-background::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(90deg, var(--krib-lime) 0px, transparent 1px),
+    linear-gradient(var(--swiss-gray-100) 0px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.3;
+  z-index: -1;
 }
 
-.swiss-divider::after {
+/* SWISS GEOMETRIC SIDEBAR DESIGN */
+[data-slot="sidebar"] {
+  background: var(--krib-black) !important;
+  border-right: 4px solid var(--krib-lime) !important;
+  position: relative !important;
+}
+
+[data-slot="sidebar"]::before {
   content: '';
   position: absolute;
-  right: 0;
   top: 0;
-  width: 60px;
-  height: 4px;
-  background: var(--swiss-red);
+  right: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(90deg, transparent 0%, var(--krib-lime) 100%);
+  opacity: 0.1;
 }
 
-/* Enhanced Dashboard Background with Krib Theme */
-.krib-dashboard-background-enhanced {
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(184, 255, 0, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(26, 26, 26, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(203, 252, 80, 0.02) 0%, transparent 50%),
-    linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
-  background-attachment: fixed;
-  min-height: 100vh;
+[data-slot="sidebar"] .nav-item {
+  position: relative;
+  margin: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  transition: all 0.2s ease;
+}
+
+[data-slot="sidebar"] .nav-item:hover {
+  background: var(--krib-lime-bold) !important;
+}
+
+[data-slot="sidebar"] .nav-item[data-active="true"] {
+  background: var(--krib-lime) !important;
+  color: var(--krib-black) !important;
+}
+
+[data-slot="sidebar"] .nav-item[data-active="true"]::before {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 100%;
+  background: var(--krib-lime);
+  border-radius: 0 2px 2px 0;
+}
+
+/* SWISS LANDING PAGE STYLES */
+.swiss-feature-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.swiss-feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-bold);
+}
+
+/* GEOMETRIC ACCENTS */
+.geometric-accent {
+  position: relative;
+}
+
+.geometric-accent::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--krib-lime), var(--krib-black), var(--krib-lime));
+  z-index: -1;
+  border-radius: inherit;
 }
 
 /* Beautiful Property Cards with Krib Accents */

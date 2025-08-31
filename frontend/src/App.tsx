@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "./components/ui/sidebar"
 import { AppProvider, useApp } from "./contexts/AppContext"
 import { AuthForm } from "./components/AuthForm"
+import { KribLandingPage } from "./components/KribLandingPage"
 import { DashboardSidebar } from "./components/DashboardSidebar"
 import { DashboardOverview } from "./components/DashboardOverview"
 import { PropertyList } from "./components/PropertyList"
@@ -27,6 +28,7 @@ function DashboardContent() {
   const { user, isLoading } = useApp()
   const location = useLocation()
   const navigate = useNavigate()
+  const [showAuthForm, setShowAuthForm] = useState(false)
   
   // Map URL paths to navigation items
   const getActiveSection = (pathname: string): NavigationItem => {
@@ -61,7 +63,10 @@ function DashboardContent() {
   }
 
   if (!user) {
-    return <AuthForm />
+    if (showAuthForm) {
+      return <AuthForm />
+    }
+    return <KribLandingPage onGetStarted={() => setShowAuthForm(true)} />
   }
 
 
@@ -78,7 +83,7 @@ function DashboardContent() {
             <SidebarTrigger className="-ml-1" />
           </div>
         </header>
-        <div className="flex-1 overflow-auto krib-dashboard-background-enhanced">
+        <div className="flex-1 overflow-auto swiss-dashboard-background">
           <Routes>
             <Route path="/" element={<DashboardOverview />} />
             <Route path="/overview" element={<DashboardOverview />} />
