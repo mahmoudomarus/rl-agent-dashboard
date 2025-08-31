@@ -62,14 +62,14 @@ export function Homepage() {
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
       {/* Dubai background image with overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{
-          backgroundImage: `url("https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2126&q=80")`
+          backgroundImage: `url("https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")`
         }}
       />
       
       {/* Light overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/75 via-gray-50/60 to-white/50" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-gray-50/50 to-white/40" />
       
       {/* Navigation */}
       <nav className="relative z-20 flex items-center justify-between p-6 lg:px-12">
