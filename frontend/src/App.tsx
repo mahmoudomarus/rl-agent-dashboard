@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "./components/ui/sidebar"
 import { AppProvider, useApp } from "./contexts/AppContext"
 import { AuthForm } from "./components/AuthForm"
-import { KribLandingPage } from "./components/KribLandingPage"
 import { DashboardSidebar } from "./components/DashboardSidebar"
 import { DashboardOverview } from "./components/DashboardOverview"
 import { PropertyList } from "./components/PropertyList"
@@ -21,14 +20,13 @@ import { CommissionDashboard } from "./components/CommissionDashboard"
 import { LeaseManagement } from "./components/LeaseManagement"
 import { CalendarIntegration } from "./components/CalendarIntegration"
 import { AuthCallback } from "./components/AuthCallback"
+import { Homepage } from "./components/Homepage"
 
 export type NavigationItem = 'overview' | 'properties' | 'add-property' | 'applications' | 'viewings' | 'contracts' | 'templates' | 'leases' | 'calendar' | 'agents' | 'commissions' | 'analytics' | 'financials' | 'settings'
 
 function DashboardContent() {
-  const { user, isLoading } = useApp()
   const location = useLocation()
   const navigate = useNavigate()
-  const [showAuthForm, setShowAuthForm] = useState(false)
   
   // Map URL paths to navigation items
   const getActiveSection = (pathname: string): NavigationItem => {
@@ -51,24 +49,6 @@ function DashboardContent() {
     navigate(section === 'overview' ? '/' : `/${section}`)
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p>Loading...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!user) {
-    if (showAuthForm) {
-      return <AuthForm />
-    }
-    return <KribLandingPage onGetStarted={() => setShowAuthForm(true)} />
-  }
-
 
 
   return (
@@ -83,7 +63,7 @@ function DashboardContent() {
             <SidebarTrigger className="-ml-1" />
           </div>
         </header>
-        <div className="flex-1 overflow-auto swiss-dashboard-background">
+        <div className="flex-1 overflow-auto krib-dashboard-background-enhanced">
           <Routes>
             <Route path="/" element={<DashboardOverview />} />
             <Route path="/overview" element={<DashboardOverview />} />
@@ -107,14 +87,42 @@ function DashboardContent() {
   )
 }
 
+function PublicRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Homepage />} />
+      <Route path="/auth" element={<AuthForm />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/auth/callback/*" element={<AuthCallback />} />
+    </Routes>
+  )
+}
+
 function DashboardApp() {
+  const { user, isLoading } = useApp()
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Router>
-      <Routes>
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/auth/callback/*" element={<AuthCallback />} />
-        <Route path="/*" element={<DashboardContent />} />
-      </Routes>
+      {!user ? (
+        <PublicRoutes />
+      ) : (
+        <Routes>
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/auth/callback/*" element={<AuthCallback />} />
+          <Route path="/*" element={<DashboardContent />} />
+        </Routes>
+      )}
     </Router>
   )
 }

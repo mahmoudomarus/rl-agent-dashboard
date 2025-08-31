@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,79 +7,44 @@
 :root {
   --font-size: 14px;
   
-  /* SWISS DESIGN TYPOGRAPHY */
-  --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-  
-  /* SWISS SPACING SYSTEM - 8px Grid */
-  --space-xs: 0.25rem;    /* 4px */
-  --space-sm: 0.5rem;     /* 8px */
-  --space-md: 1rem;       /* 16px */
-  --space-lg: 1.5rem;     /* 24px */
-  --space-xl: 2rem;       /* 32px */
-  --space-2xl: 3rem;      /* 48px */
-  --space-3xl: 4rem;      /* 64px */
-  
-  /* SWISS BAUHAUS KRIB BRAND SYSTEM */
-  --krib-lime: #B8FF00;         /* Primary: Bright Lime Green */
-  --krib-lime-light: #CBFC50;   /* Secondary: Light Lime */
-  --krib-lime-soft: rgba(184, 255, 0, 0.08);  /* Subtle: Soft Lime */
-  --krib-lime-bold: rgba(184, 255, 0, 0.15);  /* Medium: Bold Lime */
-  --krib-black: #1A1A1A;        /* Primary: Deep Black */
+  /* ORIGINAL KRIB BRAND COLORS - Lime Green & Black Theme */
+  --krib-lime: #B8FF00;         /* Bright Lime Green - Primary Brand */
+  --krib-lime-light: #CBFC50;   /* Light Lime Green - Secondary */
+  --krib-lime-soft: rgba(184, 255, 0, 0.1);  /* Soft Lime - Backgrounds */
+  --krib-black: #1A1A1A;        /* Deep Black - Text & Contrast */
   --krib-white: #FFFFFF;        /* Pure White */
+  --krib-gray-light: #F7FAFC;   /* Light Gray - Backgrounds */
+  --krib-gray-medium: #EDF2F7;  /* Medium Gray */
+  --krib-gray-dark: #2D3748;    /* Dark Gray - Text */
   
-  /* SWISS PRECISION GRAYS */
-  --swiss-gray-50: #FAFBFC;     /* Lightest background */
-  --swiss-gray-100: #F4F6F8;    /* Card backgrounds */
-  --swiss-gray-200: #E4E7EB;    /* Borders */
-  --swiss-gray-300: #D1D5DB;    /* Dividers */
-  --swiss-gray-400: #9CA3AF;    /* Muted text */
-  --swiss-gray-500: #6B7280;    /* Secondary text */
-  --swiss-gray-600: #4B5563;    /* Primary text */
-  --swiss-gray-700: #374151;    /* Headings */
-  --swiss-gray-800: #1F2937;    /* Dark headings */
+  /* Base Colors */
+  --background: #ffffff;
+  --foreground: var(--krib-gray-dark);
+  --card: #ffffff;
+  --card-foreground: var(--krib-gray-dark);
+  --popover: #ffffff;
+  --popover-foreground: var(--krib-gray-dark);
   
-  /* GEOMETRIC ELEMENTS */
-  --border-radius-none: 0;
-  --border-radius-sm: 0.125rem;  /* 2px */
-  --border-radius-md: 0.25rem;   /* 4px */
-  --border-radius-lg: 0.5rem;    /* 8px */
-  --border-radius-xl: 1rem;      /* 16px */
-  
-  /* SWISS SHADOWS */
-  --shadow-minimal: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-subtle: 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-moderate: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-bold: 0 8px 24px rgba(0, 0, 0, 0.12);
-  
-  /* SWISS BASE SYSTEM */
-  --background: var(--krib-white);
-  --foreground: var(--swiss-gray-800);
-  --card: var(--krib-white);
-  --card-foreground: var(--swiss-gray-700);
-  --popover: var(--krib-white);
-  --popover-foreground: var(--swiss-gray-700);
-  
-  /* PRIMARY KRIB SYSTEM */
+  /* Primary Colors - Krib Lime Theme */
   --primary: var(--krib-lime);
   --primary-foreground: var(--krib-black);
-  --secondary: var(--swiss-gray-100);
-  --secondary-foreground: var(--swiss-gray-700);
+  --secondary: var(--krib-gray-light);
+  --secondary-foreground: var(--krib-gray-dark);
   
-  /* SWISS UI ELEMENTS */
-  --muted: var(--swiss-gray-100);
-  --muted-foreground: var(--swiss-gray-500);
+  /* UI Elements */
+  --muted: var(--krib-gray-light);
+  --muted-foreground: #717182;
   --accent: var(--krib-lime-light);
   --accent-foreground: var(--krib-black);
-  --destructive: #dc2626;
-  --destructive-foreground: var(--krib-white);
-  --border: var(--swiss-gray-200);
-  --input: var(--swiss-gray-100);
-  --input-background: var(--swiss-gray-50);
-  --switch-background: var(--swiss-gray-300);
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --input: var(--krib-gray-light);
+  --input-background: var(--krib-gray-light);
+  --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: var(--krib-lime);
+    --ring: var(--krib-lime);
 
   /* Charts - Krib Lime Theme Palette */
   --chart-1: var(--krib-lime);
@@ -92,14 +55,14 @@
   
   --radius: 0.625rem;
   
-  /* SWISS SIDEBAR SYSTEM */
-  --sidebar: var(--krib-black);
-  --sidebar-foreground: var(--krib-white);
+  /* Sidebar - Light Gray Theme */
+  --sidebar: var(--krib-gray-light);
+  --sidebar-foreground: var(--krib-gray-dark);
   --sidebar-primary: var(--krib-lime);
   --sidebar-primary-foreground: var(--krib-black);
-  --sidebar-accent: var(--krib-lime-bold);
-  --sidebar-accent-foreground: var(--krib-white);
-  --sidebar-border: var(--swiss-gray-800);
+  --sidebar-accent: var(--krib-lime-soft);
+  --sidebar-accent-foreground: var(--krib-gray-dark);
+  --sidebar-border: rgba(184, 255, 0, 0.2);
   --sidebar-ring: var(--krib-lime);
 }
 
@@ -906,50 +869,9 @@ html {
   }
 }
 
-/* ======================================================= */
-/* SWISS BAUHAUS DESIGN SYSTEM - KRIB LIME & BLACK THEME */
-/* ======================================================= */
-
-/* SWISS TYPOGRAPHY FOUNDATION */
-* {
-  font-family: var(--font-primary) !important;
-  letter-spacing: -0.01em;
-}
-
-body {
-  font-family: var(--font-primary) !important;
-  font-weight: 400;
-  line-height: 1.5;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-primary) !important;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-h1 { font-size: 2.5rem; font-weight: 800; }
-h2 { font-size: 2rem; font-weight: 700; }
-h3 { font-size: 1.5rem; font-weight: 600; }
-h4 { font-size: 1.25rem; font-weight: 600; }
-h5 { font-size: 1.125rem; font-weight: 500; }
-h6 { font-size: 1rem; font-weight: 500; }
-
-/* GEOMETRIC LAYOUTS */
-.swiss-grid {
-  display: grid;
-  gap: var(--space-md);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-.swiss-section {
-  padding: var(--space-2xl) var(--space-xl);
-  margin-bottom: var(--space-xl);
-}
+/* =============================================== */
+/* KRIB BRAND DESIGN SYSTEM - LIME & BLACK THEME */
+/* =============================================== */
 
 /* MODAL & DIALOG FIXES - ENSURE PROPER BACKGROUNDS */
 [data-slot="dialog-overlay"] {
@@ -974,294 +896,103 @@ h6 { font-size: 1rem; font-weight: 500; }
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* SWISS GEOMETRIC CARD SYSTEM */
+/* Enhanced Card System with Krib Branding */
 .card, [data-card] {
-  background: var(--krib-white) !important;
-  border: 2px solid var(--swiss-gray-200) !important;
-  border-radius: var(--border-radius-lg) !important;
-  box-shadow: var(--shadow-subtle) !important;
-  transition: all 0.2s cubic-bezier(0.2, 0, 0.2, 1) !important;
-  position: relative !important;
-  overflow: hidden !important;
+  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%) !important;
+  border: 1px solid rgba(184, 255, 0, 0.1) !important;
+  box-shadow: 
+    0 2px 8px rgba(26, 26, 26, 0.08),
+    0 1px 3px rgba(184, 255, 0, 0.06) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .card:hover, [data-card]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 8px 25px rgba(26, 26, 26, 0.12),
+    0 4px 10px rgba(184, 255, 0, 0.08) !important;
   border-color: var(--krib-lime) !important;
-  box-shadow: var(--shadow-moderate) !important;
-  transform: translateY(-1px) !important;
 }
 
-.card::before, [data-card]::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--krib-lime);
-  transform: scaleY(0);
-  transition: transform 0.2s ease;
-  transform-origin: top;
-}
-
-.card:hover::before, [data-card]:hover::before {
-  transform: scaleY(1);
-}
-
-/* SWISS BAUHAUS STATS CARDS */
+/* Beautiful Stats Cards with Krib Gradients */
 .stats-card {
-  background: var(--krib-lime) !important;
+  background: linear-gradient(135deg, var(--krib-lime) 0%, var(--krib-lime-light) 100%) !important;
   color: var(--krib-black) !important;
   border: none !important;
-  border-radius: var(--border-radius-md) !important;
-  box-shadow: var(--shadow-moderate) !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-.stats-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 60px;
-  height: 60px;
-  background: var(--krib-black);
-  clip-path: polygon(100% 0, 100% 100%, 0 100%);
-  opacity: 0.1;
+  box-shadow: 
+    0 4px 15px rgba(184, 255, 0, 0.15),
+    0 2px 6px rgba(184, 255, 0, 0.1) !important;
 }
 
 .stats-card-dark {
-  background: var(--krib-black) !important;
+  background: linear-gradient(135deg, var(--krib-black) 0%, var(--krib-gray-dark) 100%) !important;
   color: var(--krib-lime) !important;
-  border: 2px solid var(--swiss-gray-800) !important;
-}
-
-.stats-card-dark::after {
-  background: var(--krib-lime);
-  opacity: 0.15;
 }
 
 .stats-card-light {
-  background: var(--swiss-gray-100) !important;
-  color: var(--swiss-gray-800) !important;
-  border: 2px solid var(--swiss-gray-200) !important;
-}
-
-.stats-card-light::after {
-  background: var(--krib-lime);
-  opacity: 0.08;
+  background: linear-gradient(135deg, var(--krib-lime-light) 0%, rgba(203, 252, 80, 0.8) 100%) !important;
+  color: var(--krib-black) !important;
 }
 
 .stats-card-accent {
-  background: var(--krib-white) !important;
-  color: var(--swiss-gray-800) !important;
-  border: 2px solid var(--krib-lime) !important;
+  background: linear-gradient(135deg, rgba(184, 255, 0, 0.9) 0%, var(--krib-lime) 100%) !important;
+  color: var(--krib-black) !important;
 }
 
-.stats-card-accent::after {
-  background: var(--krib-lime);
-  opacity: 0.12;
-}
-
-/* SWISS GEOMETRIC BUTTON SYSTEM */
+/* Enhanced Button System with Krib Colors */
 .btn-primary, button[data-variant="default"] {
-  background: var(--krib-lime) !important;
+  background: linear-gradient(135deg, var(--krib-lime) 0%, var(--krib-lime-light) 100%) !important;
   color: var(--krib-black) !important;
   border: none !important;
-  border-radius: var(--border-radius-md) !important;
-  box-shadow: var(--shadow-subtle) !important;
-  transition: all 0.15s cubic-bezier(0.2, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 8px rgba(184, 255, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
   font-weight: 600 !important;
-  font-family: var(--font-primary) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-.btn-primary::before, button[data-variant="default"]::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--krib-black);
-  transition: left 0.15s ease;
-  z-index: 0;
-}
-
-.btn-primary:hover::before, button[data-variant="default"]:hover::before {
-  left: 0;
 }
 
 .btn-primary:hover, button[data-variant="default"]:hover {
-  color: var(--krib-lime) !important;
-  box-shadow: var(--shadow-moderate) !important;
-}
-
-.btn-primary > *, button[data-variant="default"] > * {
-  position: relative;
-  z-index: 1;
+  background: linear-gradient(135deg, var(--krib-lime-light) 0%, var(--krib-lime) 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(184, 255, 0, 0.3) !important;
 }
 
 .btn-secondary {
-  background: var(--krib-black) !important;
+  background: linear-gradient(135deg, var(--krib-black) 0%, var(--krib-gray-dark) 100%) !important;
   color: var(--krib-lime) !important;
-  border: 2px solid var(--krib-black) !important;
-  border-radius: var(--border-radius-md) !important;
-  font-weight: 600 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-}
-
-.btn-secondary:hover {
-  background: var(--krib-lime) !important;
-  color: var(--krib-black) !important;
-  border-color: var(--krib-lime) !important;
+  border: none !important;
 }
 
 .btn-outline {
   background: transparent !important;
   color: var(--krib-lime) !important;
   border: 2px solid var(--krib-lime) !important;
-  border-radius: var(--border-radius-md) !important;
   font-weight: 600 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
 }
 
-.btn-outline:hover {
-  background: var(--krib-lime) !important;
-  color: var(--krib-black) !important;
-}
-
-/* SWISS GEOMETRIC BADGE SYSTEM */
+/* Beautiful Badge System with Krib Colors */
 .badge-primary {
-  background: var(--krib-lime) !important;
+  background: linear-gradient(135deg, var(--krib-lime) 0%, var(--krib-lime-light) 100%) !important;
   color: var(--krib-black) !important;
-  border-radius: var(--border-radius-sm) !important;
-  font-weight: 600 !important;
-  font-family: var(--font-primary) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  font-size: 0.75rem !important;
-  padding: 0.25rem 0.5rem !important;
 }
 
 .badge-dark {
-  background: var(--krib-black) !important;
+  background: linear-gradient(135deg, var(--krib-black) 0%, var(--krib-gray-dark) 100%) !important;
   color: var(--krib-lime) !important;
-  border-radius: var(--border-radius-sm) !important;
-  font-weight: 600 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
 }
 
 .badge-light {
-  background: var(--swiss-gray-100) !important;
-  color: var(--swiss-gray-800) !important;
-  border: 1px solid var(--swiss-gray-200) !important;
-  border-radius: var(--border-radius-sm) !important;
-  font-weight: 600 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-}
-
-/* SWISS BAUHAUS DASHBOARD BACKGROUND */
-.swiss-dashboard-background {
-  background: var(--swiss-gray-50);
-  position: relative;
-  min-height: 100vh;
-}
-
-.swiss-dashboard-background::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    linear-gradient(90deg, var(--krib-lime) 0px, transparent 1px),
-    linear-gradient(var(--swiss-gray-100) 0px, transparent 1px);
-  background-size: 32px 32px;
-  opacity: 0.3;
-  z-index: -1;
-}
-
-/* SWISS GEOMETRIC SIDEBAR DESIGN */
-[data-slot="sidebar"] {
-  background: var(--krib-black) !important;
-  border-right: 4px solid var(--krib-lime) !important;
-  position: relative !important;
-}
-
-[data-slot="sidebar"]::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 60px;
-  background: linear-gradient(90deg, transparent 0%, var(--krib-lime) 100%);
-  opacity: 0.1;
-}
-
-[data-slot="sidebar"] .nav-item {
-  position: relative;
-  margin: 0.25rem 0.75rem;
-  border-radius: var(--border-radius-md);
-  transition: all 0.2s ease;
-}
-
-[data-slot="sidebar"] .nav-item:hover {
-  background: var(--krib-lime-bold) !important;
-}
-
-[data-slot="sidebar"] .nav-item[data-active="true"] {
-  background: var(--krib-lime) !important;
+  background: linear-gradient(135deg, var(--krib-lime-light) 0%, rgba(203, 252, 80, 0.8) 100%) !important;
   color: var(--krib-black) !important;
 }
 
-[data-slot="sidebar"] .nav-item[data-active="true"]::before {
-  content: '';
-  position: absolute;
-  left: -0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 100%;
-  background: var(--krib-lime);
-  border-radius: 0 2px 2px 0;
-}
-
-/* SWISS LANDING PAGE STYLES */
-.swiss-feature-card {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.swiss-feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-bold);
-}
-
-/* GEOMETRIC ACCENTS */
-.geometric-accent {
-  position: relative;
-}
-
-.geometric-accent::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, var(--krib-lime), var(--krib-black), var(--krib-lime));
-  z-index: -1;
-  border-radius: inherit;
+/* Enhanced Dashboard Background with Krib Theme */
+.krib-dashboard-background-enhanced {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(184, 255, 0, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(26, 26, 26, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(203, 252, 80, 0.02) 0%, transparent 50%),
+    linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 /* Beautiful Property Cards with Krib Accents */
